@@ -1,0 +1,63 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intake | Quintrin</title>
+  <meta name="description" content="Initial intake for independent risk structuring review." />
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="nav">
+      <div class="logo">QUINTRIN</div>
+      <nav>
+        <a href="/services">Services</a>
+        <a href="/intake">Intake</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section>
+      <h1>Initial Intake</h1>
+      <p>
+        Submit basic contact details to begin an initial scope and completeness review.
+      </p>
+
+      <form action="/intake-confirmation" method="GET" class="intake-form">
+
+        <label for="name">First Name</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="company">Company / Organization</label>
+        <input type="text" id="company" name="company">
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required>
+
+        <p class="privacy-note">
+          Your personal information is reviewed internally and is never shared with third parties.
+        </p>
+
+        <button class="cta" type="submit">Submit for Review</button>
+
+      </form>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>
+      Quintrin provides independent data structuring services only.
+      No insurance placement, underwriting, or claims services are offered.
+    </p>
+  </footer>
+
+</body>
+</html>
