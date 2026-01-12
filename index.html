@@ -1,5 +1,3 @@
----
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,13 +5,117 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Concordia Estate – Execution Phase Brief | Quintrin</title>
   <meta name="description" content="Execution snapshot and capital coordination for Concordia Estate, Tobago." />
-  <link rel="stylesheet" href="/styles.css">
+
   <style>
-    /* Executive Brief Styling */
+    :root {
+      --navy: #0b1c2d;
+      --charcoal: #1a2530;
+      --silver: #f2f4f6;
+      --steel: #4f7fa8;
+      --text-primary: #0e1a24;
+      --text-muted: #5f6b76;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--silver);
+      color: var(--text-primary);
+      line-height: 1.65;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* NAVIGATION */
+    header {
+      background: linear-gradient(
+        90deg,
+        #0b1c2d 0%,
+        #0b1c2d 35%,
+        #4f7fa8 100%
+      );
+      color: white;
+      padding: 1.5rem 2rem;
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      position: relative;
+    }
+
+    .logo::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 40%;
+      height: 2px;
+      background: var(--steel);
+      opacity: 0.7;
+    }
+
+    nav a {
+      margin-left: 2rem;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #dbe4ec;
+    }
+
+    nav a:hover {
+      color: white;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 5rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-top: 4.5rem;
+      letter-spacing: -0.015em;
+    }
+
+    p {
+      max-width: 720px;
+      color: var(--text-muted);
+    }
+
+    .small-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* SECTIONS + FADE */
     section {
-      padding: 2rem 0;
-      border-bottom: 1px solid #e0e0e0;
-      opacity: 0;           /* start hidden */
+      margin-bottom: 3rem;
+      opacity: 0;
       transform: translateY(20px);
       transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     }
@@ -23,69 +125,42 @@
       transform: translateY(0);
     }
 
-    h1, h2 {
-      margin-bottom: 0.5rem;
-      line-height: 1.25;
-    }
-
-    h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-top: 2rem;
-    }
-
-    .small-text {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: -0.3rem;
-    }
-
-    p {
-      max-width: 720px;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    ul {
-      padding-left: 1.2rem;
-      margin: 0.5rem 0;
-    }
-
-    ul li {
-      margin-bottom: 0.5rem;
-    }
-
+    /* GRID */
     .grid {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2.5rem;
+      margin-top: 2.5rem;
     }
 
     .card {
-      flex: 1 1 30%;
-      background: #f9f9f9;
-      border-left: 4px solid var(--steel);
-      padding: 1rem 1.2rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      border-top: 3px solid var(--steel);
+      padding-top: 1.5rem;
+      background: #ffffff;
+      padding: 1.5rem;
       border-radius: 6px;
-      min-width: 200px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
     }
 
-    .card strong {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
+    /* FOOTER */
+    footer {
+      background: linear-gradient(
+        90deg,
+        #1a2530 0%,
+        #1a2530 40%,
+        #3f6f95 100%
+      );
+      color: #cfd8df;
+      padding: 3rem 2rem;
+      margin-top: 6rem;
+      font-size: 0.9rem;
     }
 
-    a {
-      color: var(--steel);
-      text-decoration: underline;
+    footer p {
+      max-width: 900px;
+      margin: auto;
+      color: #cfd8df;
+      text-align: center;
     }
   </style>
 </head>
@@ -95,7 +170,7 @@
   <!-- HEADER -->
   <header>
     <div class="nav">
-      <div class="logo">QUINTRIN</div>
+      <div class="logo">Quintrin</div>
       <nav>
         <a href="#">Projects</a>
         <a href="#">Active Engagements</a>
@@ -103,44 +178,38 @@
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <main class="container">
 
-    <!-- TITLE SECTION -->
     <section class="fade">
       <h1>Concordia Estate – Execution Phase Brief</h1>
       <p><em>Strategic Execution & Capital Coordination</em></p>
       <p class="small-text">Prepared by Quintrin</p>
     </section>
 
-    <!-- PURPOSE -->
     <section class="fade">
       <h2>Purpose</h2>
       <p>This brief outlines the execution structure currently being assembled to reactivate Concordia Estate and transition it into sustainable operations.</p>
     </section>
 
-    <!-- ASSET -->
     <section class="fade">
       <h2>The Asset</h2>
       <p>Concordia Estate is a hospitality and lifestyle property located in Tobago, positioned for phased revitalization and operational optimization.</p>
       <p><a href="https://www.concordiaestate.com/" target="_blank">Primary Asset Reference</a></p>
     </section>
 
-    <!-- CURRENT EXECUTION REALITY -->
     <section class="fade">
       <h2>Current Execution Reality</h2>
       <p>Previous operating attempts lacked aligned execution, accountability, and capital structure.</p>
       <p>The owner has therefore prioritized a results-driven, execution-first model.</p>
     </section>
 
-    <!-- QUINTRIN’S ROLE -->
     <section class="fade">
       <h2>Quintrin’s Role</h2>
       <p>Quintrin is acting as the execution coordinator and capital alignment interface for the Concordia Estate revitalization process.</p>
       <p>Our mandate is to convert intent into measurable progress while preserving flexibility.</p>
     </section>
 
-    <!-- EXECUTION PHASING -->
     <section class="fade">
       <h2>Execution Phasing</h2>
       <div class="grid">
@@ -159,20 +228,11 @@
       </div>
     </section>
 
-    <!-- CAPITAL PARTICIPATION FRAMEWORK -->
     <section class="fade">
       <h2>Capital Participation Framework</h2>
       <p>Capital participation is structured in phases, allowing alignment at multiple entry points based on scope, appetite, and performance.</p>
-      <p>This framework avoids overcommitment while enabling scale.</p>
     </section>
 
-    <!-- FLEXIBILITY & EXCLUSIVITY -->
-    <section class="fade">
-      <h2>Flexibility & Exclusivity Balance</h2>
-      <p>Execution coordination requires operational clarity. Exclusivity applies only within defined scopes and phases to protect performance, while preserving the owner’s ability to optimize.</p>
-    </section>
-
-    <!-- CURRENT STATUS -->
     <section class="fade">
       <h2>Current Status</h2>
       <ul>
@@ -180,12 +240,6 @@
         <li>Execution framework defined</li>
         <li>Capital alignment in progress</li>
       </ul>
-    </section>
-
-    <!-- GOVERNANCE & COMPLIANCE -->
-    <section class="fade">
-      <h2>Governance & Compliance</h2>
-      <p>Quintrin operates as a registered and compliant entity. Supporting documentation and references are available upon request.</p>
     </section>
 
   </main>
@@ -198,23 +252,21 @@
     </p>
   </footer>
 
- <script>
-  const sections = document.querySelectorAll('section.fade');
+  <!-- FADE SCRIPT -->
+  <script>
+    const sections = document.querySelectorAll("section");
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('show');
-      }
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        }
+      });
+    }, {
+      threshold: 0.1
     });
-  }, {
-    root: null,
-    rootMargin: '0px 0px -40% 0px', /* trigger before section center */
-    threshold: 0
-  });
 
-  sections.forEach(section => observer.observe(section));
-</script>section));
+    sections.forEach(section => observer.observe(section));
   </script>
 
 </body>
