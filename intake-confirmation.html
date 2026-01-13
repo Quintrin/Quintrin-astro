@@ -1,0 +1,71 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submission Received | Quintrin</title>
+  <meta name="description" content="Intake submission received." />
+  <link rel="stylesheet" href="/styles.css">
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get("name");
+
+      if (name) {
+        const slot = document.getElementById("name-slot");
+        slot.textContent = `Thank you, ${name}.`;
+      }
+    });
+  </script>
+</head>
+
+<body>
+
+  <header>
+    <div class="nav">
+      <div class="logo">QUINTRIN</div>
+      <nav>
+        <a href="/services">Services</a>
+        <a href="/intake">Intake</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section>
+      <h1>Submission Received</h1>
+
+      <p id="name-slot"><strong>Thank you.</strong></p>
+
+      <p>
+  Your submission has been received and an internal review has been initiated
+  to assess completeness and scope.
+</p>
+      </p>
+
+      <p>
+        If additional clarification is required, you will be contacted.
+        If the submission is suitable for structured review, next steps
+        will be outlined directly.
+      </p>
+
+      <p>
+        No action is required at this time.
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>
+      Quintrin provides independent data structuring services only.
+      No insurance placement, underwriting, or claims services are offered.
+    </p>
+  </footer>
+
+</body>
+</html>
