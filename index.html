@@ -1,278 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Concordia Estate – Execution Phase Brief | Quintrin</title>
-  <meta name="description" content="Execution snapshot and capital coordination for Concordia Estate, Tobago." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quintrin | Marine Risk Structuring</title>
+<meta name="description" content="Independent marine risk structuring for insurer-ready review.">
 
-  <style>
-    :root {
-      --navy: #0b1c2d;
-      --charcoal: #1a2530;
-      --silver: #f2f4f6;
-      --steel: #4f7fa8;
-      --text-primary: #0e1a24;
-      --text-muted: #5f6b76;
-    }
+<style>
+:root{
+  --navy:#0b1c2d;
+  --charcoal:#1a2530;
+  --steel:#4f7fa8;
+  --silver:#f2f4f6;
+  --text:#0e1a24;
+  --muted:#5f6b76;
+}
 
-    * {
-      box-sizing: border-box;
-    }
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--silver);
+  color:var(--text);
+  line-height:1.65;
+}
 
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--silver);
-      color: var(--text-primary);
-      line-height: 1.65;
-    }
+header,footer{
+  color:#fff;
+}
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+header{
+  background:linear-gradient(90deg,var(--navy) 0%,var(--navy) 35%,var(--steel) 100%);
+  padding:1.5rem 2rem;
+}
 
-    /* NAVIGATION */
-    header {
-      background: linear-gradient(
-        90deg,
-        #0b1c2d 0%,
-        #0b1c2d 35%,
-        #4f7fa8 100%
-      );
-      color: white;
-      padding: 1.5rem 2rem;
-    }
+footer{
+  background:linear-gradient(90deg,var(--charcoal) 0%,var(--charcoal) 40%,#3f6f95 100%);
+  padding:3rem 2rem;
+  font-size:.9rem;
+}
 
-    .nav {
-      max-width: 1200px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+.nav{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-    .logo {
-      font-weight: 700;
-      font-size: 1.4rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      position: relative;
-    }
+.logo{
+  font-weight:700;
+  letter-spacing:.08em;
+  position:relative;
+}
 
-    .logo::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -4px;
-      width: 40%;
-      height: 2px;
-      background: var(--steel);
-      opacity: 0.7;
-    }
+.logo::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:40%;
+  height:2px;
+  background:var(--steel);
+}
 
-    nav a {
-      margin-left: 2rem;
-      font-weight: 500;
-      font-size: 0.95rem;
-      color: #dbe4ec;
-    }
+nav a{
+  margin-left:2rem;
+  color:#dbe4ec;
+  text-decoration:none;
+  font-size:.95rem;
+}
 
-    nav a:hover {
-      color: white;
-    }
+nav a:hover{color:#fff}
 
-    /* LAYOUT */
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 5rem 2rem;
-    }
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:4.5rem 2rem;
+}
 
-    h1 {
-<<<<<<< HEAD
-      font-size: 2.8rem;
-      margin-bottom: 1rem;
-      letter-spacing: -0.02em;
-=======
-      font-size: 2.0rem;
-      margin-bottom: 1rem;
-      letter-spacing: -0.01em;
->>>>>>> 557bd081ec9795f245843034e8d1eee71edfb157
-    }
+section{margin-bottom:4rem}
 
-    h2 {
-      font-size: 2rem;
-      margin-top: 4.5rem;
-      letter-spacing: -0.015em;
-    }
+h1{font-size:2.0rem;letter-spacing:-.02em}
+h2{font-size:1.9rem;margin-top:3rem}
+p{max-width:760px;color:var(--muted)}
 
-    p {
-      max-width: 720px;
-      color: var(--text-muted);
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:2.5rem;
+  margin-top:2rem;
+}
 
-    .small-text {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
+.card{
+  border-top:3px solid var(--steel);
+  padding-top:1.5rem;
+}
 
-    /* SECTIONS + FADE */
-    section {
-      margin-bottom: 3rem;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    }
+.cta{
+  display:inline-block;
+  margin-top:2.5rem;
+  padding:.9rem 1.6rem;
+  border:1px solid var(--steel);
+  color:var(--steel);
+  font-weight:600;
+  text-decoration:none;
+}
 
-    section.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+.cta:hover{
+  background:var(--steel);
+  color:#fff;
+}
 
-    /* GRID */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2.5rem;
-      margin-top: 2.5rem;
-    }
+input,textarea{
+  width:100%;
+  padding:.75rem;
+  margin-top:.4rem;
+  font-family:inherit;
+}
 
-    .card {
-      border-top: 3px solid var(--steel);
-      padding-top: 1.5rem;
-      background: #ffffff;
-      padding: 1.5rem;
-      border-radius: 6px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    }
+label{font-weight:600}
 
-    /* FOOTER */
-    footer {
-      background: linear-gradient(
-        90deg,
-        #1a2530 0%,
-        #1a2530 40%,
-        #3f6f95 100%
-      );
-      color: #cfd8df;
-      padding: 3rem 2rem;
-      margin-top: 6rem;
-      font-size: 0.9rem;
-    }
-
-    footer p {
-      max-width: 900px;
-      margin: auto;
-      color: #cfd8df;
-      text-align: center;
-    }
-  </style>
+.hidden{display:none}
+</style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <div class="nav">
-      <div class="logo">Quintrin</div>
-      <nav>
-        <a href="#">Projects</a>
-        <a href="#">Active Engagements</a>
-      </nav>
+<header>
+  <div class="nav">
+    <div class="logo">QUINTRIN</div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#intake">Intake</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- HOME -->
+<section id="home">
+  <h1>Marine Risk, Structured for Insurer-Ready Review</h1>
+  <p>
+    We prepare operational and compliance data so marine risks are presented
+    clearly, consistently, and defensibly — before they reach underwriters.
+  </p>
+  <a class="cta" href="#intake">Prepare Risk Profile</a>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <h2>Independent Marine Risk Structuring</h2>
+  <p>
+    Insurance markets penalize uncertainty. We reduce it through disciplined
+    organization of vessel, route, compliance, and operational data.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <strong>Prepare Risk Profile</strong>
+      <p>Early-stage structuring for insurer-ready review.</p>
     </div>
-  </header>
+    <div class="card">
+      <strong>Stabilize Renewal Submissions</strong>
+      <p>Reduce volatility caused by fragmented renewals.</p>
+    </div>
+    <div class="card">
+      <strong>Route & Exposure Structuring</strong>
+      <p>Clarify geographic, operational, and regional sensitivities.</p>
+    </div>
+  </div>
+</section>
 
-  <!-- MAIN -->
-  <main class="container">
+<!-- INTAKE -->
+<section id="intake">
+  <h2>Intake</h2>
+  <p>
+    Submissions are reviewed to determine whether structured review may be appropriate.
+  </p>
 
-    <section class="fade">
-      <h1>Concordia Estate – Execution Phase Brief</h1>
-      <p><em>Strategic Execution & Capital Coordination</em></p>
-      <p class="small-text">Prepared by Quintrin</p>
-    </section>
+  <form id="intakeForm">
+    <label>Name
+      <input type="text" id="name" required>
+    </label>
 
-    <section class="fade">
-      <h2>Purpose</h2>
-      <p>This brief outlines the execution structure currently being assembled to reactivate Concordia Estate and transition it into sustainable operations.</p>
-    </section>
+    <label>Company / Organization
+      <input type="text">
+    </label>
 
-    <section class="fade">
-      <h2>The Asset</h2>
-      <p>Concordia Estate is a hospitality and lifestyle property located in Tobago, positioned for phased revitalization and operational optimization.</p>
-      <p><a href="https://www.concordiaestate.com/" target="_blank" style="color: #1e40af;">Primary Asset Reference</a></p>
+    <label>Email
+      <input type="email" required>
+    </label>
 
-    <section class="fade">
-      <h2>Current Execution Reality</h2>
-      <p>Previous operating attempts lacked aligned execution, accountability, and capital structure.</p>
-      <p>The owner has therefore prioritized a results-driven, execution-first model.</p>
-    </section>
-
-    <section class="fade">
-      <h2>Quintrin’s Role</h2>
-      <p>Quintrin is acting as the execution coordinator and capital alignment interface for the Concordia Estate revitalization process.</p>
-      <p>Our mandate is to convert intent into measurable progress while preserving flexibility.</p>
-    </section>
-
-    <section class="fade">
-      <h2>Execution Phasing</h2>
-      <div class="grid">
-        <div class="card">
-          <strong>Phase I</strong>
-          <p>Mobilization & Control</p>
-        </div>
-        <div class="card">
-          <strong>Phase II</strong>
-          <p>Remediation & Revenue Activation</p>
-        </div>
-        <div class="card">
-          <strong>Phase III</strong>
-          <p>Optimization & Scale</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="fade">
-      <h2>Capital Participation Framework</h2>
-      <p>Capital participation is structured in phases, allowing alignment at multiple entry points based on scope, appetite, and performance.</p>
-    </section>
-
-    <section class="fade">
-      <h2>Current Status</h2>
-      <ul>
-        <li>On-site engagement active</li>
-        <li>Execution framework defined</li>
-        <li>Capital alignment in progress</li>
-      </ul>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>
-      Quintrin provides independent execution coordination and capital alignment services only.
-      No insurance placement, underwriting, or claims services are offered.
+    <p style="font-size:.8rem;color:var(--muted)">
+      Your information is used solely for review purposes and is never shared with third parties.
     </p>
-  </footer>
 
-  <!-- FADE SCRIPT -->
-  <script>
-    const sections = document.querySelectorAll("section");
+    <button class="cta" type="submit">Submit</button>
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("show");
-        }
-      });
-    }, {
-      threshold: 0.1
-    });
+    <p style="font-size:.8rem;color:var(--muted);margin-top:1rem">
+      All submissions undergo internal review to determine suitability for structured assessment.
+    </p>
+  </form>
+</section>
 
-    sections.forEach(section => observer.observe(section));
-  </script>
+<!-- CONFIRMATION -->
+<section id="confirmation" class="hidden">
+  <h2>Submission Received</h2>
+  <p id="thankyou"><strong>Thank you.</strong></p>
+  <p>
+    Your submission has been received and an internal review has been initiated.
+  </p>
+  <p>
+    If additional clarification is required, you will be contacted directly.
+    No action is required at this time.
+  </p>
+</section>
+
+<!-- CLARIFICATION (PRIVATE / EMAIL LINKED) -->
+<section id="clarification" class="hidden">
+  <h2>Clarification Request</h2>
+  <p>
+    To determine whether a structured review is appropriate, limited clarification may be requested.
+  </p>
+
+  <label>Briefly outline the primary issue you are encountering
+    <textarea rows="6" placeholder="e.g. renewal instability, documentation gaps, route sensitivity"></textarea>
+  </label>
+
+  <p style="font-size:.8rem;color:var(--muted)">
+    This clarification is used solely to assess review suitability.
+    Supporting documentation may be requested only if appropriate.
+  </p>
+
+  <a class="cta" href="#home">Submit Clarification</a>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    Quintrin provides independent data structuring services only.
+    No insurance placement, underwriting, or claims services are offered.
+  </p>
+</footer>
+
+<script>
+document.getElementById("intakeForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const name=document.getElementById("name").value;
+  document.getElementById("thankyou").innerHTML="<strong>Thank you, "+name+".</strong>";
+  document.getElementById("intake").classList.add("hidden");
+  document.getElementById("confirmation").classList.remove("hidden");
+  location.hash="#confirmation";
+});
+</script>
 
 </body>
 </html>
