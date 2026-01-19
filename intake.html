@@ -34,110 +34,134 @@
       </p>
     </section>
 
-    <!-- ROLE SELECTOR -->
-    <section>
-      <h2>Your Role</h2>
-      <p>
-        Select the option that best represents how you are engaging.
-      </p>
+    <!-- FORM START -->
+    <form method="GET" action="confirmation.html">
 
-      <div class="grid">
-        <div class="card">
-          <strong>Operating Entity</strong>
-          <p>
-            An established company or operation with existing activities,
-            banking relationships, or regulatory history.
-          </p>
+      <!-- NAME -->
+      <section>
+        <h2>Your Name</h2>
+        <p>
+          This helps us acknowledge your submission appropriately.
+        </p>
+
+        <input
+          type="text"
+          name="name"
+          placeholder="First name (optional)"
+          style="max-width: 360px; padding: 0.6rem; font-size: 1rem;"
+        />
+      </section>
+
+      <!-- ROLE SELECTOR -->
+      <section>
+        <h2>Your Role</h2>
+        <p>
+          Select the option that best represents how you are engaging.
+        </p>
+
+        <div class="grid">
+          <label class="card">
+            <input type="radio" name="role" value="operating-entity" />
+            <strong>Operating Entity</strong>
+            <p>
+              An established company or operation with existing activities,
+              banking relationships, or regulatory history.
+            </p>
+          </label>
+
+          <label class="card">
+            <input type="radio" name="role" value="capital-partner" />
+            <strong>Capital Partner / Investor</strong>
+            <p>
+              An individual or entity seeking structured participation through
+              existing operating frameworks.
+            </p>
+          </label>
+
+          <label class="card">
+            <input type="radio" name="role" value="intermediary" />
+            <strong>Intermediary</strong>
+            <p>
+              A broker, facilitator, or advisor coordinating access between
+              counterparties.
+            </p>
+          </label>
         </div>
+      </section>
 
-        <div class="card">
-          <strong>Capital Partner / Investor</strong>
-          <p>
-            An individual or entity seeking structured participation through
-            existing operating frameworks.
-          </p>
+      <!-- ENGAGEMENT INTENT -->
+      <section>
+        <h2>Engagement Intent</h2>
+        <p>
+          Indicate the primary nature of the engagement. This does not commit you
+          to a transaction.
+        </p>
+
+        <div class="grid">
+          <label class="card">
+            <input type="radio" name="intent" value="m-and-a" />
+            <strong>M&A / Strategic Participation</strong>
+            <p>
+              Equity participation, acquisition, recapitalization, or
+              continuity-based structuring.
+            </p>
+          </label>
+
+          <label class="card">
+            <input type="radio" name="intent" value="risk-structuring" />
+            <strong>Risk / Compliance Structuring</strong>
+            <p>
+              Preparation and organization of operational or regulatory data
+              for third-party review.
+            </p>
+          </label>
+
+          <label class="card">
+            <input type="radio" name="intent" value="exploratory" />
+            <strong>Exploratory</strong>
+            <p>
+              Early-stage discussion without defined structure yet.
+            </p>
+          </label>
         </div>
+      </section>
 
-        <div class="card">
-          <strong>Intermediary</strong>
-          <p>
-            A broker, facilitator, or advisor coordinating access between
-            counterparties.
-          </p>
-        </div>
-      </div>
-    </section>
+      <!-- INDUSTRY -->
+      <section>
+        <h2>Industry Context</h2>
+        <p>
+          Select the primary industry context. This is used only for routing
+          and module alignment.
+        </p>
 
-    <!-- ENGAGEMENT INTENT -->
-    <section>
-      <h2>Engagement Intent</h2>
-      <p>
-        Indicate the primary nature of the engagement. This does not commit you
-        to a transaction.
-      </p>
+        <select name="industry" style="max-width: 420px; padding: 0.6rem; font-size: 1rem;">
+          <option value="">Select an industry (optional)</option>
+          <option value="marine">Marine / Shipping</option>
+          <option value="agriculture">Agriculture / Farming</option>
+          <option value="energy">Energy</option>
+          <option value="infrastructure">Infrastructure</option>
+          <option value="manufacturing">Manufacturing</option>
+          <option value="financial">Financial Services</option>
+          <option value="technology">Technology</option>
+          <option value="other">Other / Multi-sector</option>
+        </select>
+      </section>
 
-      <div class="grid">
-        <div class="card">
-          <strong>M&A / Strategic Participation</strong>
-          <p>
-            Equity participation, acquisition, recapitalization, or continuity-based
-            structuring.
-          </p>
-        </div>
+      <!-- SUBMIT -->
+      <section>
+        <h2>Next Step</h2>
+        <p style="max-width: 760px;">
+          After intake classification, your submission will be reviewed for
+          completeness and appropriate routing.
+        </p>
 
-        <div class="card">
-          <strong>Risk / Compliance Structuring</strong>
-          <p>
-            Preparation and organization of operational or regulatory data
-            for third-party review.
-          </p>
-        </div>
+        <button type="submit" class="cta">
+          Submit Intake
+        </button>
+      </section>
 
-        <div class="card">
-          <strong>Exploratory</strong>
-          <p>
-            Early-stage discussion without defined structure yet.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- INDUSTRY CONTEXT -->
-    <section>
-      <h2>Industry Context</h2>
-      <p>
-        Select the primary industry context. This is used only for routing
-        and module alignment.
-      </p>
-
-      <div class="grid">
-        <div class="card"><strong>Marine / Shipping</strong></div>
-        <div class="card"><strong>Agriculture / Farming</strong></div>
-        <div class="card"><strong>Energy</strong></div>
-        <div class="card"><strong>Infrastructure</strong></div>
-        <div class="card"><strong>Manufacturing</strong></div>
-        <div class="card"><strong>Financial Services</strong></div>
-        <div class="card"><strong>Technology</strong></div>
-        <div class="card">
-          <strong>Other</strong>
-          <p>Sector not listed or multi-sector engagement.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- NEXT STEP -->
-    <section>
-      <h2>Next Step</h2>
-      <p style="max-width: 760px;">
-        After intake classification, participants are routed to the appropriate
-        module and engagement pathway. No automated decisions or solicitations
-        occur.
-      </p>
-
-      <a class="cta" href="#">
-        Continue to Structured Intake
-      </a>
-    </section>
+    </form>
+    <!-- FORM END -->
 
   </main>
 
