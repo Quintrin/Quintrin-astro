@@ -1,21 +1,20 @@
----
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Submission Received | Quintrin</title>
-  <meta name="description" content="Intake submission received." />
-  <link rel="stylesheet" href="/styles.css">
+  <meta name="description" content="Structured intake submission received." />
+  <link rel="stylesheet" href="styles.css">
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const params = new URLSearchParams(window.location.search);
       const name = params.get("name");
 
-      if (name) {
-        const slot = document.getElementById("name-slot");
+      const slot = document.getElementById("name-slot");
+
+      if (name && slot) {
         slot.textContent = `Thank you, ${name}.`;
       }
     });
@@ -28,8 +27,8 @@
     <div class="nav">
       <div class="logo">QUINTRIN</div>
       <nav>
-        <a href="/services">Services</a>
-        <a href="/intake">Intake</a>
+        <a href="index.html">Framework</a>
+        <a href="intake.html">Intake</a>
       </nav>
     </div>
   </header>
@@ -42,19 +41,18 @@
       <p id="name-slot"><strong>Thank you.</strong></p>
 
       <p>
-  Your submission has been received and an internal review has been initiated
-  to assess completeness and scope.
-</p>
+        Your intake has been received and an internal review has been initiated
+        to assess completeness, scope, and appropriate routing.
       </p>
 
       <p>
-        If additional clarification is required, you will be contacted.
-        If the submission is suitable for structured review, next steps
-        will be outlined directly.
+        If additional clarification is required, you may be contacted directly.
+        If the submission is suitable for structured engagement, next steps
+        will be outlined privately.
       </p>
 
       <p>
-        No action is required at this time.
+        No further action is required at this time.
       </p>
     </section>
 
@@ -62,8 +60,8 @@
 
   <footer>
     <p>
-      Quintrin provides independent data structuring services only.
-      No insurance placement, underwriting, or claims services are offered.
+      Quintrin provides independent structuring and facilitation services only.
+      No brokerage, underwriting, fiduciary, or advisory services are offered.
     </p>
   </footer>
 
