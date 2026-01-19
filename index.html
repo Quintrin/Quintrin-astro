@@ -1,262 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quintrin | Marine Risk Structuring</title>
-<meta name="description" content="Independent marine risk structuring for insurer-ready review.">
-
-<style>
-:root{
-  --navy:#0b1c2d;
-  --charcoal:#1a2530;
-  --steel:#4f7fa8;
-  --silver:#f2f4f6;
-  --text:#0e1a24;
-  --muted:#5f6b76;
-}
-
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:var(--silver);
-  color:var(--text);
-  line-height:1.65;
-}
-
-header,footer{
-  color:#fff;
-}
-
-header{
-  background:linear-gradient(90deg,var(--navy) 0%,var(--navy) 35%,var(--steel) 100%);
-  padding:1.5rem 2rem;
-}
-
-footer{
-  background:linear-gradient(90deg,var(--charcoal) 0%,var(--charcoal) 40%,#3f6f95 100%);
-  padding:3rem 2rem;
-  font-size:.9rem;
-}
-
-.nav{
-  max-width:1200px;
-  margin:auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.logo{
-  font-weight:700;
-  letter-spacing:.08em;
-  position:relative;
-}
-
-.logo::after{
-  content:"";
-  position:absolute;
-  left:0;
-  bottom:-6px;
-  width:40%;
-  height:2px;
-  background:var(--steel);
-}
-
-nav a{
-  margin-left:2rem;
-  color:#dbe4ec;
-  text-decoration:none;
-  font-size:.95rem;
-}
-
-nav a:hover{color:#fff}
-
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:4.5rem 2rem;
-}
-
-section{margin-bottom:4rem}
-
-h1{font-size:2.0rem;letter-spacing:-.02em}
-h2{font-size:1.9rem;margin-top:3rem}
-p{max-width:760px;color:var(--muted)}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:2.5rem;
-  margin-top:2rem;
-}
-
-.card{
-  border-top:3px solid var(--steel);
-  padding-top:1.5rem;
-}
-
-.cta{
-  display:inline-block;
-  margin-top:2.5rem;
-  padding:.9rem 1.6rem;
-  border:1px solid var(--steel);
-  color:var(--steel);
-  font-weight:600;
-  text-decoration:none;
-}
-
-.cta:hover{
-  background:var(--steel);
-  color:#fff;
-}
-
-input,textarea{
-  width:100%;
-  padding:.75rem;
-  margin-top:.4rem;
-  font-family:inherit;
-}
-
-label{font-weight:600}
-
-.hidden{display:none}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quintrin Financial Services Ltd | The Creative Way to Wealth</title>
+  <meta name="description" content="Quintrin Financial Services Ltd - strategic consultancy and execution-focused solutions across diverse sectors." />
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<header>
-  <div class="nav">
-    <div class="logo">QUINTRIN</div>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#services">Services</a>
-      <a href="#intake">Intake</a>
-    </nav>
-  </div>
-</header>
-
-<main class="container">
-
-<!-- HOME -->
-<section id="home">
-  <h1>Marine Risk, Structured for Insurer-Ready Review</h1>
-  <p>
-    We prepare operational and compliance data so marine risks are presented
-    clearly, consistently, and defensibly — before they reach underwriters.
-  </p>
-  <a class="cta" href="#intake">Prepare Risk Profile</a>
-</section>
-
-<!-- SERVICES -->
-<section id="services">
-  <h2>Independent Marine Risk Structuring</h2>
-  <p>
-    Insurance markets penalize uncertainty. We reduce it through disciplined
-    organization of vessel, route, compliance, and operational data.
-  </p>
-
-  <div class="grid">
-    <div class="card">
-      <strong>Prepare Risk Profile</strong>
-      <p>Early-stage structuring for insurer-ready review.</p>
+  <header>
+    <div class="nav">
+      <div class="logo">QUINTRIN</div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="intake.html">Structured Intake</a>
+      </nav>
     </div>
-    <div class="card">
-      <strong>Stabilize Renewal Submissions</strong>
-      <p>Reduce volatility caused by fragmented renewals.</p>
-    </div>
-    <div class="card">
-      <strong>Route & Exposure Structuring</strong>
-      <p>Clarify geographic, operational, and regional sensitivities.</p>
-    </div>
-  </div>
-</section>
+  </header>
 
-<!-- INTAKE -->
-<section id="intake">
-  <h2>Intake</h2>
-  <p>
-    Submissions are reviewed to determine whether structured review may be appropriate.
-  </p>
+  <main class="container">
 
-  <form id="intakeForm">
-    <label>Name
-      <input type="text" id="name" required>
-    </label>
+    <!-- HERO / COMPANY INTRO -->
+    <section id="hero">
+      <h1>Quintrin Financial Services Ltd</h1>
+      <p>
+        Creative solutions backed by disciplined execution — delivering measurable value across sectors.
+      </p>
+      <a class="cta" href="intake.html">Begin Structured Intake</a>
+    </section>
 
-    <label>Company / Organization
-      <input type="text">
-    </label>
+    <!-- COMPANY OVERVIEW -->
+    <section id="overview">
+      <h2>Who We Are</h2>
+      <p>
+        Quintrin Financial Services Ltd is a privately held Trinidad-based consultancy and execution-focused company specializing in asset optimization, operational turnaround, and value creation across diverse sectors.
+      </p>
+      <p>
+        Our philosophy is simple: <strong>creative solutions backed by disciplined execution.</strong>
+      </p>
+    </section>
 
-    <label>Email
-      <input type="email" required>
-    </label>
+    <!-- PHILOSOPHY / APPROACH -->
+    <section id="philosophy">
+      <h2>Our Approach</h2>
+      <p>
+        While Quintrin operates primarily as a strategic consultancy, we structure each engagement independently, assembling the appropriate expertise, labor, and resources required for the specific scope of work.
+      </p>
+      <p>
+        This approach allows us to move efficiently across industries while maintaining accountability and results-driven delivery.
+      </p>
+    </section>
 
-    <p style="font-size:.8rem;color:var(--muted)">
-      Your information is used solely for review purposes and is never shared with third parties.
+    <!-- EXPERIENCE / SECTORS -->
+    <section id="experience">
+      <h2>Where We Excel</h2>
+      <div class="grid">
+        <div class="card">
+          <strong>Real Estate Operations</strong>
+          <p>Optimizing operational efficiency and asset performance.</p>
+        </div>
+        <div class="card">
+          <strong>Asset-Backed Projects</strong>
+          <p>Strategic structuring of projects to maximize returns and security.</p>
+        </div>
+        <div class="card">
+          <strong>Commodities & Markets</strong>
+          <p>Execution-focused guidance for regulated and private market engagements.</p>
+        </div>
+        <div class="card">
+          <strong>Strategic Facilitation</strong>
+          <p>Bringing together the right resources, labor, and expertise for execution.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALUES / PHILOSOPHY -->
+    <section id="values">
+      <h2>Our Guiding Principle</h2>
+      <p>
+        We do not offer generic management services. Instead, we partner where execution, problem-solving, and measurable outcomes are required.
+      </p>
+      <p>
+        Our slogan, <strong>“The Creative Way to Wealth”</strong>, reflects our belief that sustainable value is built through insight, structure, and action — not speculation or passive oversight.
+      </p>
+    </section>
+
+    <!-- CTA / INTENT -->
+    <section id="cta">
+      <h2>Get Started</h2>
+      <p>
+        Whether you are an operator, investor, or intermediary, begin your structured engagement today.
+      </p>
+      <a class="cta" href="intake.html">Start Structured Intake</a>
+      <a class="cta" href="services.html" style="margin-left:1rem;">Learn About Our Services</a>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>
+      Quintrin provides independent structuring and facilitation services only.  
+      No brokerage, underwriting, fiduciary, or advisory services are offered.
     </p>
-
-    <button class="cta" type="submit">Submit</button>
-
-    <p style="font-size:.8rem;color:var(--muted);margin-top:1rem">
-      All submissions undergo internal review to determine suitability for structured assessment.
-    </p>
-  </form>
-</section>
-
-<!-- CONFIRMATION -->
-<section id="confirmation" class="hidden">
-  <h2>Submission Received</h2>
-  <p id="thankyou"><strong>Thank you.</strong></p>
-  <p>
-    Your submission has been received and an internal review has been initiated.
-  </p>
-  <p>
-    If additional clarification is required, you will be contacted directly.
-    No action is required at this time.
-  </p>
-</section>
-
-<!-- CLARIFICATION (PRIVATE / EMAIL LINKED) -->
-<section id="clarification" class="hidden">
-  <h2>Clarification Request</h2>
-  <p>
-    To determine whether a structured review is appropriate, limited clarification may be requested.
-  </p>
-
-  <label>Briefly outline the primary issue you are encountering
-    <textarea rows="6" placeholder="e.g. renewal instability, documentation gaps, route sensitivity"></textarea>
-  </label>
-
-  <p style="font-size:.8rem;color:var(--muted)">
-    This clarification is used solely to assess review suitability.
-    Supporting documentation may be requested only if appropriate.
-  </p>
-
-  <a class="cta" href="#home">Submit Clarification</a>
-</section>
-
-</main>
-
-<footer>
-  <p>
-    Quintrin provides independent data structuring services only.
-    No insurance placement, underwriting, or claims services are offered.
-  </p>
-</footer>
-
-<script>
-document.getElementById("intakeForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const name=document.getElementById("name").value;
-  document.getElementById("thankyou").innerHTML="<strong>Thank you, "+name+".</strong>";
-  document.getElementById("intake").classList.add("hidden");
-  document.getElementById("confirmation").classList.remove("hidden");
-  location.hash="#confirmation";
-});
-</script>
+  </footer>
 
 </body>
 </html>
