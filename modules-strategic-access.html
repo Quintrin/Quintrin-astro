@@ -111,11 +111,57 @@
   </p>
 </section>
 
-<section>
-  <h2>20-Year Cost vs Control Reality</h2>
-  <p>
-    Over time, leasing becomes rent, legal trusteeship becomes a bottleneck,
-    and equity governance becomes the lowest-cost, highest-control structure.
+<section class="svg-chart">
+  <h3>20-Year Cost vs Control Comparison</h3>
+
+  <svg viewBox="0 0 800 400" width="100%" height="auto" role="img" aria-label="Cost comparison over 20 years">
+    
+    <!-- Axes -->
+    <line x1="80" y1="50" x2="80" y2="350" stroke="#333" stroke-width="2"/>
+    <line x1="80" y1="350" x2="750" y2="350" stroke="#333" stroke-width="2"/>
+
+    <!-- Y-axis labels -->
+    <text x="20" y="60" font-size="12">High Cost</text>
+    <text x="20" y="350" font-size="12">Low Cost</text>
+
+    <!-- X-axis labels -->
+    <text x="80" y="380" font-size="12">0</text>
+    <text x="250" y="380" font-size="12">5</text>
+    <text x="420" y="380" font-size="12">10</text>
+    <text x="590" y="380" font-size="12">15</text>
+    <text x="720" y="380" font-size="12">20 Years</text>
+
+    <!-- Acquisition Line -->
+    <polyline
+      points="80,120 250,140 420,160 590,180 720,200"
+      fill="none"
+      stroke="#c0392b"
+      stroke-width="3"
+    />
+    <text x="600" y="170" font-size="12" fill="#c0392b">Acquisition</text>
+
+    <!-- Lease Line -->
+    <polyline
+      points="80,200 250,230 420,260 590,300 720,330"
+      fill="none"
+      stroke="#e67e22"
+      stroke-width="3"
+    />
+    <text x="600" y="310" font-size="12" fill="#e67e22">Lease / Management</text>
+
+    <!-- Quintrin Line -->
+    <polyline
+      points="80,260 250,210 420,180 590,170 720,165"
+      fill="none"
+      stroke="#27ae60"
+      stroke-width="3"
+    />
+    <text x="600" y="155" font-size="12" fill="#27ae60">Build–Own–Operate</text>
+
+  </svg>
+
+  <p class="chart-note">
+    The Quintrin model front-loads investment to eliminate compounding control and cost exposure over time.
   </p>
 </section>
 
