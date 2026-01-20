@@ -111,60 +111,38 @@
   </p>
 </section>
 
-<section class="svg-chart">
+<!-- 20-Year Cost vs Control SVG -->
+<section class="svg-chart" style="margin: 1rem 0;">
   <h3>20-Year Cost vs Control Comparison</h3>
 
- <svg viewBox="0 0 800 400" width="100%" height="auto" aria-label="Cost over time by structure">
+  <svg viewBox="0 0 800 400" width="100%" height="auto" aria-label="Cost over time by structure" style="display: block; margin: 0 auto;">
+    <!-- Axes -->
+    <line x1="60" y1="20" x2="60" y2="360" stroke="#333" stroke-width="2"/>
+    <line x1="60" y1="360" x2="760" y2="360" stroke="#333" stroke-width="2"/>
 
-  <!-- Axes -->
-  <line x1="60" y1="20" x2="60" y2="360" stroke="#333" stroke-width="2"/>
-  <line x1="60" y1="360" x2="760" y2="360" stroke="#333" stroke-width="2"/>
+    <!-- Labels -->
+    <text x="10" y="30" font-size="14" fill="#333">High Cost</text>
+    <text x="10" y="360" font-size="14" fill="#333">Low Cost</text>
+    <text x="680" y="390" font-size="14" fill="#333">20 Years</text>
 
-  <!-- Labels -->
-  <text x="10" y="30" font-size="14">High Cost</text>
-  <text x="10" y="360" font-size="14">Low Cost</text>
-  <text x="680" y="390" font-size="14">20 Years</text>
+    <!-- Option A: Leasing -->
+    <polyline points="60,220 200,240 400,280 600,320 760,340" fill="none" stroke="#e67e22" stroke-width="4"/>
+    <text x="600" y="300" fill="#e67e22" font-size="14">Option A — Leasing</text>
 
-  <!-- Option A: Leasing -->
-  <polyline
-    points="60,220 200,240 400,280 600,320 760,340"
-    fill="none"
-    stroke="#e67e22"
-    stroke-width="4"
-  />
-  <text x="600" y="300" fill="#e67e22" font-size="14">
-    Option A — Leasing
-  </text>
+    <!-- Option B: Legal / Trustee -->
+    <polyline points="60,120 200,140 400,170 600,200 760,230" fill="none" stroke="#c0392b" stroke-width="4"/>
+    <text x="110" y="105" fill="#c0392b" font-size="14">Option B — Legal Control</text>
 
-  <!-- Option B: Legal / Trustee -->
-  <polyline
-    points="60,120 200,140 400,170 600,200 760,230"
-    fill="none"
-    stroke="#c0392b"
-    stroke-width="4"
-  />
-  <text x="110" y="105" fill="#c0392b" font-size="14">
-    Option B — Legal Control
-  </text>
+    <!-- Option C: Equity -->
+    <polyline points="60,280 200,240 400,200 600,180 760,170" fill="none" stroke="#27ae60" stroke-width="4"/>
+    <text x="545" y="160" fill="#27ae60" font-size="14">Option C — Equity + Governance</text>
+  </svg>
 
-  <!-- Option C: Equity -->
-  <polyline
-    points="60,280 200,240 400,200 600,180 760,170"
-    fill="none"
-    stroke="#27ae60"
-    stroke-width="4"
-  />
-  <text x="545" y="160" fill="#27ae60" font-size="14">
-    Option C — Equity + Governance
-  </text>
-
-</svg>
-
-  <p class="chart-note">
+  <p class="chart-note" style="margin: 0.5rem 0;">
     The Quintrin model front-loads investment to eliminate compounding control and cost exposure over time.
   </p>
 </section>
-  
+
 <section>
   <h2>Speed of Execution vs Risk Exposure</h2>
 
@@ -186,54 +164,44 @@
   </p>
 </section>
 
-<svg width="100%" height="520" viewBox="0 0 1200 520" xmlns="http://www.w3.org/2000/svg" aria-label="Speed of execution versus risk by structure">
+<!-- Speed vs Risk SVG -->
+<section class="svg-chart" style="margin: 1rem 0;">
+  <svg width="100%" height="520" viewBox="0 0 1200 520" xmlns="http://www.w3.org/2000/svg" aria-label="Speed of execution versus risk by structure" style="display: block; margin: 0 auto;">
+    <!-- Axes -->
+    <line x1="120" y1="60" x2="120" y2="440" stroke="#333" stroke-width="2"/>
+    <line x1="120" y1="440" x2="1080" y2="440" stroke="#333" stroke-width="2"/>
 
-  <!-- Axes -->
-  <line x1="120" y1="60" x2="120" y2="440" stroke="#333" stroke-width="2"/>
-  <line x1="120" y1="440" x2="1080" y2="440" stroke="#333" stroke-width="2"/>
+    <!-- Column dividers -->
+    <line x1="460" y1="60" x2="460" y2="440" stroke="#bbb" stroke-width="1"/>
+    <line x1="760" y1="60" x2="760" y2="440" stroke="#bbb" stroke-width="1"/>
+    <line x1="1080" y1="60" x2="1080" y2="440" stroke="#bbb" stroke-width="1"/>
 
-  <!-- Column dividers (light, structural only) -->
-  <line x1="460" y1="60" x2="460" y2="440" stroke="#bbb" stroke-width="1"/>
-  <line x1="760" y1="60" x2="760" y2="440" stroke="#bbb" stroke-width="1"/>
-  <line x1="1080" y1="60" x2="1080" y2="440" stroke="#bbb" stroke-width="1"/>
+    <!-- Y Labels -->
+    <text x="120" y="45" text-anchor="middle" font-size="14" fill="#333">Fast</text>
+    <text x="120" y="460" text-anchor="middle" font-size="14" fill="#333">Slow</text>
 
-  <!-- Y Labels -->
-  <text x="120" y="45" text-anchor="middle" font-size="14" fill="#333">Fast</text>
-  <text x="120" y="460" text-anchor="middle" font-size="14" fill="#333">Slow</text>
+    <!-- X Labels -->
+    <text x="120" y="480" font-size="14" fill="#333">Low Risk</text>
+    <text x="1080" y="480" text-anchor="end" font-size="14" fill="#333">High Risk</text>
+    <text x="600" y="505" text-anchor="middle" font-size="14" fill="#333">Risk → Low to High</text>
 
-  <!-- X Labels -->
-  <text x="120" y="480" font-size="14" fill="#333">Low Risk</text>
-  <text x="1080" y="480" text-anchor="end" font-size="14" fill="#333">High Risk</text>
-  <text x="600" y="505" text-anchor="middle" font-size="14" fill="#333">
-    Risk → Low to High
-  </text>
+    <!-- Axis Title -->
+    <text x="30" y="260" transform="rotate(-90 30 260)" text-anchor="middle" font-size="14" fill="#333">Speed of Execution</text>
 
-  <!-- Axis Title -->
-  <text x="30" y="260" transform="rotate(-90 30 260)"
-        text-anchor="middle" font-size="14" fill="#333">
-    Speed of Execution
-  </text>
+    <!-- OPTION C -->
+    <line x1="300" y1="440" x2="300" y2="150" stroke="#27ae60" stroke-width="5"/>
+    <text x="300" y="125" text-anchor="middle" font-size="14" fill="#27ae60">Option C — Equity + Governance</text>
 
-  <!-- OPTION C -->
-  <line x1="300" y1="440" x2="300" y2="150" stroke="#27ae60" stroke-width="5"/>
-  <text x="300" y="125" text-anchor="middle" font-size="14" fill="#27ae60">
-    Option C — Equity + Governance
-  </text>
+    <!-- OPTION B -->
+    <line x1="610" y1="440" x2="610" y2="210" stroke="#2980b9" stroke-width="5"/>
+    <text x="610" y="185" text-anchor="middle" font-size="14" fill="#2980b9">Option B — Legal / Trustee</text>
 
-  <!-- OPTION B -->
-  <line x1="610" y1="440" x2="610" y2="210" stroke="#2980b9" stroke-width="5"/>
-  <text x="610" y="185" text-anchor="middle" font-size="14" fill="#2980b9">
-    Option B — Legal / Trustee
-  </text>
+    <!-- OPTION A -->
+    <line x1="920" y1="440" x2="920" y2="270" stroke="#e67e22" stroke-width="5"/>
+    <text x="920" y="245" text-anchor="middle" font-size="14" fill="#e67e22">Option A — Leasing</text>
+  </svg>
+</section>
 
-  <!-- OPTION A -->
-  <line x1="920" y1="440" x2="920" y2="270" stroke="#e67e22" stroke-width="5"/>
-  <text x="920" y="245" text-anchor="middle" font-size="14" fill="#e67e22">
-    Option A — Leasing
-  </text>
-
-</svg>
-  
 <section>
   <h2>Final Positioning Statement</h2>
   <p>
@@ -246,6 +214,7 @@
 </section>
 
 </main>
+
 <footer>
   <p>
     Quintrin provides independent execution coordination and structural design services only.
@@ -254,4 +223,4 @@
 </footer>
 
 </body>
-</html>
+  </html>
