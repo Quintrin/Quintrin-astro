@@ -142,6 +142,20 @@ section {
   padding-top: 1.5rem;
 }
 
+.svg-chart {
+  margin: 3rem 0;
+}
+
+.svg-chart h3 {
+  margin-bottom: 1rem;
+}
+
+.svg-chart .chart-note {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-top: 0.5rem;
+}
+
 footer {
   background: linear-gradient(
     90deg,
