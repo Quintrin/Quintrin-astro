@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QFSL Seller Compliance Intake</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">QUINTRIN</div>
+    <nav>
+      <a href="/services">Services</a>
+      <a href="/intake">Intake</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- ================= INTERNAL GOVERNANCE HEADER (QFSL ONLY) ================= -->
+<section>
+  <h1>QFSL Phase 0 Compliance Intake</h1>
+
+  <label>Ref: Document Number</label>
+  <input name="document_ref" placeholder="QFSL-COMP-S0-XXXX" />
+
+  <label>Date</label>
+  <input type="date" name="document_date" />
+
+  <label>Board Resolution Number</label>
+  <input name="board_resolution" placeholder="BR-YYYY-XXX" />
+</section>
+
+<!-- ================= SECTION 1 ================= -->
+<section>
+  <h2>1. Seller Entity Identification</h2>
+
+  <label>Entity Type</label>
+  <select name="entity_type">
+    <option>Individual</option>
+    <option>Company</option>
+    <option>Trust</option>
+    <option>Joint Venture</option>
+    <option>Government / State Entity</option>
+  </select>
+
+  <label>Legal Name of Seller Entity</label>
+  <input name="legal_name" required />
+
+  <label>Registered Address</label>
+  <input name="registered_address" />
+
+  <label>Operating Address</label>
+  <input name="operating_address" />
+
+  <label>Country of Incorporation / Residence</label>
+  <input name="country" />
+
+  <label>Registration Number / National ID</label>
+  <input name="registration_number" />
+
+  <label>Tax Identification Number (TIN)</label>
+  <input name="tin" />
+
+  <label>Authorized Representative Name</label>
+  <input name="rep_name" />
+
+  <label>Position / Title</label>
+  <input name="rep_title" />
+
+  <label>Email</label>
+  <input type="email" name="rep_email" />
+
+  <label>Phone / WhatsApp</label>
+  <input name="rep_phone" />
+
+  <label>Age of Operating Bank Account(s)</label>
+  <input name="bank_age" placeholder="e.g. 5 years" />
+
+  <label>General Account Capacity & Operating Profile</label>
+  <textarea name="bank_profile" rows="4" placeholder="Typical monthly throughput, activity status"></textarea>
+</section>
+
+<!-- ================= SECTION 2 ================= -->
+<section>
+  <h2>2. Company Type / Business Classification</h2>
+
+  <label>Type of Company</label><br />
+  <input type="checkbox" name="company_type" value="Real Estate" /> Real Estate<br />
+  <input type="checkbox" name="company_type" value="Hardware" /> Hardware<br />
+  <input type="checkbox" name="company_type" value="Insurance Firm" /> Insurance Firm<br />
+  <input type="checkbox" name="company_type" value="Land Development" /> Land Development<br />
+  <input type="checkbox" name="company_type" value="Energy / Minerals" /> Energy / Minerals<br />
+  <input type="checkbox" name="company_type" value="Oil and Gas" /> Oil and Gas<br />
+  <input type="checkbox" name="company_type" value="Security" /> Security<br />
+  <input type="checkbox" name="company_type" value="Agriculture" /> Agriculture<br />
+  <input type="checkbox" name="company_type" value="Other" /> Other (Specify)
+
+  <label>Business Description / Operating Scope</label>
+  <textarea name="business_scope" rows="4"></textarea>
+
+  <label>Jurisdictions of Operation</label>
+  <input name="jurisdictions" />
+
+  <label>Expected Transaction Value (USD)</label>
+  <input type="number" name="transaction_value" />
+
+  <label>Is the company or asset encumbered?</label>
+  <select name="encumbered">
+    <option>No</option>
+    <option>Yes</option>
+  </select>
+
+  <label>If Yes, provide details</label>
+  <textarea name="encumbrance_details" rows="3"></textarea>
+</section>
+
+<!-- ================= SECTION 3 ================= -->
+<section>
+  <h2>3. Beneficial Ownership</h2>
+
+  <label>Ultimate Beneficial Owner (UBO)</label>
+  <input name="ubo_name" />
+
+  <label>Nationality</label>
+  <input name="ubo_nationality" />
+
+  <label>Ownership Control Type</label>
+  <select name="ubo_control_type">
+    <option>Direct</option>
+    <option>Indirect</option>
+    <option>Trust Structure</option>
+    <option>Nominee</option>
+  </select>
+
+  <label>Politically Exposed Person (PEP)</label>
+  <select name="pep_status">
+    <option>No</option>
+    <option>Yes</option>
+  </select>
+
+  <label>If Yes, details</label>
+  <textarea name="pep_details" rows="3"></textarea>
+</section>
+
+<!-- ================= SECTION 4 ================= -->
+<section>
+  <h2>4. Compliance Declarations</h2>
+
+  <label>Source of Funds</label>
+  <textarea name="source_of_funds" rows="3"></textarea>
+
+  <label>Source of Wealth</label>
+  <textarea name="source_of_wealth" rows="3"></textarea>
+
+  <input type="checkbox" name="sanctions" /> Not subject to sanctions<br />
+  <input type="checkbox" name="litigation" /> Not subject to ownership litigation<br />
+  <input type="checkbox" name="third_party" /> No undisclosed third-party interests
+</section>
+
+<!-- ================= SECTION 5 ================= -->
+<section>
+  <h2>5. Document Uploads</h2>
+
+  <label>Certificate of Incorporation (REQUIRED)</label>
+  <input type="file" name="certificate_incorporation" required />
+
+  <label>Government ID (Optional)</label>
+  <input type="file" name="gov_id" />
+
+  <label>Shareholder Register (Optional)</label>
+  <input type="file" name="shareholder_register" />
+
+  <label>Proof of Address (Optional)</label>
+  <input type="file" name="proof_address" />
+</section>
+
+<!-- ================= SECTION 7 ================= -->
+<section>
+  <h2>7. QFSL Exception Data Entry Mode</h2>
+
+  <label>Data Entry Mode</label>
+  <select name="data_entry_mode">
+    <option>Seller Submitted Directly</option>
+    <option>QFSL Entered on Seller’s Behalf</option>
+  </select>
+
+  <label>Reason</label>
+  <select name="qfsl_reason">
+    <option>Seller submitted via email</option>
+    <option>Seller submitted partial data</option>
+    <option>Legacy client migration</option>
+    <option>Urgent investor deadline</option>
+  </select>
+
+  <label>Source of Information</label>
+  <select name="info_source">
+    <option>Email</option>
+    <option>Signed PDF</option>
+    <option>WhatsApp</option>
+    <option>Physical Documents</option>
+  </select>
+</section>
+
+<button class="cta" type="submit">Submit Compliance Intake</button>
+
+</main>
+
+<footer>
+  <p>Quintrin provides independent data structuring services only.</p>
+</footer>
+
+</body>
+</html>
