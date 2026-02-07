@@ -1,0 +1,14 @@
+{
+  "document_ref": "string",
+  "document_date": "date",
+  "board_resolution": "string",
+  "entity_type": "string",
+  "legal_name": "string",
+  "bank_age": "string",
+  "bank_profile": "string",
+  "company_type": ["string"],
+  "ubo_name": "string",
+  "pep_status": "boolean",
+  "certificate_incorporation": "file_required",
+  "data_entry_mode": "string"
+}
