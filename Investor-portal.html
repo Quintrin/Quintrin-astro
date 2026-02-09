@@ -37,7 +37,7 @@ function submitDecision(decision) {
   const dealRef = document.getElementById("dealRef").value;
   const note = document.getElementById("note").value;
 
-  fetch("YOUR_GOOGLE_SCRIPT_URL", {
+  fetch("https://script.google.com/macros/s/AKfycbxlZKhiTB5yxxdcyk1FzNqzkb7-7T0wdmKIa9JBwYRINVesnMkCU50XiFvd2X0yTLY/exec", {
     method: "POST",
     body: JSON.stringify({
       dealRef,
