@@ -1,0 +1,54 @@
+<script>
+const PIN = "4821"; // Your private investor PIN
+
+function submitDecision(decision) {
+  const userPin = prompt("Enter Investor PIN:");
+
+  let pinStatus = "Failed";
+  if (userPin === PIN) pinStatus = "Verified";
+
+  const dealRef = document.getElementById("dealRef").value;
+  const note = document.getElementById("note").value;
+
+  fetch("YOUR_GOOGLE_SCRIPT_URL", {
+    method: "POST",
+    body: JSON.stringify({
+      dealRef,
+      decision,
+      note,
+      pinStatus
+    })
+  }).then(()=>alert("Decision Submitted. Quintrin has been notified."));
+}
+</script>
+
+<button onclick="submitDecision('Approved')">Approve</button>
+<button onclick="submitDecision('Rejected')">Reject</button>
+<button onclick="submitDecision('Clarification Required')">Clarify</button>
+<script>
+const PIN = "4821"; // Your private investor PIN
+
+function submitDecision(decision) {
+  const userPin = prompt("Enter Investor PIN:");
+
+  let pinStatus = "Failed";
+  if (userPin === PIN) pinStatus = "Verified";
+
+  const dealRef = document.getElementById("dealRef").value;
+  const note = document.getElementById("note").value;
+
+  fetch("YOUR_GOOGLE_SCRIPT_URL", {
+    method: "POST",
+    body: JSON.stringify({
+      dealRef,
+      decision,
+      note,
+      pinStatus
+    })
+  }).then(()=>alert("Decision Submitted. Quintrin has been notified."));
+}
+</script>
+
+<button onclick="submitDecision('Approved')">Approve</button>
+<button onclick="submitDecision('Rejected')">Reject</button>
+<button onclick="submitDecision('Clarification Required')">Clarify</button>
