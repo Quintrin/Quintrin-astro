@@ -10,7 +10,7 @@ function submitDecision(decision) {
   const dealRef = document.getElementById("dealRef").value;
   const note = document.getElementById("note").value;
 
-  fetch("YOUR_GOOGLE_SCRIPT_URL", {
+  fetch("https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec
     method: "POST",
     body: JSON.stringify({
       dealRef,
@@ -19,6 +19,12 @@ function submitDecision(decision) {
       pinStatus
     })
   }).then(()=>alert("Decision Submitted. Quintrin has been notified."));
+}
+  {
+  ref: "QFSL-2026-001",
+  status: "Approved",
+  notes: "All compliance satisfied",
+  code: "4821"
 }
 </script>
 
@@ -37,7 +43,7 @@ function submitDecision(decision) {
   const dealRef = document.getElementById("dealRef").value;
   const note = document.getElementById("note").value;
 
-  fetch("https://script.google.com/macros/s/AKfycbxlZKhiTB5yxxdcyk1FzNqzkb7-7T0wdmKIa9JBwYRINVesnMkCU50XiFvd2X0yTLY/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec
     method: "POST",
     body: JSON.stringify({
       dealRef,
