@@ -1,16 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Investor Decision Portal | Quintrin</title>
+  <meta name="description" content="Confidential investor decision interface." />
+
+  <!-- Quintrin Core Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">QUINTRIN</div>
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/services.html">Services</a>
+      <a href="/intake.html">Intake</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+<section>
+  <h1>Investor Decision Panel</h1>
+  <p>
+    This portal is restricted to authorized investors.  
+    Decisions are recorded directly into Quintrin’s internal compliance registry.
+  </p>
+</section>
+
+<section>
+  <h2>Deal Decision Entry</h2>
+
+  <label>Deal Reference Number</label>
+  <input id="dealRef" type="text" placeholder="QFSL-2026-001">
+
+  <label>Investor Notes (optional)</label>
+  <textarea id="note" rows="5" placeholder="Internal investor notes..."></textarea>
+
+  <div style="margin-top:2rem;">
+    <button class="cta" onclick="submitDecision('Approved')">Approve</button>
+    <button class="cta" onclick="submitDecision('Rejected')">Reject</button>
+    <button class="cta" onclick="submitDecision('Clarification Required')">Request Clarification</button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    Quintrin Financial Services Ltd.  
+    Confidential Investor Interface — Unauthorized access prohibited.
+  </p>
+</footer>
+
 <script>
-const PIN = "4821"; // Investor PIN
+const PIN = "4821"; // Investor PIN (prototype only)
 
 function submitDecision(status) {
   const userPin = prompt("Enter Investor PIN:");
 
-  if (!userPin) return alert("PIN required");
+  if (!userPin) return alert("PIN required.");
 
   let investorCode = "Failed";
   if (userPin === PIN) investorCode = "Verified";
 
   const ref = document.getElementById("dealRef").value;
   const notes = document.getElementById("note").value;
+
+  if (!ref) return alert("Deal Reference is required.");
 
   fetch("https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec", {
     method: "POST",
@@ -23,11 +85,10 @@ function submitDecision(status) {
     })
   })
   .then(r => r.text())
-  .then(msg => alert("Decision submitted to Quintrin."))
+  .then(msg => alert("Decision submitted successfully. Quintrin notified."))
   .catch(err => alert("Submission failed: " + err));
 }
 </script>
 
-<button onclick="submitDecision('Approved')">Approve</button>
-<button onclick="submitDecision('Rejected')">Reject</button>
-<button onclick="submitDecision('Clarification Required')">Clarify</button>
+</body>
+</html>
