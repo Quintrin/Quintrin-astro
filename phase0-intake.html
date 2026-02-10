@@ -203,6 +203,14 @@
 </footer>
 
 <script>
+  // AUTO LOAD REF ID FROM GOOGLE SHEET
+fetch("https://script.google.com/macros/s/YOUR_REF_GENERATOR_SCRIPT/exec")
+.then(r => r.text())
+.then(ref => {
+  document.getElementById("documentRef").value = ref;
+  document.getElementById("dealRef").value = ref;
+});
+  
 /* Auto Date */
 document.getElementById("docDate").value = new Date().toISOString().split('T')[0];
 
