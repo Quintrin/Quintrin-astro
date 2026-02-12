@@ -203,59 +203,49 @@
 </footer>
 
 <script>
-/* AUTO LOAD REF ID */
-fetch("https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec")
-.then(r => r.text())
-.then(ref => {
-  document.getElementById("documentRef").value = ref;
-  document.getElementById("dealRef").value = ref;
+
+/* ================= AUTO LOAD REF ID ================= */
+
+const REF_URL = "https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec";
+
+window.addEventListener("DOMContentLoaded", () => {
+
+  fetch(REF_URL)
+  .then(r => r.text())
+  .then(ref => {
+    document.getElementById("documentRef").value = ref;
+    document.getElementById("dealRef").value = ref;
+  });
+
+  document.getElementById("docDate").value = new Date().toISOString().split('T')[0];
+
 });
 
-/* Auto Date */
-document.getElementById("docDate").value = new Date().toISOString().split('T')[0];
 
-/* Investor Unlock */
+/* ================= INVESTOR PIN LOCK ================= */
+
 const PIN = "4821";
+
 function unlockInvestor() {
   const pin = prompt("Enter Investor PIN");
+
   if (pin === PIN) {
     document.getElementById("investorSection").style.display = "block";
     alert("Investor Panel Unlocked");
-  } else {
+  } 
+  else {
     alert("Invalid PIN");
   }
+}
 
-  const INTAKE_URL = "https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec";
+
+/* ================= SELLER INTAKE SUBMISSION ================= */
 
 function submitIntake() {
 
-  const data = {
+  const payload = {
     documentRef: document.getElementById("documentRef").value,
     dealRef: document.getElementById("dealRef").value,
-    sellerName: document.getElementById("sellerName").value,
-    sellerEmail: document.getElementById("sellerEmail").value,
-    assetType: document.getElementById("assetType").value,
-    assetValue: document.getElementById("assetValue").value
-  };
-
-  fetch(INTAKE_URL, {
-    method: "POST",
-    body: JSON.stringify(data)
-  })
-  .then(res => res.text())
-  .then(r => {
-    alert("Submission Logged Successfully. Reference ID: " + data.documentRef);
-  })
-  .catch(err => {
-    alert("Submission Failed");
-    console.error(err);
-  });
-
-    }
-  
-/* Submit Intake */
-function submitIntake() {
-  const payload = {
     legal_name: document.querySelector("[name='legal_name']").value,
     country: document.querySelector("[name='country']").value,
     registration_number: document.querySelector("[name='registration_number']").value,
@@ -268,21 +258,24 @@ function submitIntake() {
     notes: "Seller Intake Submission"
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec", {
+  fetch(REF_URL, {
     method: "POST",
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify(payload)
   })
-  .then(()=>alert("Submission received by Quintrin"))
-  .catch(err=>alert("Error: " + err));
+  .then(() => alert("Submission received by Quintrin"))
+  .catch(err => alert("Error: " + err));
 }
 
-/* Investor Decision */
+
+/* ================= INVESTOR DECISION PANEL ================= */
+
 function submitDecision(status) {
+
   const notes = document.getElementById("note").value;
   const ref = document.getElementById("documentRef").value;
 
-  fetch("https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec", {
+  fetch(REF_URL, {
     method: "POST",
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify({
@@ -292,9 +285,11 @@ function submitDecision(status) {
       code: "Verified"
     })
   })
-  .then(()=>alert("Decision submitted"))
-  .catch(err=>alert("Error: " + err));
+  .then(() => alert("Decision submitted"))
+  .catch(err => alert("Error: " + err));
+
 }
+
 </script>
 
 </body>
