@@ -226,7 +226,25 @@ function unlockInvestor() {
     alert("Invalid PIN");
   }
 }
+function submitIntake() {
+  const payload = {
+    legal_name: document.querySelector("[name='legal_name']").value,
+    country: document.querySelector("[name='country']").value,
+    registration_number: document.querySelector("[name='registration_number']").value,
+    tin: document.querySelector("[name='tin']").value,
+    rep_name: document.querySelector("[name='rep_name']").value,
+    rep_email: document.querySelector("[name='rep_email']").value,
+    transaction_value: document.querySelector("[name='transaction_value']").value,
+    source_of_funds: document.querySelector("[name='source_of_funds']").value,
+    source_of_wealth: document.querySelector("[name='source_of_wealth']").value,
+    notes: "Seller Intake Submission"
+  };
 
+  fetch("YOUR_WEB_APP_URL", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  }).then(()=>alert("Submission received by Quintrin"));
+}
 /* Investor Decision Submit */
 function submitDecision(status) {
   const notes = document.getElementById("note").value;
