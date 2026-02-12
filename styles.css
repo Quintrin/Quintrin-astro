@@ -186,3 +186,19 @@ footer p {
   margin: auto;
   color: #cfd8df;
 }
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.checkbox-grid label {
+  background: #111827;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #1f2933;
+  font-size: 13px;
+  cursor: pointer;
+}
