@@ -224,8 +224,35 @@ function unlockInvestor() {
   } else {
     alert("Invalid PIN");
   }
-}
 
+  const INTAKE_URL = "https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec";
+
+function submitIntake() {
+
+  const data = {
+    documentRef: document.getElementById("documentRef").value,
+    dealRef: document.getElementById("dealRef").value,
+    sellerName: document.getElementById("sellerName").value,
+    sellerEmail: document.getElementById("sellerEmail").value,
+    assetType: document.getElementById("assetType").value,
+    assetValue: document.getElementById("assetValue").value
+  };
+
+  fetch(INTAKE_URL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(res => res.text())
+  .then(r => {
+    alert("Submission Logged Successfully. Reference ID: " + data.documentRef);
+  })
+  .catch(err => {
+    alert("Submission Failed");
+    console.error(err);
+  });
+
+    }
+  
 /* Submit Intake */
 function submitIntake() {
   const payload = {
