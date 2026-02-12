@@ -81,9 +81,11 @@
 <script>
 const API = "https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec";
 
-// AUTO REF
+/* AUTO LOAD REF + DATE */
 window.onload = () => {
-  fetch(API).then(r=>r.text()).then(ref=>{
+  fetch(API)
+  .then(r => r.text())
+  .then(ref => {
     document.getElementById("documentRef").value = ref;
     document.getElementById("dealRef").value = ref;
   });
@@ -91,8 +93,20 @@ window.onload = () => {
   document.getElementById("docDate").value = new Date().toISOString().split("T")[0];
 };
 
-// SELLER SUBMIT
-function submitIntake(){
+/* INVESTOR LOCK */
+const PIN = "4821";
+function unlockInvestor() {
+  const pin = prompt("Enter Investor PIN");
+  if (pin === PIN) {
+    document.getElementById("investorSection").style.display = "block";
+    alert("Investor Panel Unlocked");
+  } else {
+    alert("Invalid PIN");
+  }
+}
+
+/* SELLER SUBMISSION */
+function submitIntake() {
   const payload = {
     documentRef: document.getElementById("documentRef").value,
     dealRef: document.getElementById("dealRef").value,
@@ -107,30 +121,34 @@ function submitIntake(){
     source_of_wealth: document.querySelector("[name='source_of_wealth']").value
   };
 
-  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
-  .then(()=>alert("Intake Logged"))
-  .catch(e=>alert("Error "+e));
+  fetch(API, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.text())
+  .then(r => alert("Submission Logged: " + r))
+  .catch(err => alert("FAILED: " + err));
 }
 
-// INVESTOR LOCK
-const PIN="4821";
-function unlockInvestor(){
-  const p=prompt("Investor PIN");
-  if(p===PIN) document.getElementById("investorSection").style.display="block";
-}
+/* INVESTOR DECISION */
+function submitDecision(status) {
+  const ref = document.getElementById("documentRef").value;
+  const notes = document.getElementById("note").value;
 
-// INVESTOR DECISION
-function submitDecision(status){
-  fetch(API,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      ref:document.getElementById("documentRef").value,
-      status:status,
-      notes:document.getElementById("note").value,
-      code:"Verified"
+  fetch(API, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      ref: ref,
+      status: status,
+      notes: notes,
+      code: "Verified"
     })
-  }).then(()=>alert("Decision Logged"));
+  })
+  .then(res => res.text())
+  .then(r => alert("Investor Logged: " + r))
+  .catch(err => alert("Investor Error: " + err));
 }
 </script>
 
