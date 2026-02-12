@@ -203,20 +203,19 @@
 </footer>
 
 <script>
-  // AUTO LOAD REF ID FROM GOOGLE SHEET
-fetch("https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec")
+/* AUTO LOAD REF ID */
+fetch("https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec")
 .then(r => r.text())
 .then(ref => {
   document.getElementById("documentRef").value = ref;
   document.getElementById("dealRef").value = ref;
 });
-  
+
 /* Auto Date */
 document.getElementById("docDate").value = new Date().toISOString().split('T')[0];
 
 /* Investor Unlock */
 const PIN = "4821";
-
 function unlockInvestor() {
   const pin = prompt("Enter Investor PIN");
   if (pin === PIN) {
@@ -226,6 +225,8 @@ function unlockInvestor() {
     alert("Invalid PIN");
   }
 }
+
+/* Submit Intake */
 function submitIntake() {
   const payload = {
     legal_name: document.querySelector("[name='legal_name']").value,
@@ -240,12 +241,16 @@ function submitIntake() {
     notes: "Seller Intake Submission"
   };
 
-  fetch("YOUR_WEB_APP_URL", {
+  fetch("PASTE_YOUR_WEBAPP_URL_HERE", {
     method: "POST",
+    headers: {"Content-Type":"application/json"},
     body: JSON.stringify(payload)
-  }).then(()=>alert("Submission received by Quintrin"));
+  })
+  .then(()=>alert("Submission received by Quintrin"))
+  .catch(err=>alert("Error: " + err));
 }
-/* Investor Decision Submit */
+
+/* Investor Decision */
 function submitDecision(status) {
   const notes = document.getElementById("note").value;
   const ref = document.getElementById("documentRef").value;
@@ -260,7 +265,7 @@ function submitDecision(status) {
       code: "Verified"
     })
   })
-  .then(()=>alert("Decision submitted to Quintrin"))
+  .then(()=>alert("Decision submitted"))
   .catch(err=>alert("Error: " + err));
 }
 </script>
