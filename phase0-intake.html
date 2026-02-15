@@ -41,20 +41,20 @@
 <option>Government Entity</option>
 </select>
 
-<label>Legal Name</label>
-<input name="legal_name">
+<label for="legal_name">Legal Name</label>
+<input id="legal_name" name="legal_name" autocomplete="name">
 
-<label>Registered Address</label>
-<input name="registered_address">
+<label for="country">Country</label>
+<input id="country" name="country" autocomplete="country">
 
-<label>Operating Address</label>
-<input name="operating_address">
+<label for="rep_email">Email</label>
+<input id="rep_email" name="rep_email" type="email" autocomplete="email">
 
-<label>Country</label>
-<input name="country">
+<label for="rep_phone">Phone</label>
+<input id="rep_phone" name="rep_phone" autocomplete="tel">
 
-<label>Registration Number</label>
-<input name="registration_number">
+<label for="tin">Tax Identification Number</label>
+<input id="tin" name="tin" autocomplete="off">
 
 <label>TIN</label>
 <input name="tin">
@@ -173,7 +173,7 @@
 <input type="file" name="doc_address">
 </section>
 
-<button class="cta" onclick="submitIntake()">Submit Compliance Intake</button>
+<button type="button" class="cta" onclick="submitIntake()">Submit Compliance Intake</button>  
 
 <!-- INVESTOR PANEL -->
 <section id="investorSection" class="investor-panel">
