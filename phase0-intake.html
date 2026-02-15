@@ -219,7 +219,9 @@ if(p===PIN) document.getElementById("investorSection").style.display="block";
 
 /* SELLER SUBMIT */
 function submitIntake(){
-const payload={
+const businessTypes = [...document.querySelectorAll("input[name='business_type']:checked")]
+  .map(el => el.value);  
+const payload={business_type: businessTypes,
 documentRef:document.getElementById("documentRef").value,
 dealRef:document.getElementById("dealRef").value,
 legal_name:document.querySelector("[name='legal_name']").value,
@@ -229,12 +231,14 @@ source_of_funds:document.querySelector("[name='source_of_funds']").value,
 source_of_wealth:document.querySelector("[name='source_of_wealth']").value
 };
 
-fetch(API,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify(payload)
-}).then(()=>alert("Intake Logged")).catch(e=>alert("Error "+e));
-}
+fetch(API, {
+  method: "POST",
+  mode: "no-cors",
+  headers: {"Content-Type":"application/json"},
+  body: JSON.stringify(payload)
+})
+.then(()=>alert("Submitted to Quintrin"))
+.catch(e=>alert("Error "+e));
 
 /* INVESTOR DECISION */
 function submitDecision(status){
