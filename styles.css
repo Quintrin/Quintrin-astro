@@ -137,6 +137,12 @@ textarea {
   transition: all 0.2s ease;
 }
 
+.cta {
+  pointer-events: auto !important;
+  z-index: 9999;
+  position: relative;
+}
+
 .cta:hover {
   background: var(--steel);
   color: white;
