@@ -1,258 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>QFSL Compliance Intake</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://quintrin.github.io/Quintrin-astro/styles.css">
+  <meta charset="UTF-8">
+  <title>QFSL Compliance Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://quintrin.github.io/Quintrin-astro/styles.css">
+  <style>
+    /* Temporary override until styles.css is updated */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+      background: transparent;
+    }
+    .checkbox-grid label {
+      background: transparent !important;
+      border: none !important;
+      padding: 0;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .checkbox-grid input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+    .tooltip {
+      display: inline-block;
+      background: #4f7fa8;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 18px;
+      margin-left: 6px;
+      cursor: help;
+    }
+    .tooltip:hover {
+      background: #0b1c2d;
+    }
+    .status-result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+      display: none;
+    }
+    .status-success { background: #d4edda; color: #155724; }
+    .status-error { background: #f8d7da; color: #721c24; }
+    .admin-panel {
+      display: none;
+      border: 2px solid #4f7fa8;
+      padding: 2rem;
+      margin-top: 3rem;
+      background: white;
+      border-radius: 6px;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .admin-table th, .admin-table td {
+      border: 1px solid #cfd8df;
+      padding: 8px;
+      text-align: left;
+    }
+    .admin-table th {
+      background: #f2f4f6;
+    }
+  </style>
 </head>
-
 <body>
 
-<header>
-<div class="nav">
-<div class="logo">QUINTRIN</div>
-</div>
+<header class="sticky-header">
+  <div class="nav">
+    <div class="logo">QUINTRIN</div>
+  </div>
 </header>
 
 <main class="container">
 
-<!-- HEADER -->
-<section>
-<h1>QFSL Compliance Intake</h1>
+  <!-- HEADER -->
+  <section>
+    <h1>QFSL Compliance Intake</h1>
+    <label>Document Ref</label>
+    <input id="documentRef" readonly>
+    <label>Date</label>
+    <input id="docDate" type="date" readonly>
+  </section>
 
-<label>Document Ref</label>
-<input id="documentRef" readonly>
+  <!-- FORM (will be submitted to GAS) -->
+  <form id="intakeForm" enctype="multipart/form-data">
+    <!-- SECTION 1 -->
+    <section>
+      <h2>1. Seller Entity Identification</h2>
+      <label>Entity Type <span class="tooltip" onclick="showTooltip('entity_type')">?</span></label>
+      <select name="entity_type">
+        <option>Individual</option>
+        <option>Company</option>
+        <option>Trust</option>
+        <option>Joint Venture</option>
+        <option>Government Entity</option>
+      </select>
 
-<label>Date</label>
-<input id="docDate" type="date" readonly>
-</section>
+      <label>Legal Name <span class="tooltip" onclick="showTooltip('legal_name')">?</span></label>
+      <input name="legal_name" autocomplete="name">
 
-<!-- SECTION 1 -->
-<section>
-<h2>1. Seller Entity Identification</h2>
+      <label>Country <span class="tooltip" onclick="showTooltip('country')">?</span></label>
+      <input name="country" autocomplete="country">
 
-<label>Entity Type</label>
-<select name="entity_type">
-<option>Individual</option>
-<option>Company</option>
-<option>Trust</option>
-<option>Joint Venture</option>
-<option>Government Entity</option>
-</select>
+      <label>Email <span class="tooltip" onclick="showTooltip('rep_email')">?</span></label>
+      <input name="rep_email" type="email" autocomplete="email">
 
-<label for="legal_name">Legal Name</label>
-<input id="legal_name" name="legal_name" autocomplete="name">
+      <label>Phone <span class="tooltip" onclick="showTooltip('rep_phone')">?</span></label>
+      <input name="rep_phone" autocomplete="tel">
 
-<label for="country">Country</label>
-<input id="country" name="country" autocomplete="country">
+      <label>Tax Identification Number <span class="tooltip" onclick="showTooltip('tin')">?</span></label>
+      <input name="tin">
 
-<label for="rep_email">Email</label>
-<input id="rep_email" name="rep_email" type="email" autocomplete="email">
+      <label>Representative Name <span class="tooltip" onclick="showTooltip('rep_name')">?</span></label>
+      <input name="rep_name">
 
-<label for="rep_phone">Phone</label>
-<input id="rep_phone" name="rep_phone" autocomplete="tel">
+      <label>Representative Title <span class="tooltip" onclick="showTooltip('rep_title')">?</span></label>
+      <input name="rep_title">
 
-<label for="tin">Tax Identification Number</label>
-<input id="tin" name="tin" autocomplete="off">
+      <label>Bank Account Age <span class="tooltip" onclick="showTooltip('bank_age')">?</span></label>
+      <input name="bank_age">
 
-<label>TIN</label>
-<input name="tin">
+      <label>Bank Operating Profile <span class="tooltip" onclick="showTooltip('bank_profile')">?</span></label>
+      <textarea name="bank_profile"></textarea>
+    </section>
 
-<label>Representative Name</label>
-<input name="rep_name">
+    <!-- SECTION 2 -->
+    <section>
+      <h2>2. Business Classification</h2>
+      <div class="checkbox-grid">
+        <label><input type="checkbox" name="business_type" value="Real Estate"> Real Estate</label>
+        <label><input type="checkbox" name="business_type" value="Energy"> Energy</label>
+        <label><input type="checkbox" name="business_type" value="Oil & Gas"> Oil & Gas</label>
+        <label><input type="checkbox" name="business_type" value="Agriculture"> Agriculture</label>
+        <label><input type="checkbox" name="business_type" value="Insurance"> Insurance</label>
+        <label><input type="checkbox" name="business_type" value="Security"> Security</label>
+        <label><input type="checkbox" name="business_type" value="Hardware"> Hardware</label>
+        <label><input type="checkbox" name="business_type" value="Land Development"> Land Development</label>
+        <label><input type="checkbox" name="business_type" value="Other"> Other</label>
+      </div>
 
-<label>Representative Title</label>
-<input name="rep_title">
+      <label>Business Description <span class="tooltip" onclick="showTooltip('business_scope')">?</span></label>
+      <textarea name="business_scope"></textarea>
 
-<label>Email</label>
-<input name="rep_email">
+      <label>Jurisdictions of Operation <span class="tooltip" onclick="showTooltip('jurisdictions')">?</span></label>
+      <input name="jurisdictions">
 
-<label>Phone</label>
-<input name="rep_phone">
+      <label>Transaction Value (USD) <span class="tooltip" onclick="showTooltip('transaction_value')">?</span></label>
+      <input name="transaction_value">
 
-<label>Bank Account Age</label>
-<input name="bank_age">
+      <label>Encumbered? <span class="tooltip" onclick="showTooltip('encumbered')">?</span></label>
+      <select name="encumbered">
+        <option>No</option>
+        <option>Yes</option>
+      </select>
 
-<label>Bank Operating Profile</label>
-<textarea name="bank_profile"></textarea>
-</section>
+      <label>Encumbrance Details <span class="tooltip" onclick="showTooltip('encumbrance_details')">?</span></label>
+      <textarea name="encumbrance_details"></textarea>
+    </section>
 
-<!-- SECTION 2 -->
-<section>
-<h2>2. Business Classification</h2>
+    <!-- SECTION 3 -->
+    <section>
+      <h2>3. Beneficial Ownership</h2>
+      <label>Ultimate Beneficial Owner <span class="tooltip" onclick="showTooltip('ubo_name')">?</span></label>
+      <input name="ubo_name">
 
-<div class="checkbox-grid">
-<label><input type="checkbox" name="business_type" value="Real Estate"> Real Estate</label>
-<label><input type="checkbox" name="business_type" value="Energy"> Energy</label>
-<label><input type="checkbox" name="business_type" value="Oil & Gas"> Oil & Gas</label>
-<label><input type="checkbox" name="business_type" value="Agriculture"> Agriculture</label>
-<label><input type="checkbox" name="business_type" value="Insurance"> Insurance</label>
-<label><input type="checkbox" name="business_type" value="Security"> Security</label>
-<label><input type="checkbox" name="business_type" value="Hardware"> Hardware</label>
-<label><input type="checkbox" name="business_type" value="Land Development"> Land Development</label>
-<label><input type="checkbox" name="business_type" value="Other"> Other</label>
-</div>
+      <label>UBO Nationality <span class="tooltip" onclick="showTooltip('ubo_nationality')">?</span></label>
+      <input name="ubo_nationality">
 
-<label>Business Description</label>
-<textarea name="business_scope"></textarea>
+      <label>Control Type <span class="tooltip" onclick="showTooltip('ubo_control_type')">?</span></label>
+      <select name="ubo_control_type">
+        <option>Direct</option>
+        <option>Indirect</option>
+        <option>Trust</option>
+        <option>Nominee</option>
+      </select>
 
-<label>Jurisdictions of Operation</label>
-<input name="jurisdictions">
+      <label>Politically Exposed Person (PEP) <span class="tooltip" onclick="showTooltip('pep_status')">?</span></label>
+      <select name="pep_status">
+        <option>No</option>
+        <option>Yes</option>
+      </select>
 
-<label>Transaction Value (USD)</label>
-<input name="transaction_value">
+      <label>PEP Details <span class="tooltip" onclick="showTooltip('pep_details')">?</span></label>
+      <textarea name="pep_details"></textarea>
+    </section>
 
-<label>Encumbered?</label>
-<select name="encumbered">
-<option>No</option>
-<option>Yes</option>
-</select>
+    <!-- SECTION 4 -->
+    <section>
+      <h2>4. Compliance Declarations</h2>
+      <label>Source of Funds <span class="tooltip" onclick="showTooltip('source_of_funds')">?</span></label>
+      <textarea name="source_of_funds"></textarea>
 
-<label>Encumbrance Details</label>
-<textarea name="encumbrance_details"></textarea>
-</section>
+      <label>Source of Wealth <span class="tooltip" onclick="showTooltip('source_of_wealth')">?</span></label>
+      <textarea name="source_of_wealth"></textarea>
 
-<!-- SECTION 3 -->
-<section>
-<h2>3. Beneficial Ownership</h2>
+      <label><input type="checkbox" name="sanctions" value="Yes"> Not sanctioned</label>
+      <label><input type="checkbox" name="litigation" value="Yes"> No litigation</label>
+      <label><input type="checkbox" name="thirdparty" value="Yes"> No undisclosed third parties</label>
+    </section>
 
-<label>Ultimate Beneficial Owner</label>
-<input name="ubo_name">
+    <!-- SECTION 5 -->
+    <section>
+      <h2>5. Document Uploads</h2>
+      <label>Certificate of Incorporation <span class="tooltip" onclick="showTooltip('doc_coi')">?</span></label>
+      <input type="file" name="doc_coi">
 
-<label>UBO Nationality</label>
-<input name="ubo_nationality">
+      <label>Government ID <span class="tooltip" onclick="showTooltip('doc_id')">?</span></label>
+      <input type="file" name="doc_id">
 
-<label>Control Type</label>
-<select name="ubo_control_type">
-<option>Direct</option>
-<option>Indirect</option>
-<option>Trust</option>
-<option>Nominee</option>
-</select>
+      <label>Shareholder Register <span class="tooltip" onclick="showTooltip('doc_shareholders')">?</span></label>
+      <input type="file" name="doc_shareholders">
 
-<label>Politically Exposed Person (PEP)</label>
-<select name="pep_status">
-<option>No</option>
-<option>Yes</option>
-</select>
+      <label>Proof of Address <span class="tooltip" onclick="showTooltip('doc_address')">?</span></label>
+      <input type="file" name="doc_address">
+    </section>
 
-<label>PEP Details</label>
-<textarea name="pep_details"></textarea>
-</section>
+    <!-- Submit Button (now inside form) -->
+    <button type="submit" class="cta">Submit Compliance Intake</button>
+  </form>
 
-<!-- SECTION 4 -->
-<section>
-<h2>4. Compliance Declarations</h2>
+  <!-- Status Lookup -->
+  <section style="margin-top: 2rem;">
+    <h2>Check Submission Status</h2>
+    <input type="text" id="statusRef" placeholder="Enter your reference number">
+    <button class="cta" onclick="checkStatus()">Check Status</button>
+    <div id="statusResult" class="status-result"></div>
+  </section>
 
-<label>Source of Funds</label>
-<textarea name="source_of_funds"></textarea>
+  <!-- Investor Panel (hidden by default) -->
+  <section id="investorSection" class="investor-panel">
+    <h2>Investor Panel</h2>
+    <label>Deal Ref</label>
+    <input id="dealRef" readonly>
+    <label>Investor Notes</label>
+    <textarea id="note"></textarea>
+    <label>Decision</label>
+    <select id="decisionStatus">
+      <option>Under Review</option>
+      <option>Waiting Lawyer Review</option>
+      <option>Approved</option>
+      <option>Disapproved</option>
+    </select>
+    <button onclick="submitDecision()">Submit Decision</button>
+  </section>
 
-<label>Source of Wealth</label>
-<textarea name="source_of_wealth"></textarea>
+  <!-- Admin Panel (hidden by default) -->
+  <section id="adminSection" class="admin-panel">
+    <h2>Admin Panel</h2>
+    <div id="adminContent">Loading...</div>
+  </section>
 
-<label><input type="checkbox" name="sanctions"> Not sanctioned</label>
-<label><input type="checkbox" name="litigation"> No litigation</label>
-<label><input type="checkbox" name="thirdparty"> No undisclosed third parties</label>
-</section>
-
-<!-- SECTION 5 -->
-<section>
-<h2>5. Document Uploads</h2>
-
-<label>Certificate of Incorporation</label>
-<input type="file" name="doc_coi">
-
-<label>Government ID</label>
-<input type="file" name="doc_id">
-
-<label>Shareholder Register</label>
-<input type="file" name="doc_shareholders">
-
-<label>Proof of Address</label>
-<input type="file" name="doc_address">
-</section>
-
-<button type="button" class="cta" onclick="submitIntake()">Submit Compliance Intake</button>  
-
-<!-- INVESTOR PANEL -->
-<section id="investorSection" class="investor-panel">
-<h2>Investor Panel</h2>
-
-<label>Deal Ref</label>
-<input id="dealRef" readonly>
-
-<label>Investor Notes</label>
-<textarea id="note"></textarea>
-
-<button onclick="submitDecision('Approved')">Approve</button>
-<button onclick="submitDecision('Rejected')">Reject</button>
-<button onclick="submitDecision('Clarification Required')">Clarify</button>
-</section>
-
-<button class="investor-btn" onclick="unlockInvestor()">Investor Access</button>
+  <!-- Access Buttons -->
+  <button class="investor-btn" onclick="unlockInvestor()">Investor Access</button>
+  <button class="investor-btn" onclick="unlockAdmin()">Admin Access</button>
 
 </main>
 
 <footer>
-<p>Quintrin Independent Structuring Platform</p>
+  <p>Quintrin Independent Structuring Platform</p>
 </footer>
 
 <script>
-const API="https://script.google.com/macros/s/AKfycbzPp1BTZtvFpOAqwgyak01dI1CLs4VQV-1Xm1xvcdS0wFiqBEpNXtqMrzLwSLKpjVw/exec";
+  const API = "YOUR_GAS_WEB_APP_URL"; // Replace after deployment
 
-/* LOAD REF + DATE */
-window.onload=()=>{
-fetch(API).then(r=>r.text()).then(ref=>{
-document.getElementById("documentRef").value=ref;
-document.getElementById("dealRef").value=ref;
-});
-document.getElementById("docDate").value=new Date().toISOString().split("T")[0];
-};
+  // Tooltip descriptions (customize as needed)
+  const tooltips = {
+    entity_type: "Select the legal entity type of the seller.",
+    legal_name: "Full legal name as per registration documents.",
+    country: "Country of incorporation or residence.",
+    rep_email: "Primary contact email.",
+    rep_phone: "Primary contact phone number.",
+    tin: "Tax Identification Number assigned by local authority.",
+    rep_name: "Name of the authorized representative.",
+    rep_title: "Official title of the representative.",
+    bank_age: "How long the bank account has been active (in years).",
+    bank_profile: "Describe the typical use of the bank account.",
+    business_scope: "Detailed description of the business activities.",
+    jurisdictions: "List all countries where the entity operates.",
+    transaction_value: "Estimated transaction amount in USD.",
+    encumbered: "Is any asset encumbered?",
+    encumbrance_details: "Provide details of any liens or encumbrances.",
+    ubo_name: "Full name of the Ultimate Beneficial Owner.",
+    ubo_nationality: "Nationality of the UBO.",
+    ubo_control_type: "How does the UBO exercise control?",
+    pep_status: "Is the UBO a Politically Exposed Person?",
+    pep_details: "If PEP, provide details.",
+    source_of_funds: "Origin of the funds used in this transaction.",
+    source_of_wealth: "How the overall wealth was accumulated.",
+    doc_coi: "Upload Certificate of Incorporation.",
+    doc_id: "Upload government-issued ID of representative.",
+    doc_shareholders: "Upload register of shareholders.",
+    doc_address: "Upload proof of business address."
+  };
 
-/* INVESTOR LOCK */
-const PIN="4821";
-function unlockInvestor(){
-const p=prompt("Investor PIN");
-if(p===PIN) document.getElementById("investorSection").style.display="block";
-}
+  function showTooltip(field) {
+    alert(tooltips[field] || "No description available.");
+  }
 
-/* SELLER SUBMIT */
-function submitIntake(){
-const businessTypes = [...document.querySelectorAll("input[name='business_type']:checked")]
-  .map(el => el.value);  
-const payload={business_type: businessTypes,
-documentRef:document.getElementById("documentRef").value,
-dealRef:document.getElementById("dealRef").value,
-legal_name:document.querySelector("[name='legal_name']").value,
-country:document.querySelector("[name='country']").value,
-transaction_value:document.querySelector("[name='transaction_value']").value,
-source_of_funds:document.querySelector("[name='source_of_funds']").value,
-source_of_wealth:document.querySelector("[name='source_of_wealth']").value
-};
+  // Load reference and date on page load
+  window.onload = function() {
+    fetch(API + "?action=getRef")
+      .then(r => r.text())
+      .then(ref => {
+        document.getElementById("documentRef").value = ref;
+        document.getElementById("dealRef").value = ref;
+      });
+    document.getElementById("docDate").value = new Date().toISOString().split("T")[0];
+  };
 
-fetch(API, {
-  method: "POST",
-  mode: "no-cors",
-  headers: {"Content-Type":"application/json"},
-  body: JSON.stringify(payload)
-})
-.then(()=>alert("Submitted to Quintrin"))
-.catch(e=>alert("Error "+e));
+  // Handle form submission (with files)
+  document.getElementById("intakeForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    formData.append("documentRef", document.getElementById("documentRef").value);
+    formData.append("action", "submitIntake");
 
-/* INVESTOR DECISION */
-function submitDecision(status){
-fetch(API,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-ref:document.getElementById("documentRef").value,
-status:status,
-notes:document.getElementById("note").value,
-code:"Verified"
-})
-}).then(()=>alert("Decision Logged"));
-}
+    fetch(API, {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+      alert("Submitted successfully. Your reference: " + document.getElementById("documentRef").value);
+    })
+    .catch(error => {
+      alert("Error: " + error);
+    });
+  });
+
+  // Investor functions
+  const INVESTOR_PIN = "4821";
+  function unlockInvestor() {
+    const p = prompt("Investor PIN");
+    if (p === INVESTOR_PIN) {
+      document.getElementById("investorSection").style.display = "block";
+    }
+  }
+
+  function submitDecision() {
+    const payload = {
+      action: "investorDecision",
+      ref: document.getElementById("dealRef").value,
+      status: document.getElementById("decisionStatus").value,
+      notes: document.getElementById("note").value
+    };
+    fetch(API, {
+      method: "POST",
+      body: new URLSearchParams(payload)
+    })
+    .then(() => alert("Decision logged"));
+  }
+
+  // Admin functions
+  const ADMIN_PIN = "7392";
+  function unlockAdmin() {
+    const p = prompt("Admin PIN");
+    if (p === ADMIN_PIN) {
+      document.getElementById("adminSection").style.display = "block";
+      loadAdminData();
+    }
+  }
+
+  function loadAdminData() {
+    fetch(API + "?action=getAllSubmissions")
+      .then(r => r.json())
+      .then(data => {
+        let html = '<table class="admin-table"><tr><th>Ref</th><th>Date</th><th>Status</th><th>PDF</th></tr>';
+        data.forEach(row => {
+          html += `<tr>
+            <td>${row.ref}</td>
+            <td>${row.timestamp}</td>
+            <td>${row.status}</td>
+            <td>${row.pdfUrl ? '<a href="' + row.pdfUrl + '" target="_blank">View</a>' : ''}</td>
+          </tr>`;
+        });
+        html += '</table>';
+        document.getElementById("adminContent").innerHTML = html;
+      });
+  }
+
+  // Status lookup
+  function checkStatus() {
+    const ref = document.getElementById("statusRef").value;
+    if (!ref) {
+      alert("Please enter a reference number");
+      return;
+    }
+    fetch(API + "?action=getStatus&ref=" + encodeURIComponent(ref))
+      .then(r => r.text())
+      .then(status => {
+        const resultDiv = document.getElementById("statusResult");
+        resultDiv.style.display = "block";
+        resultDiv.className = "status-result status-success";
+        resultDiv.innerText = "Status: " + status;
+      })
+      .catch(() => {
+        const resultDiv = document.getElementById("statusResult");
+        resultDiv.style.display = "block";
+        resultDiv.className = "status-result status-error";
+        resultDiv.innerText = "Reference not found.";
+      });
+  }
 </script>
 
 </body>
