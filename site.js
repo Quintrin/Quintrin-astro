@@ -89,5 +89,16 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     document.body.insertAdjacentHTML("beforeend", footerHTML);
   }
+const menuButton = document.querySelector(".mobile-menu-btn");
+const mobileMenu = document.querySelector(".mobile-menu");
 
+if (menuButton && mobileMenu) {
+  menuButton.addEventListener("click", () => {
+    mobileMenu.classList.toggle("open");
+    menuButton.classList.toggle("open");
+
+    const expanded = menuButton.getAttribute("aria-expanded") === "true";
+    menuButton.setAttribute("aria-expanded", !expanded);
+  });
+}
 });
