@@ -239,17 +239,22 @@ header {
 .logo {
   color: #fff;
   text-decoration: none;
-  font-size: 1.45rem;
-  font-weight: 800;
-  letter-spacing: 0.18rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  position: relative;
 }
 
-.desktop-nav {
-  display: flex;
-  align-items: center;
-  gap: 1.6rem;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+.logo::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 40%;
+  height: 2px;
+  background: var(--steel);
+  opacity: 0.7;
 }
 
 .desktop-nav a,
