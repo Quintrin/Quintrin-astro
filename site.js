@@ -17,16 +17,27 @@ document.addEventListener("DOMContentLoaded", () => {
   ========================== */
 
   const headerHTML = `
-    <header>
-      <div class="nav">
-        <div class="logo">QUINTRIN</div>
+    const headerHTML = `
+  <header>
+    <div class="nav-container">
+      <a href="/index.html" class="logo">QUINTRIN</a>
 
-        <nav>
-          ${navLinks}
-        </nav>
-      </div>
-    </header>
-  `;
+      <nav class="desktop-nav">
+        ${navLinks}
+      </nav>
+
+      <button class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <div class="mobile-menu">
+      ${navLinks}
+    </div>
+  </header>
+`;
 
   /* =========================
      FOOTER
