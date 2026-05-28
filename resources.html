@@ -7,54 +7,63 @@
   <title>Quintrin Resource Library | Strategic Knowledge Assets</title>
   <meta name="description" content="Curated strategic knowledge assets from Quintrin Financial Services Ltd." />
 
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<header>
-  <div class="nav-container">
-    <a href="/index.html" class="brand-lockup">
-      <img src="/assets/logo.png" alt="Quintrin Logo" class="brand-mark">
-      <span class="brand-text">QUINTRIN</span>
+<header class="q-resource-header">
+  <div class="q-nav-container">
+    <a href="index.html" class="q-brand-lockup">
+      <img src="assets/logo.png" alt="Quintrin Logo" class="q-brand-mark">
+      <span class="q-brand-text">QUINTRIN</span>
     </a>
 
-    <nav class="desktop-nav">
-      <a href="/index.html">Home</a>
-      <a href="/services.html">Services</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/intake.html">Structured Intake</a>
+    <nav class="q-desktop-nav">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="intake.html">Structured Intake</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="ai-messaging.html">AI & Messaging</a>
     </nav>
 
-    <button class="mobile-menu-btn" onclick="document.querySelector('.mobile-menu').classList.toggle('open')">
+    <button class="q-menu-icon" onclick="document.querySelector('.q-mobile-nav').classList.toggle('open')">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <div class="mobile-menu">
-    <a href="/index.html">Home</a>
-    <a href="/services.html">Services</a>
-    <a href="/resources.html">Resources</a>
-    <a href="/intake.html">Structured Intake</a>
-  </div>
+  <nav class="q-mobile-nav">
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="intake.html">Structured Intake</a>
+    <a href="contact.html">Contact</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="ai-messaging.html">AI & Messaging</a>
+  </nav>
 </header>
 
 <main>
 
-  <section class="resource-hero">
-    <div class="resource-hero-inner">
-      <p class="eyebrow">Quintrin Resource Ecosystem</p>
-      <h1>Strategic Knowledge Assets for Wealth, Discipline & Execution</h1>
+  <section class="q-hero">
+    <div class="q-hero-overlay"></div>
+    <div class="q-hero-content">
+      <p class="q-eyebrow">Quintrin Resource Ecosystem</p>
+      <h1>Strategic Knowledge Assets<br>for Wealth, Discipline & Execution</h1>
+      <div class="q-gold-line"></div>
       <p>
         A curated library of practical intelligence designed to support clearer thinking,
         stronger personal discipline, better money awareness, and long-term value creation.
       </p>
-      <a class="cta light-cta" href="#launch-library">Explore Launch Library</a>
+      <a href="#launch-library" class="q-outline-btn">Explore Launch Library →</a>
     </div>
   </section>
 
-  <section class="container resource-intro">
+  <section class="q-section q-center">
     <h2>Curated, Not Crowded.</h2>
+    <div class="q-small-line"></div>
     <p>
       The Quintrin Resource Library is not a generic ebook store. It is a controlled
       knowledge layer built to support personal development, financial clarity,
@@ -62,73 +71,104 @@
     </p>
   </section>
 
-  <section id="launch-library" class="container">
-    <p class="eyebrow dark">Featured Launch Asset</p>
+  <section id="launch-library" class="q-feature-wrap">
 
-    <div class="featured-resource">
-      <div>
-        <span class="resource-tag">Featured</span>
+    <div class="q-feature-card">
+      <div class="q-star">★</div>
+
+      <div class="q-book-cover">
+        <img src="assets/reality-mindset-cover.png" alt="Reality Mindset Cover">
+      </div>
+
+      <div class="q-feature-copy">
+        <p class="q-eyebrow dark">Featured Asset</p>
         <h2>Reality Mindset</h2>
         <p>
           A foundational mindset resource selected as the first featured asset in the
           Quintrin knowledge ecosystem. This resource supports mental clarity, stronger
           decision-making, and disciplined personal development.
         </p>
-        <a class="cta" href="#" target="_blank">Coming Soon</a>
+        <a href="#" class="q-dark-btn">Coming Soon</a>
       </div>
     </div>
 
-    <h2 class="library-heading">Initial Launch Cluster</h2>
+    <h2 class="q-cluster-title">Initial Launch Cluster</h2>
+    <div class="q-small-line"></div>
 
-    <div class="resource-grid">
+    <div class="q-product-grid">
 
-      <article class="resource-card">
-        <span class="resource-tag">Mindset</span>
+      <article class="q-product-card blue">
+        <div class="q-icon">💡</div>
+        <p class="q-card-label">Mindset</p>
         <h3>Entrepreneur Mind</h3>
         <p>Supports business thinking, opportunity awareness, and personal initiative.</p>
-        <a href="#" class="resource-link">Coming Soon</a>
+        <a href="#">Coming Soon →</a>
       </article>
 
-      <article class="resource-card">
-        <span class="resource-tag">Wealth</span>
+      <article class="q-product-card green">
+        <div class="q-icon">🧲</div>
+        <p class="q-card-label">Wealth</p>
         <h3>Money Attraction Secrets</h3>
         <p>Focused on money awareness, financial mindset, and wealth-oriented thinking.</p>
-        <a href="#" class="resource-link">Coming Soon</a>
+        <a href="#">Coming Soon →</a>
       </article>
 
-      <article class="resource-card">
-        <span class="resource-tag">Discipline</span>
+      <article class="q-product-card orange">
+        <div class="q-icon">⛰️</div>
+        <p class="q-card-label">Discipline</p>
         <h3>Overcoming Resistances</h3>
         <p>Helps address internal resistance, hesitation, and blocks to progress.</p>
-        <a href="#" class="resource-link">Coming Soon</a>
+        <a href="#">Coming Soon →</a>
       </article>
 
-      <article class="resource-card">
-        <span class="resource-tag">Presence</span>
+      <article class="q-product-card purple">
+        <div class="q-icon">🧘</div>
+        <p class="q-card-label">Presence</p>
         <h3>The Power of the Present Moment</h3>
         <p>Encourages focus, calm, clarity, and stronger command of daily action.</p>
-        <a href="#" class="resource-link">Coming Soon</a>
+        <a href="#">Coming Soon →</a>
       </article>
 
     </div>
-  </section>
 
-  <section class="container resource-cta-panel">
-    <h2>More Strategic Resources Are Being Prepared</h2>
-    <p>
-      Quintrin will continue expanding this library through curated releases,
-      structured bundles, and future AI-assisted knowledge navigation.
-    </p>
-    <a class="cta" href="/intake.html">Connect With Quintrin</a>
+    <div class="q-resource-banner">
+      <div class="q-banner-icon">📖</div>
+      <div>
+        <h2>More Strategic Resources Are Being Prepared</h2>
+        <p>
+          Quintrin will continue expanding this library through curated releases,
+          structured bundles, and future AI-assisted knowledge navigation.
+        </p>
+      </div>
+      <a href="intake.html" class="q-outline-btn small">Connect With Quintrin</a>
+    </div>
+
   </section>
 
 </main>
 
-<footer>
-  <p>
-    Quintrin provides independent structuring and facilitation services only.
-    No brokerage, underwriting, fiduciary, or advisory services are offered.
-  </p>
+<footer class="q-footer">
+  <div class="q-footer-inner">
+    <div class="q-footer-brand">
+      <img src="assets/logo.png" alt="Quintrin Logo">
+      <strong>QUINTRIN</strong>
+      <span>The Creative Way to Wealth</span>
+    </div>
+
+    <div class="q-footer-copy">
+      <p>
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="terms.html">Terms of Use</a> |
+        <a href="ai-messaging.html">AI & Messaging Notice</a> |
+        <a href="contact.html">Contact</a>
+      </p>
+      <p>© 2026 Quintrin Financial Services Ltd. All rights reserved.</p>
+      <p>
+        Quintrin provides independent structuring and facilitation services only.
+        No brokerage, underwriting, fiduciary, or advisory services are offered.
+      </p>
+    </div>
+  </div>
 </footer>
 
 </body>
