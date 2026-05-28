@@ -943,3 +943,75 @@ header {
     grid-template-columns: 1fr;
   }
 }
+/* =========================
+   SITE-WIDE HEADER / FOOTER CLEANUP
+========================= */
+
+header nav,
+.desktop-nav,
+.q-desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+  flex-wrap: wrap;
+}
+
+header nav a,
+.desktop-nav a,
+.q-desktop-nav a {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.nav,
+.nav-container,
+.q-nav-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+/* Add Resources tab automatically where normal header nav exists */
+header nav a[href="resources.html"],
+.desktop-nav a[href="resources.html"] {
+  display: inline-block;
+}
+
+/* Logo image cleanup */
+.q-brand-mark,
+.brand-mark {
+  background: #06182a !important;
+  mix-blend-mode: normal;
+  border-radius: 6px;
+}
+
+/* Bigger resource logo */
+.q-brand-mark {
+  width: 92px;
+  height: 92px;
+}
+
+/* Footer tidy-up */
+footer,
+.q-footer {
+  background: linear-gradient(90deg, #06182a, #09213a, #103b61);
+  color: #e5edf4;
+}
+
+footer p,
+footer a,
+.q-footer p,
+.q-footer a {
+  color: #e5edf4;
+}
+
+@media (max-width: 900px) {
+  header nav,
+  .desktop-nav,
+  .q-desktop-nav {
+    display: none;
+  }
+}
