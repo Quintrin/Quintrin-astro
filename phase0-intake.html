@@ -4,14 +4,16 @@
   <meta charset="UTF-8">
   <title>QFSL Compliance Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://quintrin.github.io/Quintrin-astro/styles.css">
+
+  <link rel="stylesheet" href="styles.css">
+
   <style>
-    /* Temporary override until styles.css is updated */
     .sticky-header {
       position: sticky;
       top: 0;
       z-index: 1000;
     }
+
     .checkbox-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -19,6 +21,7 @@
       margin-bottom: 20px;
       background: transparent;
     }
+
     .checkbox-grid label {
       background: transparent !important;
       border: none !important;
@@ -28,34 +31,29 @@
       align-items: center;
       gap: 6px;
     }
+
     .checkbox-grid input[type="checkbox"] {
       width: auto;
       margin: 0;
     }
-    .tooltip {
-      display: inline-block;
-      background: #4f7fa8;
-      color: white;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      text-align: center;
-      font-size: 14px;
-      line-height: 18px;
-      margin-left: 6px;
-      cursor: help;
-    }
-    .tooltip:hover {
-      background: #0b1c2d;
-    }
+
     .status-result {
       margin-top: 20px;
       padding: 15px;
       border-radius: 4px;
       display: none;
     }
-    .status-success { background: #d4edda; color: #155724; }
-    .status-error { background: #f8d7da; color: #721c24; }
+
+    .status-success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
     .admin-panel {
       display: none;
       border: 2px solid #4f7fa8;
@@ -64,48 +62,67 @@
       background: white;
       border-radius: 6px;
     }
+
     .admin-table {
       width: 100%;
       border-collapse: collapse;
     }
-    .admin-table th, .admin-table td {
+
+    .admin-table th,
+    .admin-table td {
       border: 1px solid #cfd8df;
       padding: 8px;
       text-align: left;
     }
+
     .admin-table th {
       background: #f2f4f6;
     }
+
+    @media (max-width: 800px) {
+      .checkbox-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
-  
-  <script src="/site-config.js"></script>
-<script src="/site.js"></script>
-  
+
 <body>
 
 <header class="sticky-header">
   <div class="nav">
-    <div class="logo">QUINTRIN</div>
+    <a href="index.html" class="logo">QUINTRIN</a>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="resources.html">Resources</a>
+      <a href="intake.html">Structured Intake</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="ai-messaging.html">AI & Messaging</a>
+    </nav>
   </div>
 </header>
 
 <main class="container">
 
-  <!-- HEADER -->
   <section>
     <h1>QFSL Compliance Intake</h1>
+
     <label>Document Ref</label>
     <input id="documentRef" readonly>
+
     <label>Date</label>
     <input id="docDate" type="date" readonly>
   </section>
 
-  <!-- FORM (will be submitted to GAS) -->
   <form id="intakeForm" enctype="multipart/form-data">
-    <!-- SECTION 1 -->
+
     <section>
       <h2>1. Seller Entity Identification</h2>
+
       <label>Entity Type <span class="tooltip" onclick="showTooltip('entity_type')">?</span></label>
       <select name="entity_type">
         <option>Individual</option>
@@ -143,9 +160,9 @@
       <textarea name="bank_profile"></textarea>
     </section>
 
-    <!-- SECTION 2 -->
     <section>
       <h2>2. Business Classification</h2>
+
       <div class="checkbox-grid">
         <label><input type="checkbox" name="business_type" value="Real Estate"> Real Estate</label>
         <label><input type="checkbox" name="business_type" value="Energy"> Energy</label>
@@ -177,9 +194,9 @@
       <textarea name="encumbrance_details"></textarea>
     </section>
 
-    <!-- SECTION 3 -->
     <section>
       <h2>3. Beneficial Ownership</h2>
+
       <label>Ultimate Beneficial Owner <span class="tooltip" onclick="showTooltip('ubo_name')">?</span></label>
       <input name="ubo_name">
 
@@ -204,9 +221,9 @@
       <textarea name="pep_details"></textarea>
     </section>
 
-    <!-- SECTION 4 -->
     <section>
       <h2>4. Compliance Declarations</h2>
+
       <label>Source of Funds <span class="tooltip" onclick="showTooltip('source_of_funds')">?</span></label>
       <textarea name="source_of_funds"></textarea>
 
@@ -218,9 +235,9 @@
       <label><input type="checkbox" name="thirdparty" value="Yes"> No undisclosed third parties</label>
     </section>
 
-    <!-- SECTION 5 -->
     <section>
       <h2>5. Document Uploads</h2>
+
       <label>Certificate of Incorporation <span class="tooltip" onclick="showTooltip('doc_coi')">?</span></label>
       <input type="file" name="doc_coi">
 
@@ -234,11 +251,9 @@
       <input type="file" name="doc_address">
     </section>
 
-    <!-- Submit Button (now inside form) -->
     <button type="submit" class="cta">Submit Compliance Intake</button>
   </form>
 
-  <!-- Status Lookup -->
   <section style="margin-top: 2rem;">
     <h2>Check Submission Status</h2>
     <input type="text" id="statusRef" placeholder="Enter your reference number">
@@ -246,13 +261,15 @@
     <div id="statusResult" class="status-result"></div>
   </section>
 
-  <!-- Investor Panel (hidden by default) -->
   <section id="investorSection" class="investor-panel">
     <h2>Investor Panel</h2>
+
     <label>Deal Ref</label>
     <input id="dealRef" readonly>
+
     <label>Investor Notes</label>
     <textarea id="note"></textarea>
+
     <label>Decision</label>
     <select id="decisionStatus">
       <option>Under Review</option>
@@ -260,29 +277,39 @@
       <option>Approved</option>
       <option>Disapproved</option>
     </select>
+
     <button onclick="submitDecision()">Submit Decision</button>
   </section>
 
-  <!-- Admin Panel (hidden by default) -->
   <section id="adminSection" class="admin-panel">
     <h2>Admin Panel</h2>
     <div id="adminContent">Loading...</div>
   </section>
 
-  <!-- Access Buttons -->
   <button class="investor-btn" onclick="unlockInvestor()">Investor Access</button>
   <button class="investor-btn" onclick="unlockAdmin()">Admin Access</button>
 
 </main>
 
 <footer>
-  <p>Quintrin Independent Structuring Platform</p>
+  <p>
+    <strong>Quintrin Financial Services Ltd</strong> — The Creative Way to Wealth
+  </p>
+  <p>
+    <a href="privacy.html">Privacy Policy</a> |
+    <a href="terms.html">Terms of Use</a> |
+    <a href="ai-messaging.html">AI & Messaging Notice</a> |
+    <a href="contact.html">Contact</a>
+  </p>
+  <p>
+    Quintrin provides independent structuring and facilitation services only.
+    No brokerage, underwriting, fiduciary, or advisory services are offered.
+  </p>
 </footer>
 
 <script>
-  const API = "https://script.google.com/macros/s/AKfycbzPp1BTZtvFpOAqwgyak01dI1CLs4VQV-1Xm1xvcdS0wFiqBEpNXtqMrzLwSLKpjVw/exec; // Replace after deployment
+  const API = "https://script.google.com/macros/s/AKfycbzPp1BTZtvFpOAqwgyak01dI1CLs4VQV-1Xm1xvcdS0wFiqBEpNXtqMrzLwSLKpjVw/exec";
 
-  // Tooltip descriptions (customize as needed)
   const tooltips = {
     entity_type: "Select the legal entity type of the seller.",
     legal_name: "Full legal name as per registration documents.",
@@ -292,7 +319,7 @@
     tin: "Tax Identification Number assigned by local authority.",
     rep_name: "Name of the authorized representative.",
     rep_title: "Official title of the representative.",
-    bank_age: "How long the bank account has been active (in years).",
+    bank_age: "How long the bank account has been active.",
     bank_profile: "Describe the typical use of the bank account.",
     business_scope: "Detailed description of the business activities.",
     jurisdictions: "List all countries where the entity operates.",
@@ -316,20 +343,24 @@
     alert(tooltips[field] || "No description available.");
   }
 
-  // Load reference and date on page load
   window.onload = function() {
+    document.getElementById("docDate").value = new Date().toISOString().split("T")[0];
+
     fetch(API + "?action=getRef")
       .then(r => r.text())
       .then(ref => {
         document.getElementById("documentRef").value = ref;
         document.getElementById("dealRef").value = ref;
+      })
+      .catch(() => {
+        document.getElementById("documentRef").value = "QFSL-REF-PENDING";
+        document.getElementById("dealRef").value = "QFSL-REF-PENDING";
       });
-    document.getElementById("docDate").value = new Date().toISOString().split("T")[0];
   };
 
-  // Handle form submission (with files)
   document.getElementById("intakeForm").addEventListener("submit", function(e) {
     e.preventDefault();
+
     const formData = new FormData(this);
     formData.append("documentRef", document.getElementById("documentRef").value);
     formData.append("action", "submitIntake");
@@ -339,7 +370,7 @@
       body: formData
     })
     .then(response => response.text())
-    .then(result => {
+    .then(() => {
       alert("Submitted successfully. Your reference: " + document.getElementById("documentRef").value);
     })
     .catch(error => {
@@ -347,8 +378,8 @@
     });
   });
 
-  // Investor functions
   const INVESTOR_PIN = "4821";
+
   function unlockInvestor() {
     const p = prompt("Investor PIN");
     if (p === INVESTOR_PIN) {
@@ -363,6 +394,7 @@
       status: document.getElementById("decisionStatus").value,
       notes: document.getElementById("note").value
     };
+
     fetch(API, {
       method: "POST",
       body: new URLSearchParams(payload)
@@ -370,8 +402,8 @@
     .then(() => alert("Decision logged"));
   }
 
-  // Admin functions
   const ADMIN_PIN = "7392";
+
   function unlockAdmin() {
     const p = prompt("Admin PIN");
     if (p === ADMIN_PIN) {
@@ -385,26 +417,29 @@
       .then(r => r.json())
       .then(data => {
         let html = '<table class="admin-table"><tr><th>Ref</th><th>Date</th><th>Status</th><th>PDF</th></tr>';
+
         data.forEach(row => {
           html += `<tr>
-            <td>${row.ref}</td>
-            <td>${row.timestamp}</td>
-            <td>${row.status}</td>
+            <td>${row.ref || ""}</td>
+            <td>${row.timestamp || ""}</td>
+            <td>${row.status || ""}</td>
             <td>${row.pdfUrl ? '<a href="' + row.pdfUrl + '" target="_blank">View</a>' : ''}</td>
           </tr>`;
         });
+
         html += '</table>';
         document.getElementById("adminContent").innerHTML = html;
       });
   }
 
-  // Status lookup
   function checkStatus() {
     const ref = document.getElementById("statusRef").value;
+
     if (!ref) {
       alert("Please enter a reference number");
       return;
     }
+
     fetch(API + "?action=getStatus&ref=" + encodeURIComponent(ref))
       .then(r => r.text())
       .then(status => {
