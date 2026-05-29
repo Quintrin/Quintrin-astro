@@ -1058,3 +1058,16 @@ footer a {
     gap: 1rem;
   }
 }
+/* =========================
+   FIX IMAGE DARKENING
+========================= */
+
+.q-brand-mark,
+.q-footer-brand img,
+.q-book-cover img,
+.q-product-card img {
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
