@@ -1058,3 +1058,21 @@ footer a {
     gap: 1rem;
   }
 }
+/* =========================
+   IMAGE BACKGROUND CLEANUP
+========================= */
+
+.q-book-cover,
+.q-product-card img,
+.q-footer-brand img,
+.q-brand-mark {
+  background: transparent !important;
+}
+
+.q-book-cover img,
+.q-product-card img,
+.q-footer-brand img,
+.q-brand-mark {
+  background-color: transparent !important;
+  mix-blend-mode: multiply;
+}
