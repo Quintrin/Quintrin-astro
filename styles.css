@@ -499,7 +499,7 @@ header {
 .q-nav-container {
   max-width: 1280px;
   margin: auto;
-  padding: 1.2rem 2rem;
+  padding: 0.8rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -522,7 +522,7 @@ header {
 
 .q-brand-text {
   font-size: 1.85rem;
-  font-weight: 800;
+  font-weight: 750;
   letter-spacing: 0.08em;
 }
 
@@ -973,6 +973,7 @@ header nav a,
   margin: 0 auto;
   padding-left: 2rem;
   padding-right: 2rem;
+  letter-spacing: -0.02em;
 }
 
 /* Add Resources tab automatically where normal header nav exists */
@@ -1070,4 +1071,46 @@ footer a {
   filter: none !important;
   background: transparent !important;
   background-color: transparent !important;
+}
+/* =========================
+   PHASE 3A COVER UPGRADE
+========================= */
+
+.q-product-card img {
+  width: 170px !important;
+  height: auto;
+  margin: 1rem auto 1.25rem;
+  display: block;
+  border-radius: 6px;
+  box-shadow: 0 12px 24px rgba(11,28,45,0.15);
+  transition: transform 0.25s ease;
+}
+
+.q-product-card:hover img {
+  transform: scale(1.04);
+}
+.q-product-card h3 {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 1.55rem;
+}
+
+.q-product-card p {
+  line-height: 1.6;
+}
+.payhip-buy-button {
+  display: inline-block !important;
+  margin-top: 1rem !important;
+  padding: 12px 22px !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  transition: all 0.25s ease !important;
+}
+
+.payhip-buy-button:hover {
+  transform: translateY(-2px);
 }
