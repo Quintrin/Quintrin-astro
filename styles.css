@@ -1247,3 +1247,36 @@ footer a {
 .intake-choice-card p {
   margin-top: 0;
 }
+/* =========================
+   SERVICE PAYMENT OPTIONS
+========================= */
+
+.service-local-price {
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-top: -0.6rem;
+}
+
+.service-bank-button {
+  display: inline-block;
+  margin-top: 0.75rem;
+  margin-left: 0.5rem;
+  padding: 0.75rem 1.2rem;
+  border: 1px solid #8a552f;
+  color: #8a552f;
+  font-weight: 700;
+  border-radius: 4px;
+}
+
+.service-bank-button:hover {
+  background: #8a552f;
+  color: white;
+}
+
+.payment-method-notice {
+  background: white;
+  border-left: 5px solid #d6a06d;
+  padding: 2rem;
+  margin-top: 3rem;
+  border-radius: 8px;
+}
