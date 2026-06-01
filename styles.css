@@ -1114,3 +1114,87 @@ footer a {
 .payhip-buy-button:hover {
   transform: translateY(-2px);
 }
+/* =========================
+   SERVICES PAGE UPGRADE
+========================= */
+
+.service-checklist {
+  margin-top: 1.5rem;
+}
+
+.service-ticket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.4rem;
+  margin-top: 2rem;
+}
+
+.service-ticket-card {
+  background: white;
+  border: 1px solid rgba(79,127,168,0.25);
+  border-radius: 10px;
+  padding: 1.6rem;
+  box-shadow: 0 12px 30px rgba(11,28,45,0.06);
+}
+
+.service-ticket-card h3 {
+  color: var(--navy);
+  margin-top: 0;
+}
+
+.service-price {
+  font-weight: 800;
+  color: #8a552f;
+  font-size: 1.15rem;
+}
+
+.service-ticket-card ul {
+  padding-left: 1.2rem;
+  color: var(--text-muted);
+}
+
+.service-pay-button {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.2rem;
+  border: 1px solid var(--steel);
+  color: var(--steel);
+  font-weight: 700;
+  border-radius: 4px;
+}
+
+.service-pay-button:hover {
+  background: var(--steel);
+  color: white;
+}
+
+.featured-service-ticket {
+  border-left: 5px solid #d6a06d;
+}
+
+.service-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.service-flow-grid div {
+  background: white;
+  border-radius: 8px;
+  padding: 1.2rem;
+  border: 1px solid rgba(79,127,168,0.2);
+}
+
+.service-flow-grid strong {
+  color: #8a552f;
+  font-size: 1.4rem;
+}
+
+.service-notice-box {
+  background: white;
+  border-left: 5px solid var(--steel);
+  padding: 2rem;
+  margin-top: 3rem;
+  border-radius: 8px;
+}
