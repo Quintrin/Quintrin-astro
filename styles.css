@@ -1221,12 +1221,12 @@ footer a {
 }
 
 .intake-choice-header {
-  display: flex;
+ .intake-choice-header {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 0.75rem;
 }
-
 .intake-choice-header strong {
   display: inline-block;
 }
