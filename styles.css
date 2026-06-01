@@ -1198,3 +1198,17 @@ footer a {
   margin-top: 3rem;
   border-radius: 8px;
 }
+/* =========================
+   HERO BUTTON ALIGNMENT
+========================= */
+
+.hero-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 1.5rem;
+}
+
+.hero-button-group .cta {
+  margin: 0 !important;
+}
