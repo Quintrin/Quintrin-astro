@@ -1223,9 +1223,18 @@ footer a {
 .intake-choice-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 10px;
   margin-bottom: 0.75rem;
+}
+
+.intake-choice-header strong {
+  display: inline-block;
+}
+
+.intake-choice-header input[type="radio"] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
 }
 
 .intake-choice-header input[type="radio"] {
