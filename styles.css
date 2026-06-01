@@ -1212,3 +1212,27 @@ footer a {
 .hero-button-group .cta {
   margin: 0 !important;
 }
+/* =========================
+   STRUCTURED INTAKE
+   RADIO ALIGNMENT FIX
+========================= */
+
+.role-option,
+.intent-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.role-option label,
+.intent-option label {
+  flex: 1;
+}
+
+.role-option input[type="radio"],
+.intent-option input[type="radio"] {
+  margin-top: 4px;
+  flex-shrink: 0;
+}
