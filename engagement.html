@@ -250,6 +250,23 @@
     return "https://wa.me/18683122756?text=" + message;
   }
 
+  /* =========================
+   AUTO-SELECT SERVICE FROM URL
+========================= */
+
+const urlParams = new URLSearchParams(window.location.search);
+const selectedServiceFromUrl = urlParams.get("service");
+
+if (selectedServiceFromUrl) {
+  const serviceInput = document.querySelector(
+    'input[name="service"][value="' + selectedServiceFromUrl + '"]'
+  );
+
+  if (serviceInput) {
+    serviceInput.checked = true;
+  }
+}
+
   document.getElementById("activationForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
