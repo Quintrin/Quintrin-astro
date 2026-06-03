@@ -1531,3 +1531,13 @@ footer a {
   height: 18px !important;
   flex-shrink: 0 !important;
 }
+.engagement-form select {
+  width: 100%;
+  max-width: 620px;
+  padding: 0.75rem;
+  margin-top: 0.35rem;
+  border: 1px solid #cfd8df;
+  border-radius: 5px;
+  font-size: 1rem;
+  background: white;
+}
