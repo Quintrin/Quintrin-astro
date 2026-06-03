@@ -1457,3 +1457,42 @@ footer a {
     font-size: 1.1rem;
   }
 }
+/* =========================
+   ENGAGEMENT RADIO ALIGNMENT FIX
+========================= */
+
+.engagement-option {
+  display: inline-flex !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+}
+
+.engagement-option input[type="radio"] {
+  order: 0 !important;
+  margin: 3px 0 0 0 !important;
+  width: 18px !important;
+  height: 18px !important;
+  flex-shrink: 0 !important;
+}
+
+.engagement-option span {
+  order: 1 !important;
+  display: block !important;
+}
+
+.engagement-declaration label {
+  display: inline-flex !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+}
+
+.engagement-declaration input[type="checkbox"] {
+  margin: 3px 0 0 0 !important;
+  width: 18px !important;
+  height: 18px !important;
+  flex-shrink: 0 !important;
+}
