@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Quintrin Engagement Activation | Private Client Access</title>
+  <meta name="description" content="Activate a structured Quintrin engagement and choose your service pathway." />
+
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- GOOGLE ANALYTICS : QUINTRIN -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JHBK5LEX7V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JHBK5LEX7V');
+  </script>
+  <!-- END GOOGLE ANALYTICS -->
+</head>
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="logo">QUINTRIN</a>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="resources.html">Resources</a>
+      <a href="intake.html">Structured Intake</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- =========================
+       HERO SECTION
+  ========================= -->
+
+  <section class="engagement-hero">
+    <p class="engagement-eyebrow">Private Client Access</p>
+
+    <h1>Activate Your Engagement</h1>
+
+    <p>
+      Every successful transaction begins with structure.
+      Begin your engagement with Quintrin by providing the information required
+      to establish a structured review pathway.
+    </p>
+
+    <a href="#engagement-form" class="cta">Begin Engagement</a>
+  </section>
+
+  <!-- =========================
+       ENGAGEMENT FORM
+  ========================= -->
+
+  <section id="engagement-form" class="engagement-form-section">
+    <h2>Engagement Activation Gateway</h2>
+
+    <p>
+      Complete the short activation form below. After submission, your engagement
+      reference will be generated and the appropriate payment pathway will be displayed.
+    </p>
+
+    <form id="activationForm" class="engagement-form">
+
+      <!-- CLIENT INFORMATION -->
+
+      <h3>Client Information</h3>
+
+      <label>Full Name</label>
+      <input type="text" id="clientName" name="clientName" required>
+
+      <label>Email Address</label>
+      <input type="email" id="clientEmail" name="clientEmail" required>
+
+      <label>WhatsApp Number</label>
+      <input type="text" id="clientWhatsapp" name="clientWhatsapp" required>
+
+      <label>Company / Organization</label>
+      <input type="text" id="clientCompany" name="clientCompany">
+
+      <label>Country</label>
+      <input type="text" id="clientCountry" name="clientCountry" required>
+
+      <!-- SERVICE SELECTION -->
+
+      <h3>Service Selection</h3>
+
+      <div class="engagement-option-group">
+
+        <label class="engagement-option">
+          <input type="radio" name="service" value="digital-asset" required>
+          <span>
+            <strong>Digital Asset Procurement & Structuring Engagement</strong>
+            <small>US$1,000 / Approx. TT$8,300</small>
+          </span>
+        </label>
+
+        <label class="engagement-option">
+          <input type="radio" name="service" value="supplier-verification">
+          <span>
+            <strong>Supplier Verification Review</strong>
+            <small>US$100 / Approx. TT$830</small>
+          </span>
+        </label>
+
+        <label class="engagement-option">
+          <input type="radio" name="service" value="strategic-consultation">
+          <span>
+            <strong>Strategic Consultation Ticket</strong>
+            <small>US$250 / Approx. TT$2,075</small>
+          </span>
+        </label>
+
+      </div>
+
+      <!-- PAYMENT METHOD -->
+
+      <h3>Payment Method</h3>
+
+      <div class="engagement-option-group">
+
+        <label class="engagement-option">
+          <input type="radio" name="payment" value="online" required>
+          <span>
+            <strong>Online Payment</strong>
+            <small>Pay securely online where available.</small>
+          </span>
+        </label>
+
+        <label class="engagement-option">
+          <input type="radio" name="payment" value="bank">
+          <span>
+            <strong>Bank Deposit / Transfer</strong>
+            <small>Banking details are shared directly after WhatsApp confirmation.</small>
+          </span>
+        </label>
+
+        <label class="engagement-option">
+          <input type="radio" name="payment" value="cash">
+          <span>
+            <strong>Cash Payment</strong>
+            <small>Cash arrangements are coordinated directly with Quintrin.</small>
+          </span>
+        </label>
+
+      </div>
+
+      <!-- DECLARATION -->
+
+      <div class="engagement-declaration">
+        <label>
+          <input type="checkbox" id="clientDeclaration" required>
+          I confirm that the information provided is accurate and understand that
+          submission does not guarantee acceptance or completion of any transaction.
+        </label>
+      </div>
+
+      <button type="submit" class="cta">Activate Engagement</button>
+    </form>
+  </section>
+
+  <!-- =========================
+       ACTIVATION RESULT
+  ========================= -->
+
+  <section id="activationResult" class="activation-result" style="display:none;">
+    <h2>Engagement Activated</h2>
+
+    <p>
+      Your engagement reference has been generated. Please keep this reference
+      for future communication with Quintrin.
+    </p>
+
+    <div class="reference-box">
+      <span>Engagement Reference</span>
+      <strong id="generatedReference"></strong>
+    </div>
+
+    <div id="nextStepBox" class="next-step-box"></div>
+  </section>
+
+</main>
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+  <p>
+    © 2026 <strong>Quintrin Financial Services Ltd</strong> — The Creative Way to Wealth
+  </p>
+  <p>
+    <a href="privacy.html">Privacy Policy</a> |
+    <a href="terms.html">Terms of Use</a> |
+    <a href="ai-messaging.html">AI & Messaging Notice</a> |
+    <a href="contact.html">Contact</a>
+  </p>
+  <p>
+    Quintrin provides independent structuring and facilitation services only.
+    No brokerage, fiduciary, underwriting, or advisory services are offered.
+  </p>
+</footer>
+
+<!-- PAYHIP SCRIPT -->
+<script type="text/javascript" src="https://payhip.com/payhip.js"></script>
+
+<!-- =========================
+     ENGAGEMENT GATEWAY SCRIPT
+========================= -->
+
+<script>
+  const serviceLinks = {
+    "digital-asset": "#",
+    "supplier-verification": "#",
+    "strategic-consultation": "#"
+  };
+
+  const serviceNames = {
+    "digital-asset": "Digital Asset Procurement & Structuring Engagement",
+    "supplier-verification": "Supplier Verification Review",
+    "strategic-consultation": "Strategic Consultation Ticket"
+  };
+
+  function generateReference() {
+    const year = new Date().getFullYear();
+    const randomNumber = Math.floor(1000 + Math.random() * 9000);
+    return "QFSL-ENG-" + year + "-" + randomNumber;
+  }
+
+  function buildWhatsappLink(reference, serviceName, paymentMethod) {
+    const message =
+      "Hello Quintrin, I have activated an engagement.%0A%0A" +
+      "Reference: " + encodeURIComponent(reference) + "%0A" +
+      "Service: " + encodeURIComponent(serviceName) + "%0A" +
+      "Payment Method: " + encodeURIComponent(paymentMethod) + "%0A%0A" +
+      "Please guide me on the next step.";
+
+    return "https://wa.me/18683122756?text=" + message;
+  }
+
+  document.getElementById("activationForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const selectedService = document.querySelector('input[name="service"]:checked').value;
+    const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
+    const serviceName = serviceNames[selectedService];
+    const reference = generateReference();
+
+    document.getElementById("generatedReference").textContent = reference;
+
+    const nextStepBox = document.getElementById("nextStepBox");
+
+    if (selectedPayment === "online") {
+      nextStepBox.innerHTML = `
+        <h3>Next Step: Online Payment</h3>
+        <p>
+          Your engagement has been activated. Please proceed to the secure payment page
+          for your selected service.
+        </p>
+
+        <a href="${serviceLinks[selectedService]}" class="cta">
+          Proceed To Payment
+        </a>
+
+        <p class="small-note">
+          Payment links will be activated after the Payhip service tickets are created.
+        </p>
+      `;
+    }
+
+    if (selectedPayment === "bank") {
+      const whatsappLink = buildWhatsappLink(reference, serviceName, "Bank Deposit / Transfer");
+
+      nextStepBox.innerHTML = `
+        <h3>Next Step: Bank Deposit / Transfer</h3>
+        <p>
+          Please contact Quintrin through WhatsApp to receive banking instructions.
+          Bank details are not published publicly.
+        </p>
+
+        <a href="${whatsappLink}" class="cta" target="_blank">
+          Continue On WhatsApp
+        </a>
+      `;
+    }
+
+    if (selectedPayment === "cash") {
+      const whatsappLink = buildWhatsappLink(reference, serviceName, "Cash Payment");
+
+      nextStepBox.innerHTML = `
+        <h3>Next Step: Cash Payment</h3>
+        <p>
+          Please contact Quintrin through WhatsApp to arrange payment confirmation
+          and receive further instructions.
+        </p>
+
+        <a href="${whatsappLink}" class="cta" target="_blank">
+          Continue On WhatsApp
+        </a>
+      `;
+    }
+
+    document.getElementById("activationResult").style.display = "block";
+    document.getElementById("activationResult").scrollIntoView({ behavior: "smooth" });
+  });
+</script>
+
+</body>
+</html>
