@@ -1280,3 +1280,180 @@ footer a {
   margin-top: 3rem;
   border-radius: 8px;
 }
+/* =========================
+   ENGAGEMENT ACTIVATION GATEWAY
+========================= */
+
+.engagement-hero {
+  background:
+    radial-gradient(circle at right, rgba(79,127,168,0.22), transparent 28%),
+    linear-gradient(90deg, #06182a, #09213a);
+  color: white;
+  padding: 3rem 2rem;
+  border-radius: 10px;
+  margin-top: 2rem;
+  border: 1px solid rgba(214,160,109,0.45);
+}
+
+.engagement-hero h1 {
+  color: white;
+  font-size: 2.7rem;
+  margin-bottom: 1rem;
+}
+
+.engagement-hero p {
+  max-width: 760px;
+  color: #e5edf4;
+}
+
+.engagement-eyebrow {
+  color: #d6a06d !important;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.engagement-form-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  margin-top: 2rem;
+  border: 1px solid rgba(79,127,168,0.22);
+  box-shadow: 0 14px 35px rgba(11,28,45,0.06);
+}
+
+.engagement-form h3 {
+  margin-top: 2rem;
+  color: var(--navy);
+  border-bottom: 1px solid rgba(214,160,109,0.45);
+  padding-bottom: 0.5rem;
+}
+
+.engagement-form label {
+  display: block;
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+.engagement-form input[type="text"],
+.engagement-form input[type="email"] {
+  width: 100%;
+  max-width: 620px;
+  padding: 0.75rem;
+  margin-top: 0.35rem;
+  border: 1px solid #cfd8df;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.engagement-option-group {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.engagement-option {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 0.8rem;
+  background: #f8fafc;
+  border: 1px solid rgba(79,127,168,0.22);
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.engagement-option input[type="radio"] {
+  margin-top: 0.25rem;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.engagement-option strong {
+  display: block;
+  color: var(--navy);
+}
+
+.engagement-option small {
+  display: block;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.engagement-declaration {
+  background: #f8fafc;
+  padding: 1rem;
+  border-left: 4px solid #d6a06d;
+  margin: 2rem 0;
+  border-radius: 6px;
+}
+
+.engagement-declaration label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-weight: 600;
+}
+
+.engagement-declaration input {
+  margin-top: 0.2rem;
+}
+
+.activation-result {
+  background: white;
+  padding: 2rem;
+  margin-top: 2rem;
+  border-radius: 10px;
+  border-left: 5px solid #d6a06d;
+  box-shadow: 0 14px 35px rgba(11,28,45,0.06);
+}
+
+.reference-box {
+  background: #06182a;
+  color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border: 1px solid rgba(214,160,109,0.6);
+}
+
+.reference-box span {
+  display: block;
+  color: #d6a06d;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.5rem;
+}
+
+.reference-box strong {
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.next-step-box {
+  margin-top: 1.5rem;
+}
+
+.small-note {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+@media (max-width: 700px) {
+  .engagement-hero h1 {
+    font-size: 2rem;
+  }
+
+  .engagement-form-section,
+  .activation-result {
+    padding: 1.3rem;
+  }
+
+  .reference-box strong {
+    font-size: 1.1rem;
+  }
+}
