@@ -305,6 +305,10 @@ if (selectedServiceFromUrl) {
 
   document.getElementById("activationForm").addEventListener("submit", async function(e) {
 
+  e.preventDefault();
+
+  const selectedService = document.querySelector('input[name="service"]:checked').value;
+
     const selectedService = document.querySelector('input[name="service"]:checked').value;
     const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
     const serviceName = serviceNames[selectedService];
@@ -374,7 +378,7 @@ try {
         </p>
 
         <a href="${serviceLinks[selectedService]}" class="cta">
-          Proceed To Payment
+          Continue To Secure Checkout 
         </a>
 
         <p class="small-note">
