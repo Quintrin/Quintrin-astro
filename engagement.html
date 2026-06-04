@@ -244,6 +244,145 @@
 ========================= -->
 
 <script>
+const SHEET_WEBAPP =
+"https://script.google.com/macros/s/AKfycbxj7YhkMaoMUcVY5CTdqyzGg7YZpjZD1jbays8xaPnC57_78VfdnvuhL85QVTdcNX1M/exec";
+
+const serviceLinks = {
+  "digital-asset": "https://payhip.com/b/4L3Em",
+  "supplier-verification": "https://payhip.com/b/7FjlG",
+  "strategic-consultation": "https://payhip.com/b/652Ja"
+};
+
+const serviceNames = {
+  "digital-asset": "Digital Asset Procurement & Structuring Engagement",
+  "supplier-verification": "Supplier Verification Review",
+  "strategic-consultation": "Strategic Consultation Ticket"
+};
+
+const paymentLabels = {
+  online: "Online Payment",
+  bank: "Bank Deposit / Transfer",
+  cash: "Cash Payment"
+};
+
+function generateReference() {
+  const year = new Date().getFullYear();
+  const randomNumber = Math.floor(1000 + Math.random() * 9000);
+  return "QFSL-ENG-" + year + "-" + randomNumber;
+}
+
+function buildWhatsappLink(reference, serviceName, paymentMethod) {
+  const message =
+    "Hello Quintrin, I have activated an engagement.%0A%0A" +
+    "Reference: " + encodeURIComponent(reference) + "%0A" +
+    "Service: " + encodeURIComponent(serviceName) + "%0A" +
+    "Payment Method: " + encodeURIComponent(paymentMethod) + "%0A%0A" +
+    "Please guide me on the next step.";
+
+  return "https://wa.me/18683122756?text=" + message;
+}
+
+/* AUTO-SELECT SERVICE FROM URL */
+const urlParams = new URLSearchParams(window.location.search);
+const selectedServiceFromUrl = urlParams.get("service");
+
+if (selectedServiceFromUrl) {
+  const serviceInput = document.querySelector(
+    'input[name="service"][value="' + selectedServiceFromUrl + '"]'
+  );
+
+  if (serviceInput) {
+    serviceInput.checked = true;
+  }
+}
+
+document.getElementById("activationForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const selectedService = document.querySelector('input[name="service"]:checked').value;
+  const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
+  const serviceName = serviceNames[selectedService];
+  const reference = generateReference();
+
+  const payload = {
+    reference: reference,
+    clientName: document.getElementById("clientName").value,
+    clientEmail: document.getElementById("clientEmail").value,
+    clientWhatsapp: document.getElementById("clientWhatsapp").value,
+    clientCompany: document.getElementById("clientCompany").value,
+    clientCountry: document.getElementById("clientCountry").value,
+    serviceName: serviceName,
+    paymentMethod: paymentLabels[selectedPayment],
+    payhipLink: serviceLinks[selectedService]
+  };
+
+  fetch(SHEET_WEBAPP, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify(payload)
+  }).catch(function(error) {
+    console.log("Sheet logging error:", error);
+  });
+
+  document.getElementById("generatedReference").textContent = reference;
+
+  const nextStepBox = document.getElementById("nextStepBox");
+
+  if (selectedPayment === "online") {
+    nextStepBox.innerHTML = `
+      <h3>Next Step: Online Payment</h3>
+      <p>
+        Your engagement has been activated. Please proceed to the secure payment page
+        for your selected service.
+      </p>
+
+      <a href="${serviceLinks[selectedService]}" class="cta">
+        Continue To Secure Checkout
+      </a>
+    `;
+  }
+
+  if (selectedPayment === "bank") {
+    const whatsappLink = buildWhatsappLink(reference, serviceName, "Bank Deposit / Transfer");
+
+    nextStepBox.innerHTML = `
+      <h3>Next Step: Bank Deposit / Transfer</h3>
+      <p>
+        Please contact Quintrin through WhatsApp to receive banking instructions.
+        Bank details are not published publicly.
+      </p>
+
+      <a href="${whatsappLink}" class="cta" target="_blank">
+        Continue On WhatsApp
+      </a>
+    `;
+  }
+
+  if (selectedPayment === "cash") {
+    const whatsappLink = buildWhatsappLink(reference, serviceName, "Cash Payment");
+
+    nextStepBox.innerHTML = `
+      <h3>Next Step: Cash Payment</h3>
+      <p>
+        Please contact Quintrin through WhatsApp to arrange payment confirmation
+        and receive further instructions.
+      </p>
+
+      <a href="${whatsappLink}" class="cta" target="_blank">
+        Continue On WhatsApp
+      </a>
+    `;
+  }
+
+  document.getElementById("activationResult").style.display = "block";
+  document.getElementById("activationResult").scrollIntoView({ behavior: "smooth" });
+});
+</script>
+
+<script>
   /* =========================
    GOOGLE SHEET WEB APP
 ========================= */
