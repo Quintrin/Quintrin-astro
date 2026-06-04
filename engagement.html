@@ -316,16 +316,19 @@ document.getElementById("activationForm").addEventListener("submit", async funct
     payhipLink: serviceLinks[selectedService]
   };
 
-  fetch(SHEET_WEBAPP, {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
-    },
-    body: JSON.stringify(payload)
-  }).catch(function(error) {
-    console.log("Sheet logging error:", error);
-  });
+ const formData = new FormData();
+
+Object.keys(payload).forEach(function(key) {
+  formData.append(key, payload[key]);
+});
+
+fetch(SHEET_WEBAPP, {
+  method: "POST",
+  mode: "no-cors",
+  body: formData
+}).catch(function(error) {
+  console.log("Sheet logging error:", error);
+});
 
   document.getElementById("generatedReference").textContent = reference;
 
