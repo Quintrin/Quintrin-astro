@@ -5,15 +5,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Quintrin Investor Portal</title>
+  <title>Quintrin Secure Investor Portal</title>
 
   <link
     rel="stylesheet"
     href="https://quintrin.github.io/Quintrin-astro/styles.css"
   >
 
-  <script src="/site-config.js"></script>
-  <script src="/site.js" defer></script>
+  <style>
+    .portal-box {
+      max-width: 520px;
+      margin: 60px auto;
+      padding: 30px;
+    }
+
+    .portal-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0 16px;
+      box-sizing: border-box;
+    }
+
+    .portal-message {
+      margin-top: 15px;
+    }
+
+    .secure-notice {
+      margin: 25px 0;
+      padding: 20px;
+      border: 1px solid #b99545;
+    }
+  </style>
 </head>
 
 <body>
@@ -24,32 +46,218 @@
 
 <main class="container">
 
-  <h1>Secure Investor Portal</h1>
+  <!-- LOGIN SCREEN -->
+  <section id="loginPanel" class="portal-box">
 
-  <p>
-    Quintrin Financial Services Ltd. is upgrading its private investor
-    access system.
-  </p>
+    <h1>Investor Portal</h1>
 
-  <p>
-    Investor documents, transaction information and decision functions
-    are not accessible from this public page.
-  </p>
+    <p>
+      Private access for authorised Quintrin investors.
+    </p>
 
-  <p>
-    Authorized investors will receive secure access instructions
-    directly from Quintrin Financial Services Ltd.
-  </p>
+    <form id="loginForm">
 
-  <p>
-    <strong>The Creative Way to Wealth</strong>
-  </p>
+      <label for="email">Email Address</label>
+      <input
+        id="email"
+        type="email"
+        autocomplete="username"
+        required
+      >
 
-  <a class="cta" href="/">
-    Return to Quintrin
-  </a>
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        required
+      >
+
+      <button class="cta" type="submit">
+        Secure Login
+      </button>
+
+    </form>
+
+    <p id="loginMessage" class="portal-message"></p>
+
+  </section>
+
+
+  <!-- AUTHENTICATED SCREEN -->
+  <section id="portalPanel" class="portal-box" hidden>
+
+    <h1>Secure Investor Portal</h1>
+
+    <p id="welcomeUser"></p>
+
+    <div class="secure-notice">
+      <strong>Authentication Successful</strong>
+
+      <p>
+        Your identity has been authenticated through the
+        Quintrin Investor Portal security system.
+      </p>
+
+      <p>
+        Private investor information and decision functions
+        will be connected in the next development stage.
+      </p>
+    </div>
+
+    <button id="logoutButton" class="cta">
+      Secure Logout
+    </button>
+
+  </section>
 
 </main>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  setPersistence,
+  browserSessionPersistence
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+
+/*
+=====================================================
+PASTE YOUR FIREBASE CONFIGURATION BELOW
+=====================================================
+*/
+
+const firebaseConfig = {
+
+  apiKey: "PASTE-YOUR-apiKey-HERE",
+
+  authDomain: "PASTE-YOUR-authDomain-HERE",
+
+  projectId: "PASTE-YOUR-projectId-HERE",
+
+  storageBucket: "PASTE-YOUR-storageBucket-HERE",
+
+  messagingSenderId: "PASTE-YOUR-messagingSenderId-HERE",
+
+  appId: "PASTE-YOUR-appId-HERE"
+
+};
+
+/*
+=====================================================
+DO NOT CHANGE ANYTHING BELOW THIS LINE
+=====================================================
+*/
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const loginPanel =
+  document.getElementById("loginPanel");
+
+const portalPanel =
+  document.getElementById("portalPanel");
+
+const loginForm =
+  document.getElementById("loginForm");
+
+const loginMessage =
+  document.getElementById("loginMessage");
+
+const welcomeUser =
+  document.getElementById("welcomeUser");
+
+const logoutButton =
+  document.getElementById("logoutButton");
+
+
+loginForm.addEventListener("submit", async (event) => {
+
+  event.preventDefault();
+
+  loginMessage.textContent =
+    "Authenticating...";
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  try {
+
+    await setPersistence(
+      auth,
+      browserSessionPersistence
+    );
+
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    document.getElementById("password").value = "";
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    loginMessage.textContent =
+      "Unable to sign in. Please check your credentials.";
+
+  }
+
+});
+
+
+onAuthStateChanged(auth, (user) => {
+
+  if (user) {
+
+    loginPanel.hidden = true;
+
+    portalPanel.hidden = false;
+
+    loginMessage.textContent = "";
+
+    welcomeUser.textContent =
+      "Authenticated account: " + user.email;
+
+  }
+
+  else {
+
+    portalPanel.hidden = true;
+
+    loginPanel.hidden = false;
+
+    welcomeUser.textContent = "";
+
+  }
+
+});
+
+
+logoutButton.addEventListener("click", async () => {
+
+  await signOut(auth);
+
+});
+
+</script>
 
 </body>
 </html>
