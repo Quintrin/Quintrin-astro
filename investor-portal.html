@@ -1,47 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<title>Quintrin Investor Portal</title>
-<link rel="stylesheet" href="https://quintrin.github.io/Quintrin-astro/styles.css">
-</head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Quintrin Investor Portal</title>
+
+  <link
+    rel="stylesheet"
+    href="https://quintrin.github.io/Quintrin-astro/styles.css"
+  >
 
   <script src="/site-config.js"></script>
-<script src="/site.js"></script>
-  
+  <script src="/site.js" defer></script>
+</head>
+
 <body>
+
 <header>
-<div class="logo">QUINTRIN</div></div>
+  <div class="logo">QUINTRIN</div>
 </header>
 
 <main class="container">
-<h1>Investor Decision Panel</h1>
 
-<input id="dealRef" placeholder="Reference">
-<textarea id="note"></textarea>
+  <h1>Secure Investor Portal</h1>
 
-<button class="cta" onclick="submitDecision('Approved')">Approve</button>
-<button class="cta" onclick="submitDecision('Rejected')">Reject</button>
+  <p>
+    Quintrin Financial Services Ltd. is upgrading its private investor
+    access system.
+  </p>
+
+  <p>
+    Investor documents, transaction information and decision functions
+    are not accessible from this public page.
+  </p>
+
+  <p>
+    Authorized investors will receive secure access instructions
+    directly from Quintrin Financial Services Ltd.
+  </p>
+
+  <p>
+    <strong>The Creative Way to Wealth</strong>
+  </p>
+
+  <a class="cta" href="/">
+    Return to Quintrin
+  </a>
+
 </main>
 
-<script>
-const API="https://script.google.com/macros/s/AKfycbwMqFyO3pVZbvOfhSt1DMUObfHAeyqNBxTlLZjXOMdqJo6xc8DzILMec_YVjrXbjo8/exec";
-const PIN="4821";
-
-function submitDecision(status){
-  const p=prompt("PIN");
-  if(p!==PIN) return alert("Invalid");
-
-  fetch(API,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      ref:document.getElementById("dealRef").value,
-      status:status,
-      notes:document.getElementById("note").value,
-      code:"Verified"
-    })
-  }).then(()=>alert("Logged"));
-}
-</script>
 </body>
 </html>
