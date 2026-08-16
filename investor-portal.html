@@ -66,13 +66,37 @@
       >
 
       <label for="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        autocomplete="current-password"
-        required
-      >
+      <div style="position:relative;">
 
+  <input
+    id="password"
+    type="password"
+    autocomplete="current-password"
+    required
+    style="padding-right:70px;"
+  >
+
+  <button
+    type="button"
+    onclick="
+      const p=document.getElementById('password');
+      p.type = p.type === 'password' ? 'text' : 'password';
+      this.textContent = p.type === 'password' ? 'View' : 'Hide';
+    "
+    style="
+      position:absolute;
+      right:8px;
+      top:16px;
+      border:none;
+      background:transparent;
+      cursor:pointer;
+      font-weight:bold;
+    "
+  >
+    View
+  </button>
+
+</div>
       <button class="cta" type="submit">
         Secure Login
       </button>
