@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -28,12 +28,32 @@
 
     .portal-message {
       margin-top: 15px;
+      min-height: 24px;
     }
 
     .secure-notice {
       margin: 25px 0;
       padding: 20px;
       border: 1px solid #b99545;
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-wrap input {
+      padding-right: 75px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 8px;
+      top: 16px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-weight: bold;
+      padding: 8px;
     }
   </style>
 </head>
@@ -58,6 +78,7 @@
     <form id="loginForm">
 
       <label for="email">Email Address</label>
+
       <input
         id="email"
         type="email"
@@ -66,70 +87,83 @@
       >
 
       <label for="password">Password</label>
-      <div style="position:relative;">
 
-  <input
-    id="password"
-    type="password"
-    autocomplete="current-password"
-    required
-    style="padding-right:70px;"
-  >
+      <div class="password-wrap">
 
-  <button
-    type="button"
-    onclick="
-      const p=document.getElementById('password');
-      p.type = p.type === 'password' ? 'text' : 'password';
-      this.textContent = p.type === 'password' ? 'View' : 'Hide';
-    "
-    style="
-      position:absolute;
-      right:8px;
-      top:16px;
-      border:none;
-      background:transparent;
-      cursor:pointer;
-      font-weight:bold;
-    "
-  >
-    View
-  </button>
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          required
+        >
 
-</div>
-      <button class="cta" type="submit">
+        <button
+          id="togglePassword"
+          class="password-toggle"
+          type="button"
+          aria-label="Show password"
+          aria-pressed="false"
+        >
+          View
+        </button>
+
+      </div>
+
+      <button
+        id="loginButton"
+        class="cta"
+        type="submit"
+      >
         Secure Login
       </button>
 
     </form>
 
-    <p id="loginMessage" class="portal-message"></p>
+    <p
+      id="loginMessage"
+      class="portal-message"
+      aria-live="polite"
+    ></p>
 
   </section>
 
 
   <!-- AUTHENTICATED SCREEN -->
-  <section id="portalPanel" class="portal-box" hidden>
+  <section
+    id="portalPanel"
+    class="portal-box"
+    hidden
+  >
 
     <h1>Secure Investor Portal</h1>
 
     <p id="welcomeUser"></p>
 
     <div class="secure-notice">
-      <strong>Authentication Successful</strong>
+
+      <strong>
+        Authentication Successful
+      </strong>
 
       <p>
-        Your identity has been authenticated through the
-        Quintrin Investor Portal security system.
+        Your identity has been authenticated and
+        authorised through the Quintrin Investor
+        Portal security system.
       </p>
 
       <p>
-        Private investor information and decision functions
-        will be connected in the next development stage.
+        Private investor information and decision
+        functions will be connected in the next
+        development stage.
       </p>
+
     </div>
 
-    <button id="logoutButton" class="cta">
+    <button
+      id="logoutButton"
+      class="cta"
+      type="button"
+    >
       Secure Logout
     </button>
 
@@ -153,7 +187,6 @@ import {
   browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-
 import {
   getFirestore,
   doc,
@@ -161,38 +194,47 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
-=====================================================
-PASTE YOUR FIREBASE CONFIGURATION BELOW
-=====================================================
-*/
+/* =====================================================
+   FIREBASE CONFIGURATION
+   ===================================================== */
 
 const firebaseConfig = {
 
-  apiKey: "AIzaSyCEsncA0dxiRu6d-ZOV87OgmJzArk0rrL0",
+  apiKey:
+    "AIzaSyCEsncA0dxiRu6d-ZOV87OgmJzArk0rrL0",
 
-  authDomain: "quintrin-investor-portal.firebaseapp.com",
+  authDomain:
+    "quintrin-investor-portal.firebaseapp.com",
 
-  projectId: "quintrin-investor-portal",
+  projectId:
+    "quintrin-investor-portal",
 
-  storageBucket: "quintrin-investor-portal.firebasestorage.app",
+  storageBucket:
+    "quintrin-investor-portal.firebasestorage.app",
 
-  messagingSenderId: "PASTE-YOUR-messagingSenderId-HERE",
+  messagingSenderId:
+    "384297431496",
 
-  appId: "1:384297431496:web:ffe7f5771ebd6319dbd0fd"
+  appId:
+    "1:384297431496:web:ffe7f5771ebd6319dbd0fd"
 
 };
 
-/*
-=====================================================
-DO NOT CHANGE ANYTHING BELOW THIS LINE
-=====================================================
-*/
+
+/* =====================================================
+   INITIALIZE FIREBASE
+   ===================================================== */
 
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-  
+
 const db = getFirestore(app);
+
+
+/* =====================================================
+   PAGE ELEMENTS
+   ===================================================== */
 
 const loginPanel =
   document.getElementById("loginPanel");
@@ -203,6 +245,9 @@ const portalPanel =
 const loginForm =
   document.getElementById("loginForm");
 
+const loginButton =
+  document.getElementById("loginButton");
+
 const loginMessage =
   document.getElementById("loginMessage");
 
@@ -212,109 +257,238 @@ const welcomeUser =
 const logoutButton =
   document.getElementById("logoutButton");
 
+const passwordInput =
+  document.getElementById("password");
 
-loginForm.addEventListener("submit", async (event) => {
+const togglePassword =
+  document.getElementById("togglePassword");
 
-  event.preventDefault();
 
-  loginMessage.textContent =
-    "Authenticating...";
+/* =====================================================
+   VIEW / HIDE PASSWORD
+   ===================================================== */
 
-  const email =
-    document.getElementById("email").value.trim();
+togglePassword.addEventListener("click", () => {
 
-  const password =
-    document.getElementById("password").value;
+  const hidden =
+    passwordInput.type === "password";
 
-  try {
+  passwordInput.type =
+    hidden ? "text" : "password";
 
-    await setPersistence(
-      auth,
-      browserSessionPersistence
-    );
+  togglePassword.textContent =
+    hidden ? "Hide" : "View";
 
-    await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+  togglePassword.setAttribute(
+    "aria-pressed",
+    hidden ? "true" : "false"
+  );
 
-    document.getElementById("password").value = "";
-
-  }
-
-  catch (error) {
-
-    console.error(error);
-
-    loginMessage.textContent =
-      "Unable to sign in. Please check your credentials.";
-
-  }
+  togglePassword.setAttribute(
+    "aria-label",
+    hidden ? "Hide password" : "Show password"
+  );
 
 });
 
 
-onAuthStateChanged(auth, async (user) => {
+/* =====================================================
+   LOGIN
+   ===================================================== */
 
-  if (user) {
+loginForm.addEventListener(
+  "submit",
+  async (event) => {
+
+    event.preventDefault();
+
+    loginButton.disabled = true;
+
+    loginMessage.textContent =
+      "Authenticating...";
+
+    const email =
+      document
+        .getElementById("email")
+        .value
+        .trim();
+
+    const password =
+      passwordInput.value;
 
     try {
 
-      const userRef = doc(db, "portalUsers", user.uid);
-      const userSnap = await getDoc(userRef);
+      await setPersistence(
+        auth,
+        browserSessionPersistence
+      );
 
-      if (
-        userSnap.exists() &&
-        (
-          userSnap.data().role === "admin" ||
-          userSnap.data().role === "investor"
-        )
-      ) {
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-        loginPanel.hidden = true;
-        portalPanel.hidden = false;
-        loginMessage.textContent = "";
+      passwordInput.value = "";
 
-        welcomeUser.textContent =
-          "Authenticated account: " + user.email;
+      passwordInput.type = "password";
 
-      } else {
+      togglePassword.textContent = "View";
+
+      togglePassword.setAttribute(
+        "aria-pressed",
+        "false"
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Firebase login error:",
+        error
+      );
+
+      loginMessage.textContent =
+        "Unable to sign in. Please check your credentials.";
+
+      loginButton.disabled = false;
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   AUTHENTICATION + FIRESTORE AUTHORISATION
+   ===================================================== */
+
+onAuthStateChanged(
+  auth,
+  async (user) => {
+
+    portalPanel.hidden = true;
+
+    if (!user) {
+
+      loginPanel.hidden = false;
+
+      welcomeUser.textContent = "";
+
+      loginButton.disabled = false;
+
+      return;
+
+    }
+
+    loginPanel.hidden = false;
+
+    loginMessage.textContent =
+      "Verifying portal authorisation...";
+
+    try {
+
+      const userRef =
+        doc(
+          db,
+          "portalUsers",
+          user.uid
+        );
+
+      const userSnap =
+        await getDoc(userRef);
+
+      const role =
+        userSnap.exists()
+          ? userSnap.data().role
+          : null;
+
+      const authorised =
+        role === "admin" ||
+        role === "investor";
+
+      if (!authorised) {
 
         await signOut(auth);
 
         loginMessage.textContent =
           "This account is not authorised for Investor Portal access.";
 
+        loginButton.disabled = false;
+
+        return;
+
       }
 
-    } catch (error) {
+      loginPanel.hidden = true;
 
-      console.error(error);
+      portalPanel.hidden = false;
+
+      loginMessage.textContent = "";
+
+      welcomeUser.textContent =
+        "Authenticated account: " +
+        user.email;
+
+      loginButton.disabled = false;
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Portal authorisation error:",
+        error
+      );
 
       await signOut(auth);
 
       loginMessage.textContent =
         "Unable to verify portal authorisation.";
 
+      loginButton.disabled = false;
+
     }
 
-  } else {
+  }
+);
 
-    portalPanel.hidden = true;
-    loginPanel.hidden = false;
-    welcomeUser.textContent = "";
+
+/* =====================================================
+   LOGOUT
+   ===================================================== */
+
+logoutButton.addEventListener(
+  "click",
+  async () => {
+
+    try {
+
+      await signOut(auth);
+
+      portalPanel.hidden = true;
+
+      loginPanel.hidden = false;
+
+      welcomeUser.textContent = "";
+
+      loginMessage.textContent =
+        "Securely logged out.";
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Logout error:",
+        error
+      );
+
+    }
 
   }
-
-});
-
-
-logoutButton.addEventListener("click", async () => {
-
-  await signOut(auth);
-
-});
+);
 
 </script>
 
