@@ -400,9 +400,11 @@ onAuthStateChanged(
         await getDoc(userRef);
 
       const role =
-        userSnap.exists()
-          ? userSnap.data().role
-          : null;
+  userSnap.exists()
+    ? String(userSnap.data().role || "")
+        .trim()
+        .toLowerCase()
+    : "";
 
       const authorised =
         role === "admin" ||
