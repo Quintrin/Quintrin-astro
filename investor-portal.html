@@ -415,7 +415,10 @@ onAuthStateChanged(
         await signOut(auth);
 
         loginMessage.textContent =
-          "This account is not authorised for Investor Portal access.";
+          loginMessage.textContent =
+  "DIAGNOSTIC — UID: " + user.uid +
+  " | Document exists: " + userSnap.exists() +
+  " | Role: [" + role + "]";
 
         loginButton.disabled = false;
 
