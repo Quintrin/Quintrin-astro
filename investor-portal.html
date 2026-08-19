@@ -371,15 +371,18 @@ onAuthStateChanged(
     portalPanel.hidden = true;
 
     if (!user) {
+
       loginPanel.hidden = false;
       welcomeUser.textContent = "";
       loginButton.disabled = false;
+
       return;
     }
 
     loginPanel.hidden = false;
+
     loginMessage.textContent =
-      "Checking portal authorisation...";
+      "Verifying portal authorisation...";
 
     try {
 
@@ -392,46 +395,37 @@ onAuthStateChanged(
       const userSnap =
         await getDoc(userRef);
 
-      const exists =
-        userSnap.exists();
-
-      const rawRole =
-        exists
-          ? userSnap.data().role
-          : null;
-
       const role =
-        String(rawRole ?? "")
-          .trim()
-          .toLowerCase();
+        userSnap.exists()
+          ? String(userSnap.data().role || "")
+              .trim()
+              .toLowerCase()
+          : "";
 
-      loginMessage.textContent =
-        "DIAGNOSTIC — UID: " +
-        user.uid +
-        " | Document exists: " +
-        exists +
-        " | Raw role: [" +
-        rawRole +
-        "] | Normalized role: [" +
-        role +
-        "]";
+      const authorised =
+        role === "admin" ||
+        role === "investor";
 
-      if (
-        exists &&
-        (
-          role === "admin" ||
-          role === "investor"
-        )
-      ) {
+      if (!authorised) {
 
-        loginPanel.hidden = true;
-        portalPanel.hidden = false;
-        loginMessage.textContent = "";
+        await signOut(auth);
 
-        welcomeUser.textContent =
-          "Authenticated account: " +
-          user.email;
+        loginMessage.textContent =
+          "This account is not authorised for Investor Portal access.";
+
+        loginButton.disabled = false;
+
+        return;
       }
+
+      loginPanel.hidden = true;
+      portalPanel.hidden = false;
+
+      loginMessage.textContent = "";
+
+      welcomeUser.textContent =
+        "Authenticated account: " +
+        user.email;
 
       loginButton.disabled = false;
 
@@ -440,15 +434,100 @@ onAuthStateChanged(
     catch (error) {
 
       console.error(
-        "Portal authorization error:",
+        "Portal authorisation error:",
         error
       );
 
+      await signOut(auth);
+
       loginMessage.textContent =
-        "DIAGNOSTIC ERROR — " +
-        error.code +
-        " | " +
-        error.message;
+        "Unable to verify portal authorisation. Please try again.";
+
+      loginButton.disabled = false;
+    }
+
+  }
+);
+
+On Wed, Aug 19, 2026, 3:38 PM Quintrin Finance <quintrinf@gmail.com> wrote:
+onAuthStateChanged(
+  auth,
+  async (user) => {
+
+    portalPanel.hidden = true;
+
+    if (!user) {
+
+      loginPanel.hidden = false;
+      welcomeUser.textContent = "";
+      loginButton.disabled = false;
+
+      return;
+    }
+
+    loginPanel.hidden = false;
+
+    loginMessage.textContent =
+      "Verifying portal authorisation...";
+
+    try {
+
+      const userRef = doc(
+        db,
+        "portalUsers",
+        user.uid
+      );
+
+      const userSnap =
+        await getDoc(userRef);
+
+      const role =
+        userSnap.exists()
+          ? String(userSnap.data().role || "")
+              .trim()
+              .toLowerCase()
+          : "";
+
+      const authorised =
+        role === "admin" ||
+        role === "investor";
+
+      if (!authorised) {
+
+        await signOut(auth);
+
+        loginMessage.textContent =
+          "This account is not authorised for Investor Portal access.";
+
+        loginButton.disabled = false;
+
+        return;
+      }
+
+      loginPanel.hidden = true;
+      portalPanel.hidden = false;
+
+      loginMessage.textContent = "";
+
+      welcomeUser.textContent =
+        "Authenticated account: " +
+        user.email;
+
+      loginButton.disabled = false;
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Portal authorisation error:",
+        error
+      );
+
+      await signOut(auth);
+
+      loginMessage.textContent =
+        "Unable to verify portal authorisation. Please try again.";
 
       loginButton.disabled = false;
     }
