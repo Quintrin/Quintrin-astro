@@ -4,119 +4,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quintrin Secure Investor Portal</title>
-
   <link rel="stylesheet" href="https://quintrin.github.io/Quintrin-astro/styles.css">
 
   <style>
-    .portal-box {
-      max-width: 520px;
-      margin: 60px auto;
-      padding: 30px;
-    }
-
-    .portal-box input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0 16px;
-      box-sizing: border-box;
-    }
-
-    .portal-message {
-      margin-top: 15px;
-      min-height: 24px;
-    }
-
-    .secure-notice {
-      margin: 25px 0;
-      padding: 20px;
-      border: 1px solid #b99545;
-    }
-
-    .password-wrap {
-      position: relative;
-      width: 100%;
-    }
-
-    .password-wrap input {
-      padding-right: 78px;
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 8px;
-      top: 16px;
-      width: auto;
-      margin: 0;
-      padding: 6px 8px;
-      border: 0;
-      background: transparent;
-      cursor: pointer;
-      font: inherit;
-      font-weight: 600;
-      z-index: 10;
-    }
-
-    [hidden] {
-      display: none !important;
-    }
+    .portal-box{max-width:620px;margin:60px auto;padding:30px}
+    .portal-box input,.portal-box select,.portal-box textarea{width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box}
+    .portal-message{margin-top:15px;min-height:24px}
+    .secure-notice{margin:25px 0;padding:20px;border:1px solid #b99545}
+    .engagement-card{margin-top:30px;padding-top:10px}
+    .password-wrap{position:relative;width:100%}
+    .password-wrap input{padding-right:78px}
+    .password-toggle{position:absolute;right:8px;top:16px;width:auto;margin:0;padding:6px 8px;border:0;background:transparent;cursor:pointer;font:inherit;font-weight:600;z-index:10}
+    .decision-divider{margin:30px 0}
+    [hidden]{display:none!important}
   </style>
 </head>
 
 <body>
-
-<header>
-  <div class="logo">QUINTRIN</div>
-</header>
+<header><div class="logo">QUINTRIN</div></header>
 
 <main class="container">
 
   <section id="loginPanel" class="portal-box">
     <h1>Investor Portal</h1>
-
     <p>Private access for authorised Quintrin investors.</p>
 
     <form id="loginForm">
       <label for="email">Email Address</label>
-      <input
-        id="email"
-        name="email"
-        type="email"
-        autocomplete="username"
-        required
-      >
+      <input id="email" name="email" type="email" autocomplete="username" required>
 
       <label for="password">Password</label>
-
       <div class="password-wrap">
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autocomplete="current-password"
-          required
-        >
-
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
         <button
           id="togglePassword"
           class="password-toggle"
           type="button"
           aria-label="Show password"
+          aria-pressed="false"
           onclick="
-            const p = document.getElementById('password');
-            const hidden = p.type === 'password';
-            p.type = hidden ? 'text' : 'password';
-            this.textContent = hidden ? 'Hide' : 'View';
-            this.setAttribute('aria-label', hidden ? 'Hide password' : 'Show password');
-            this.setAttribute('aria-pressed', hidden ? 'true' : 'false');
+            const p=document.getElementById('password');
+            const hidden=p.type==='password';
+            p.type=hidden?'text':'password';
+            this.textContent=hidden?'Hide':'View';
+            this.setAttribute('aria-label',hidden?'Hide password':'Show password');
+            this.setAttribute('aria-pressed',hidden?'true':'false');
           "
-        >
-          View
-        </button>
+        >View</button>
       </div>
 
-      <button id="loginButton" class="cta" type="submit">
-        Secure Login
-      </button>
+      <button id="loginButton" class="cta" type="submit">Secure Login</button>
     </form>
 
     <p id="loginMessage" class="portal-message" aria-live="polite"></p>
@@ -124,118 +61,61 @@
 
   <section id="portalPanel" class="portal-box" hidden>
     <h1>Secure Investor Portal</h1>
-
     <p id="welcomeUser"></p>
 
     <div class="secure-notice">
       <strong>Authentication Successful</strong>
-
-      <p>
-        Your identity has been authenticated and authorised through
-        the Quintrin secure access system.
-      </p>
-
-      <p>
-        Private investor information and decision functions will be
-        connected in the next development stage.
-      </p>
+      <p>Your identity has been authenticated and authorised through the Quintrin secure access system.</p>
     </div>
 
-    <button id="logoutButton" class="cta" type="button">
-      Secure Logout
-      <section id="engagementPanel" hidden>
+    <section id="engagementPanel" class="engagement-card" hidden>
+      <hr class="decision-divider">
+      <h2>Private Engagement Review</h2>
 
-  <hr>
+      <p><strong>Reference:</strong> <span id="engagementRef"></span></p>
+      <p><strong>Client:</strong> <span id="clientName"></span></p>
+      <p><strong>Engagement:</strong> <span id="engagementTitle"></span></p>
+      <p><strong>Current Status:</strong> <span id="engagementStatus"></span></p>
 
-  <h2>Private Engagement Review</h2>
+      <div class="secure-notice">
+        <strong>Client / Engagement Summary</strong>
+        <p id="engagementSummary"></p>
+      </div>
 
-  <p>
-    <strong>Reference:</strong>
-    <span id="engagementRef"></span>
-  </p>
+      <section id="decisionSection">
+        <h2>Investor Decision</h2>
 
-  <p>
-    <strong>Client:</strong>
-    <span id="clientName"></span>
-  </p>
+        <form id="decisionForm">
+          <label for="decisionStatus">Decision Status</label>
+          <select id="decisionStatus" required>
+            <option value="Under Review">Under Review</option>
+            <option value="Request Additional Information">Request Additional Information</option>
+            <option value="Waiting Professional/Legal Review">Waiting Professional/Legal Review</option>
+            <option value="Approved to Proceed">Approved to Proceed</option>
+            <option value="Declined">Declined</option>
+          </select>
 
-  <p>
-    <strong>Engagement:</strong>
-    <span id="engagementTitle"></span>
-  </p>
+          <label for="decisionNotes">Notes / Conditions</label>
+          <textarea id="decisionNotes" rows="5" maxlength="5000" placeholder="Enter your review comments, conditions, or information requests."></textarea>
 
-  <p>
-    <strong>Current Status:</strong>
-    <span id="engagementStatus"></span>
-  </p>
+          <button id="decisionButton" class="cta" type="submit">Submit Decision</button>
+        </form>
 
-  <div class="secure-notice">
-    <strong>Client / Engagement Summary</strong>
-    <p id="engagementSummary"></p>
-  </div>
+        <p id="decisionMessage" class="portal-message" aria-live="polite"></p>
+      </section>
 
-  <h2>Investor Decision</h2>
+      <p id="adminViewMessage" class="portal-message" hidden>
+        Administrator view. Investor decision controls are hidden.
+      </p>
+    </section>
 
-  <form id="decisionForm">
-
-    <label for="decisionStatus">
-      Decision Status
-    </label>
-
-    <select id="decisionStatus" required>
-      <option value="Under Review">Under Review</option>
-      <option value="Request Additional Information">
-        Request Additional Information
-      </option>
-      <option value="Waiting Professional/Legal Review">
-        Waiting Professional/Legal Review
-      </option>
-      <option value="Approved to Proceed">
-        Approved to Proceed
-      </option>
-      <option value="Declined">
-        Declined
-      </option>
-    </select>
-
-    <label for="decisionNotes">
-      Notes / Conditions
-    </label>
-
-    <textarea
-      id="decisionNotes"
-      rows="5"
-      maxlength="5000"
-      placeholder="Enter your review comments, conditions, or information requests."
-    ></textarea>
-
-    <button
-      id="decisionButton"
-      class="cta"
-      type="submit"
-    >
-      Submit Decision
-    </button>
-
-  </form>
-
-  <p
-    id="decisionMessage"
-    class="portal-message"
-    aria-live="polite"
-  ></p>
-
-</section>
-    </button>
+    <button id="logoutButton" class="cta" type="button">Secure Logout</button>
   </section>
 
 </main>
 
 <script type="module">
-  import {
-    initializeApp
-  } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
   import {
     getAuth,
     signInWithEmailAndPassword,
@@ -244,11 +124,12 @@
     setPersistence,
     browserSessionPersistence
   } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-
   import {
     getFirestore,
     doc,
-    getDoc
+    getDoc,
+    setDoc,
+    serverTimestamp
   } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -274,98 +155,81 @@
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
   const togglePassword = document.getElementById("togglePassword");
-  const engagementPanel =
-  document.getElementById("engagementPanel");
 
-const engagementRef =
-  document.getElementById("engagementRef");
+  const engagementPanel = document.getElementById("engagementPanel");
+  const engagementRef = document.getElementById("engagementRef");
+  const clientName = document.getElementById("clientName");
+  const engagementTitle = document.getElementById("engagementTitle");
+  const engagementStatus = document.getElementById("engagementStatus");
+  const engagementSummary = document.getElementById("engagementSummary");
 
-const clientName =
-  document.getElementById("clientName");
+  const decisionSection = document.getElementById("decisionSection");
+  const decisionForm = document.getElementById("decisionForm");
+  const decisionStatus = document.getElementById("decisionStatus");
+  const decisionNotes = document.getElementById("decisionNotes");
+  const decisionButton = document.getElementById("decisionButton");
+  const decisionMessage = document.getElementById("decisionMessage");
+  const adminViewMessage = document.getElementById("adminViewMessage");
 
-const engagementTitle =
-  document.getElementById("engagementTitle");
+  const ACTIVE_ENGAGEMENT_ID = "QFSL-TEST-001";
+  let currentPortalRole = "";
 
-const engagementStatus =
-  document.getElementById("engagementStatus");
+  async function loadExistingDecision() {
+    const user = auth.currentUser;
+    if (!user) return;
 
-const engagementSummary =
-  document.getElementById("engagementSummary");
-
-const decisionForm =
-  document.getElementById("decisionForm");
-
-const decisionStatus =
-  document.getElementById("decisionStatus");
-
-const decisionNotes =
-  document.getElementById("decisionNotes");
-
-const decisionButton =
-  document.getElementById("decisionButton");
-
-const decisionMessage =
-  document.getElementById("decisionMessage");
-
-  const ACTIVE_ENGAGEMENT_ID =
-  "QFSL-TEST-001";
-
-  async function loadEngagement() {
-
-  engagementPanel.hidden = true;
-
-  const engagementDoc = doc(
-    db,
-    "engagements",
-    ACTIVE_ENGAGEMENT_ID
-  );
-
-  const engagementSnap =
-    await getDoc(engagementDoc);
-
-  if (!engagementSnap.exists()) {
-    throw new Error(
-      "Engagement record not found."
+    const decisionRef = doc(
+      db,
+      "engagements",
+      ACTIVE_ENGAGEMENT_ID,
+      "decisions",
+      user.uid
     );
+
+    const decisionSnap = await getDoc(decisionRef);
+
+    if (!decisionSnap.exists()) {
+      decisionStatus.value = "Under Review";
+      decisionNotes.value = "";
+      decisionMessage.textContent = "";
+      return;
+    }
+
+    const data = decisionSnap.data();
+    if (data.status) decisionStatus.value = data.status;
+    decisionNotes.value = data.notes || "";
+    decisionMessage.textContent = "Your previously submitted decision is loaded.";
   }
 
-  const data =
-    engagementSnap.data();
+  async function loadEngagement() {
+    engagementPanel.hidden = true;
 
-  engagementRef.textContent =
-    engagementSnap.id;
+    const engagementDoc = doc(db, "engagements", ACTIVE_ENGAGEMENT_ID);
+    const engagementSnap = await getDoc(engagementDoc);
 
-  clientName.textContent =
-    data.clientName || "Not provided";
+    if (!engagementSnap.exists()) {
+      throw new Error("Engagement record not found.");
+    }
 
-  engagementTitle.textContent =
-    data.title || "Private Engagement";
+    const data = engagementSnap.data();
 
-  engagementStatus.textContent =
-    data.status || "Under Review";
+    engagementRef.textContent = engagementSnap.id;
+    clientName.textContent = data.clientName || "Not provided";
+    engagementTitle.textContent = data.title || "Private Engagement";
+    engagementStatus.textContent = data.status || "Under Review";
+    engagementSummary.textContent = data.summary || "No summary available.";
 
-  engagementSummary.textContent =
-    data.summary || "No summary available.";
+    if (currentPortalRole === "investor") {
+      decisionSection.hidden = false;
+      adminViewMessage.hidden = true;
+      await loadExistingDecision();
+    } else {
+      decisionSection.hidden = true;
+      adminViewMessage.hidden = false;
+    }
 
-  engagementPanel.hidden = false;
- }
-   <p
-    id="decisionMessage"
-    class="portal-message"
-    aria-live="polite"
-  ></p>
-
-</section>
-
-<button
-  id="logoutButton"
-  class="cta"
-  type="button"
->
-  Secure Logout
-</button>
-
-</section>
+    engagementPanel.hidden = false;
+  }
 
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -378,33 +242,70 @@ const decisionMessage =
 
     try {
       await setPersistence(auth, browserSessionPersistence);
-
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      await signInWithEmailAndPassword(auth, email, password);
 
       passwordInput.value = "";
       passwordInput.type = "password";
-
       togglePassword.textContent = "View";
       togglePassword.setAttribute("aria-label", "Show password");
       togglePassword.setAttribute("aria-pressed", "false");
     } catch (error) {
       console.error("Firebase login error:", error);
-
-      loginMessage.textContent =
-        "Unable to sign in. Please check your credentials.";
-
+      loginMessage.textContent = "Unable to sign in. Please check your credentials.";
       loginButton.disabled = false;
+    }
+  });
+
+  decisionForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const user = auth.currentUser;
+
+    if (!user) {
+      decisionMessage.textContent = "Your secure session has ended. Please sign in again.";
+      return;
+    }
+
+    if (currentPortalRole !== "investor") {
+      decisionMessage.textContent = "This account cannot submit an investor decision.";
+      return;
+    }
+
+    decisionButton.disabled = true;
+    decisionMessage.textContent = "Submitting decision...";
+
+    try {
+      const decisionRef = doc(
+        db,
+        "engagements",
+        ACTIVE_ENGAGEMENT_ID,
+        "decisions",
+        user.uid
+      );
+
+      await setDoc(decisionRef, {
+        investorUid: user.uid,
+        status: decisionStatus.value,
+        notes: decisionNotes.value.trim(),
+        submittedAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+
+      decisionMessage.textContent = "Decision submitted securely to Quintrin.";
+    } catch (error) {
+      console.error("Decision submission error:", error);
+      decisionMessage.textContent = "Unable to submit your decision. Please try again.";
+    } finally {
+      decisionButton.disabled = false;
     }
   });
 
   onAuthStateChanged(auth, async (user) => {
     portalPanel.hidden = true;
+    engagementPanel.hidden = true;
 
     if (!user) {
+      currentPortalRole = "";
       loginPanel.hidden = false;
       welcomeUser.textContent = "";
       loginButton.disabled = false;
@@ -415,103 +316,33 @@ const decisionMessage =
     loginMessage.textContent = "Verifying portal authorisation...";
 
     try {
-      const userRef = doc(
-        db,
-        "portalUsers",
-        user.uid
-      );
-
+      const userRef = doc(db, "portalUsers", user.uid);
       const userSnap = await getDoc(userRef);
 
       const role = userSnap.exists()
         ? String(userSnap.data().role || "").trim().toLowerCase()
         : "";
 
-      const authorised =
-        role === "admin" ||
-        role === "investor";
+      const authorised = role === "admin" || role === "investor";
 
       if (!authorised) {
         await signOut(auth);
-
-        loginMessage.textContent =
-          "This account is not authorised for Investor Portal access.";
-
+        loginMessage.textContent = "This account is not authorised for Investor Portal access.";
         loginButton.disabled = false;
         return;
       }
 
-      loginPanel.hidden = true;
+      currentPortalRole = role;
       await loadEngagement();
-      decisionForm.addEventListener(
-  "submit",
-  async (event) => {
 
-    event.preventDefault();
-
-    const user = auth.currentUser;
-
-    if (!user) {
-      decisionMessage.textContent =
-        "Your secure session has ended. Please sign in again.";
-      return;
-    }
-
-    decisionButton.disabled = true;
-    decisionMessage.textContent =
-      "Submitting decision...";
-
-    try {
-
-      const decisionRef = doc(
-        db,
-        "engagements",
-        ACTIVE_ENGAGEMENT_ID,
-        "decisions",
-        user.uid
-      );
-
-      await setDoc(
-        decisionRef,
-        {
-          investorUid: user.uid,
-          status: decisionStatus.value,
-          notes: decisionNotes.value.trim(),
-          submittedAt: serverTimestamp(),
-          updatedAt: serverTimestamp()
-        }
-      );
-
-      decisionMessage.textContent =
-        "Decision submitted securely to Quintrin.";
-
-    } catch (error) {
-
-      console.error(
-        "Decision submission error:",
-        error
-      );
-
-      decisionMessage.textContent =
-        "Unable to submit your decision. Please try again.";
-
-    } finally {
-
-      decisionButton.disabled = false;
-
-    }
-
-  }
-);
+      loginPanel.hidden = true;
       portalPanel.hidden = false;
       loginMessage.textContent = "";
-
-      welcomeUser.textContent =
-        "Authenticated account: " + user.email;
-
+      welcomeUser.textContent = "Authenticated account: " + user.email;
       loginButton.disabled = false;
     } catch (error) {
       console.error("Portal authorisation error:", error);
+      currentPortalRole = "";
 
       try {
         await signOut(auth);
@@ -519,9 +350,7 @@ const decisionMessage =
         console.error("Sign-out error:", signOutError);
       }
 
-      loginMessage.textContent =
-        "Unable to verify portal authorisation. Please try again.";
-
+      loginMessage.textContent = "Unable to verify portal authorisation. Please try again.";
       loginButton.disabled = false;
     }
   });
@@ -532,15 +361,16 @@ const decisionMessage =
     try {
       await signOut(auth);
 
+      currentPortalRole = "";
       portalPanel.hidden = true;
+      engagementPanel.hidden = true;
       loginPanel.hidden = false;
       welcomeUser.textContent = "";
+      decisionMessage.textContent = "";
       loginMessage.textContent = "Securely logged out.";
     } catch (error) {
       console.error("Logout error:", error);
-
-      loginMessage.textContent =
-        "Unable to complete secure logout. Please try again.";
+      loginMessage.textContent = "Unable to complete secure logout. Please try again.";
     } finally {
       logoutButton.disabled = false;
     }
@@ -549,3 +379,4 @@ const decisionMessage =
 
 </body>
 </html>
+        
