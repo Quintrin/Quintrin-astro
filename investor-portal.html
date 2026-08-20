@@ -348,7 +348,24 @@ const decisionMessage =
     data.summary || "No summary available.";
 
   engagementPanel.hidden = false;
-}
+    
+ <p
+    id="decisionMessage"
+    class="portal-message"
+    aria-live="polite"
+  ></p>
+
+</section>
+
+<button
+  id="logoutButton"
+  class="cta"
+  type="button"
+>
+  Secure Logout
+</button>
+
+</section>
 
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
