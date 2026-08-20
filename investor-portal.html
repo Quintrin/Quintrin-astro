@@ -143,6 +143,89 @@
 
     <button id="logoutButton" class="cta" type="button">
       Secure Logout
+      <section id="engagementPanel" hidden>
+
+  <hr>
+
+  <h2>Private Engagement Review</h2>
+
+  <p>
+    <strong>Reference:</strong>
+    <span id="engagementRef"></span>
+  </p>
+
+  <p>
+    <strong>Client:</strong>
+    <span id="clientName"></span>
+  </p>
+
+  <p>
+    <strong>Engagement:</strong>
+    <span id="engagementTitle"></span>
+  </p>
+
+  <p>
+    <strong>Current Status:</strong>
+    <span id="engagementStatus"></span>
+  </p>
+
+  <div class="secure-notice">
+    <strong>Client / Engagement Summary</strong>
+    <p id="engagementSummary"></p>
+  </div>
+
+  <h2>Investor Decision</h2>
+
+  <form id="decisionForm">
+
+    <label for="decisionStatus">
+      Decision Status
+    </label>
+
+    <select id="decisionStatus" required>
+      <option value="Under Review">Under Review</option>
+      <option value="Request Additional Information">
+        Request Additional Information
+      </option>
+      <option value="Waiting Professional/Legal Review">
+        Waiting Professional/Legal Review
+      </option>
+      <option value="Approved to Proceed">
+        Approved to Proceed
+      </option>
+      <option value="Declined">
+        Declined
+      </option>
+    </select>
+
+    <label for="decisionNotes">
+      Notes / Conditions
+    </label>
+
+    <textarea
+      id="decisionNotes"
+      rows="5"
+      maxlength="5000"
+      placeholder="Enter your review comments, conditions, or information requests."
+    ></textarea>
+
+    <button
+      id="decisionButton"
+      class="cta"
+      type="submit"
+    >
+      Submit Decision
+    </button>
+
+  </form>
+
+  <p
+    id="decisionMessage"
+    class="portal-message"
+    aria-live="polite"
+  ></p>
+
+</section>
     </button>
   </section>
 
@@ -191,6 +274,81 @@
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
   const togglePassword = document.getElementById("togglePassword");
+  const engagementPanel =
+  document.getElementById("engagementPanel");
+
+const engagementRef =
+  document.getElementById("engagementRef");
+
+const clientName =
+  document.getElementById("clientName");
+
+const engagementTitle =
+  document.getElementById("engagementTitle");
+
+const engagementStatus =
+  document.getElementById("engagementStatus");
+
+const engagementSummary =
+  document.getElementById("engagementSummary");
+
+const decisionForm =
+  document.getElementById("decisionForm");
+
+const decisionStatus =
+  document.getElementById("decisionStatus");
+
+const decisionNotes =
+  document.getElementById("decisionNotes");
+
+const decisionButton =
+  document.getElementById("decisionButton");
+
+const decisionMessage =
+  document.getElementById("decisionMessage");
+
+  const ACTIVE_ENGAGEMENT_ID =
+  "QFSL-TEST-001";
+
+  async function loadEngagement() {
+
+  engagementPanel.hidden = true;
+
+  const engagementDoc = doc(
+    db,
+    "engagements",
+    ACTIVE_ENGAGEMENT_ID
+  );
+
+  const engagementSnap =
+    await getDoc(engagementDoc);
+
+  if (!engagementSnap.exists()) {
+    throw new Error(
+      "Engagement record not found."
+    );
+  }
+
+  const data =
+    engagementSnap.data();
+
+  engagementRef.textContent =
+    engagementSnap.id;
+
+  clientName.textContent =
+    data.clientName || "Not provided";
+
+  engagementTitle.textContent =
+    data.title || "Private Engagement";
+
+  engagementStatus.textContent =
+    data.status || "Under Review";
+
+  engagementSummary.textContent =
+    data.summary || "No summary available.";
+
+  engagementPanel.hidden = false;
+}
 
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -267,6 +425,67 @@
       }
 
       loginPanel.hidden = true;
+      await loadEngagement();
+      decisionForm.addEventListener(
+  "submit",
+  async (event) => {
+
+    event.preventDefault();
+
+    const user = auth.currentUser;
+
+    if (!user) {
+      decisionMessage.textContent =
+        "Your secure session has ended. Please sign in again.";
+      return;
+    }
+
+    decisionButton.disabled = true;
+    decisionMessage.textContent =
+      "Submitting decision...";
+
+    try {
+
+      const decisionRef = doc(
+        db,
+        "engagements",
+        ACTIVE_ENGAGEMENT_ID,
+        "decisions",
+        user.uid
+      );
+
+      await setDoc(
+        decisionRef,
+        {
+          investorUid: user.uid,
+          status: decisionStatus.value,
+          notes: decisionNotes.value.trim(),
+          submittedAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        }
+      );
+
+      decisionMessage.textContent =
+        "Decision submitted securely to Quintrin.";
+
+    } catch (error) {
+
+      console.error(
+        "Decision submission error:",
+        error
+      );
+
+      decisionMessage.textContent =
+        "Unable to submit your decision. Please try again.";
+
+    } finally {
+
+      decisionButton.disabled = false;
+
+    }
+
+  }
+);
       portalPanel.hidden = false;
       loginMessage.textContent = "";
 
