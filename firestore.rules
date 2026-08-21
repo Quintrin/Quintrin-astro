@@ -1,0 +1,225 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function portalUserExists() {
+      return signedIn()
+        && exists(
+          /databases/$(database)/documents/portalUsers/$(request.auth.uid)
+        );
+    }
+
+    function isActivePortalUser() {
+      return portalUserExists()
+        && get(
+          /databases/$(database)/documents/portalUsers/$(request.auth.uid)
+        ).data.active == true;
+    }
+
+    function isAdmin() {
+      return isActivePortalUser()
+        && get(
+          /databases/$(database)/documents/portalUsers/$(request.auth.uid)
+        ).data.role == "admin";
+    }
+
+    function isInvestor() {
+      return isActivePortalUser()
+        && get(
+          /databases/$(database)/documents/portalUsers/$(request.auth.uid)
+        ).data.role == "investor";
+    }
+
+    function membershipExists(engagementId) {
+      return signedIn()
+        && exists(
+          /databases/$(database)/documents/engagements/$(engagementId)/members/$(request.auth.uid)
+        );
+    }
+
+    function hasActiveMembership(engagementId) {
+      return isActivePortalUser()
+        && membershipExists(engagementId)
+        && get(
+          /databases/$(database)/documents/engagements/$(engagementId)/members/$(request.auth.uid)
+        ).data.access == "active";
+    }
+
+    function isEngagementInvestor(engagementId) {
+      return isInvestor()
+        && hasActiveMembership(engagementId)
+        && get(
+          /databases/$(database)/documents/engagements/$(engagementId)/members/$(request.auth.uid)
+        ).data.role == "investor";
+    }
+
+    function canReadEngagement(engagementId) {
+      return isAdmin()
+        || (
+          hasActiveMembership(engagementId)
+          && resource.data.memberUids is list
+          && request.auth.uid in resource.data.memberUids
+        );
+    }
+
+
+    match /portalUsers/{userId} {
+
+      allow read:
+        if signedIn()
+        && (
+          request.auth.uid == userId
+          || isAdmin()
+        );
+
+      allow create, update, delete:
+        if isAdmin();
+    }
+
+
+    match /engagements/{engagementId} {
+
+      allow read:
+        if canReadEngagement(engagementId);
+
+      allow create, update, delete:
+        if isAdmin();
+
+
+      match /members/{memberId} {
+
+        allow read:
+          if isAdmin()
+          || (
+            isActivePortalUser()
+            && request.auth.uid == memberId
+          );
+
+        allow create, update, delete:
+          if isAdmin();
+      }
+
+
+      match /decisions/{investorId} {
+
+        allow read:
+          if isAdmin()
+          || (
+            request.auth.uid == investorId
+            && isEngagementInvestor(engagementId)
+          );
+
+
+        allow create:
+          if request.auth.uid == investorId
+          && isEngagementInvestor(engagementId)
+
+          && request.resource.data.keys().hasOnly([
+            "investorUid",
+            "status",
+            "notes",
+            "submittedAt",
+            "updatedAt"
+          ])
+
+          && request.resource.data.keys().hasAll([
+            "investorUid",
+            "status",
+            "notes",
+            "submittedAt",
+            "updatedAt"
+          ])
+
+          && request.resource.data.investorUid == request.auth.uid
+
+          && request.resource.data.status in [
+            "Under Review",
+            "Request Additional Information",
+            "Waiting Professional/Legal Review",
+            "Approved to Proceed",
+            "Declined"
+          ]
+
+          && request.resource.data.notes is string
+          && request.resource.data.notes.size() <= 5000
+
+          && request.resource.data.submittedAt == request.time
+          && request.resource.data.updatedAt == request.time;
+
+
+        allow update:
+          if request.auth.uid == investorId
+          && isEngagementInvestor(engagementId)
+
+          && request.resource.data.keys().hasOnly([
+            "investorUid",
+            "status",
+            "notes",
+            "submittedAt",
+            "updatedAt"
+          ])
+
+          && request.resource.data.keys().hasAll([
+            "investorUid",
+            "status",
+            "notes",
+            "submittedAt",
+            "updatedAt"
+          ])
+
+          && request.resource.data.investorUid == request.auth.uid
+          && request.resource.data.investorUid == resource.data.investorUid
+
+          && request.resource.data.status in [
+            "Under Review",
+            "Request Additional Information",
+            "Waiting Professional/Legal Review",
+            "Approved to Proceed",
+            "Declined"
+          ]
+
+          && request.resource.data.notes is string
+          && request.resource.data.notes.size() <= 5000
+
+          && request.resource.data.submittedAt == resource.data.submittedAt
+          && request.resource.data.updatedAt == request.time;
+
+
+        allow delete:
+          if isAdmin();
+      }
+
+
+      match /updates/{updateId} {
+
+        allow read:
+          if isAdmin()
+          || hasActiveMembership(engagementId);
+
+        allow create, update, delete:
+          if isAdmin();
+      }
+
+
+      match /documents/{documentId} {
+
+        allow read:
+          if isAdmin()
+          || hasActiveMembership(engagementId);
+
+        allow create, update, delete:
+          if isAdmin();
+      }
+    }
+
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
