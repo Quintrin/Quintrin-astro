@@ -1,0 +1,44 @@
+name: Validate Firestore Rules
+
+on:
+  push:
+    paths:
+      - "firestore.rules"
+      - "firebase.json"
+      - ".github/workflows/validate-firestore-rules.yml"
+
+  pull_request:
+    paths:
+      - "firestore.rules"
+      - "firebase.json"
+      - ".github/workflows/validate-firestore-rules.yml"
+
+jobs:
+  validate-firestore-rules:
+    name: Compile Firestore Rules
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Install Firebase CLI
+        run: npm install --global firebase-tools
+
+      - name: Validate Firestore security rules
+        run: >
+          firebase emulators:exec
+          --only firestore
+          --project demo-quintrin
+          "echo Firestore rules compiled successfully"
