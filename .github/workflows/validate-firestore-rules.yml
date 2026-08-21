@@ -1,21 +1,23 @@
-name: Validate Firestore Rules
+name: Validate Firestore Security
 
 on:
   push:
     paths:
       - "firestore.rules"
       - "firebase.json"
+      - "tests/**"
       - ".github/workflows/validate-firestore-rules.yml"
 
   pull_request:
     paths:
       - "firestore.rules"
       - "firebase.json"
+      - "tests/**"
       - ".github/workflows/validate-firestore-rules.yml"
 
 jobs:
-  validate-firestore-rules:
-    name: Compile Firestore Rules
+  validate-firestore-security:
+    name: Compile and Test Firestore Rules
     runs-on: ubuntu-latest
 
     steps:
@@ -36,9 +38,13 @@ jobs:
       - name: Install Firebase CLI
         run: npm install --global firebase-tools
 
-      - name: Validate Firestore security rules
+      - name: Install Firestore test dependencies
+        run: |
+          npm install --no-save firebase @firebase/rules-unit-testing
+
+      - name: Compile and test Firestore security rules
         run: >
           firebase emulators:exec
           --only firestore
           --project demo-quintrin
-          "echo Firestore rules compiled successfully"
+          "node --test tests/firestore-rules.test.mjs"
