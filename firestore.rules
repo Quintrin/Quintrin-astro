@@ -62,8 +62,9 @@ service cloud.firestore {
       return isAdmin()
         || (
           hasActiveMembership(engagementId)
-          && resource.data.memberUids is list
-          && request.auth.uid in resource.data.memberUids
+          && resource.data.memberUids.hasAny([
+            request.auth.uid
+          ])
         );
     }
 
@@ -173,7 +174,9 @@ service cloud.firestore {
           ])
 
           && request.resource.data.investorUid == request.auth.uid
-          && request.resource.data.investorUid == resource.data.investorUid
+
+          && request.resource.data.investorUid
+             == resource.data.investorUid
 
           && request.resource.data.status in [
             "Under Review",
@@ -186,7 +189,9 @@ service cloud.firestore {
           && request.resource.data.notes is string
           && request.resource.data.notes.size() <= 5000
 
-          && request.resource.data.submittedAt == resource.data.submittedAt
+          && request.resource.data.submittedAt
+             == resource.data.submittedAt
+
           && request.resource.data.updatedAt == request.time;
 
 
