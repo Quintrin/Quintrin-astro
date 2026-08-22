@@ -3,6 +3,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    /* =========================================================
+       AUTHENTICATION / PORTAL USER HELPERS
+       ========================================================= */
+
     function signedIn() {
       return request.auth != null;
     }
@@ -14,111 +18,214 @@ service cloud.firestore {
         );
     }
 
+    function portalUser() {
+      return get(
+        /databases/$(database)/documents/portalUsers/$(request.auth.uid)
+      );
+    }
+
     function isActivePortalUser() {
       return portalUserExists()
-        && get(
-          /databases/$(database)/documents/portalUsers/$(request.auth.uid)
-        ).data.active == true;
+        && portalUser().data.active == true;
     }
 
     function isAdmin() {
       return isActivePortalUser()
-        && get(
-          /databases/$(database)/documents/portalUsers/$(request.auth.uid)
-        ).data.role == "admin";
+        && portalUser().data.role == "admin";
     }
 
     function isInvestor() {
       return isActivePortalUser()
-        && get(
-          /databases/$(database)/documents/portalUsers/$(request.auth.uid)
-        ).data.role == "investor";
+        && portalUser().data.role == "investor";
     }
 
-    function membershipExists(engagementId) {
+
+    /* =========================================================
+       USER ENGAGEMENT ASSIGNMENT HELPERS
+
+       Authoritative assignment path:
+
+       portalUsers/{uid}/engagements/{engagementId}
+       ========================================================= */
+
+    function assignmentExists(engagementId) {
       return signedIn()
         && exists(
-          /databases/$(database)/documents/engagements/$(engagementId)/members/$(request.auth.uid)
+          /databases/$(database)/documents/portalUsers/$(request.auth.uid)/engagements/$(engagementId)
         );
     }
 
-    function hasActiveMembership(engagementId) {
+    function assignment(engagementId) {
+      return get(
+        /databases/$(database)/documents/portalUsers/$(request.auth.uid)/engagements/$(engagementId)
+      );
+    }
+
+    function hasActiveAssignment(engagementId) {
       return isActivePortalUser()
-        && membershipExists(engagementId)
-        && get(
-          /databases/$(database)/documents/engagements/$(engagementId)/members/$(request.auth.uid)
-        ).data.access == "active";
+        && assignmentExists(engagementId)
+        && assignment(engagementId).data.access == "active";
     }
 
-    function isEngagementInvestor(engagementId) {
+    function isAssignedInvestor(engagementId) {
       return isInvestor()
-        && hasActiveMembership(engagementId)
-        && get(
-          /databases/$(database)/documents/engagements/$(engagementId)/members/$(request.auth.uid)
-        ).data.role == "investor";
+        && hasActiveAssignment(engagementId)
+        && assignment(engagementId).data.role == "investor";
     }
 
-    function canReadEngagement(engagementId) {
-      return isAdmin()
-        || (
-          hasActiveMembership(engagementId)
-          && resource.data.memberUids.hasAny([
-            request.auth.uid
-          ])
-        );
-    }
 
+    /* =========================================================
+       PORTAL USERS
+       ========================================================= */
 
     match /portalUsers/{userId} {
 
-      allow read:
+      /*
+       * A portal user may read their own profile.
+       * An active administrator may read any portal user profile.
+       */
+
+      allow get:
         if signedIn()
         && (
           request.auth.uid == userId
           || isAdmin()
         );
 
-      allow create, update, delete:
-        if isAdmin();
-    }
+      /*
+       * Only administrators may list all portal users.
+       */
 
-
-    match /engagements/{engagementId} {
-
-      allow read:
-        if canReadEngagement(engagementId);
-
-      allow create, update, delete:
+      allow list:
         if isAdmin();
 
+      /*
+       * Portal roles, activation state, email and display name
+       * are controlled only by Quintrin administration.
+       */
 
-      match /members/{memberId} {
+      allow create, update, delete:
+        if isAdmin();
+
+
+      /* =======================================================
+         USER ENGAGEMENT INDEX / ASSIGNMENTS
+         ======================================================= */
+
+      match /engagements/{engagementId} {
+
+        /*
+         * A user may read and list only the engagement assignments
+         * stored beneath their own portal user record.
+         *
+         * This is the dashboard source.
+         *
+         * No collection-wide query against the main engagements
+         * collection is required.
+         */
 
         allow read:
           if isAdmin()
           || (
             isActivePortalUser()
-            && request.auth.uid == memberId
+            && request.auth.uid == userId
           );
+
+        /*
+         * Only Quintrin administrators may assign, revoke,
+         * or modify engagement access.
+         */
+
+        allow create, update, delete:
+          if isAdmin();
+      }
+    }
+
+
+    /* =========================================================
+       PRIVATE ENGAGEMENTS
+       ========================================================= */
+
+    match /engagements/{engagementId} {
+
+      /*
+       * Administrators may read any engagement.
+       *
+       * Non-admin users may open an individual engagement only
+       * when an active assignment exists beneath their own
+       * portalUsers/{uid}/engagements path.
+       */
+
+      allow get:
+        if isAdmin()
+        || hasActiveAssignment(engagementId);
+
+      /*
+       * Investors must never enumerate the global engagement
+       * collection. Their dashboard comes from their personal
+       * assignment subcollection instead.
+       */
+
+      allow list:
+        if isAdmin();
+
+      /*
+       * Only administrators manage the main engagement record.
+       */
+
+      allow create, update, delete:
+        if isAdmin();
+
+
+      /* =======================================================
+         LEGACY MEMBERSHIP RECORDS
+         ======================================================= */
+
+      match /members/{memberId} {
+
+        /*
+         * This collection is retained for legacy/reference data.
+         * It is no longer authoritative for portal authorization.
+         */
+
+        allow read:
+          if isAdmin();
 
         allow create, update, delete:
           if isAdmin();
       }
 
 
+      /* =======================================================
+         INVESTOR DECISIONS
+         ======================================================= */
+
       match /decisions/{investorId} {
+
+        /*
+         * Administrators may review all decisions.
+         *
+         * An investor may read only their own decision and only
+         * while their active investor assignment remains valid.
+         */
 
         allow read:
           if isAdmin()
           || (
-            request.auth.uid == investorId
-            && isEngagementInvestor(engagementId)
+            signedIn()
+            && request.auth.uid == investorId
+            && isAssignedInvestor(engagementId)
           );
 
 
+        /*
+         * First decision submission.
+         */
+
         allow create:
-          if request.auth.uid == investorId
-          && isEngagementInvestor(engagementId)
+          if signedIn()
+          && request.auth.uid == investorId
+          && isAssignedInvestor(engagementId)
 
           && request.resource.data.keys().hasOnly([
             "investorUid",
@@ -153,9 +260,17 @@ service cloud.firestore {
           && request.resource.data.updatedAt == request.time;
 
 
+        /*
+         * Later decision updates.
+         *
+         * submittedAt must remain unchanged.
+         * updatedAt must use Firestore server time.
+         */
+
         allow update:
-          if request.auth.uid == investorId
-          && isEngagementInvestor(engagementId)
+          if signedIn()
+          && request.auth.uid == investorId
+          && isAssignedInvestor(engagementId)
 
           && request.resource.data.keys().hasOnly([
             "investorUid",
@@ -195,33 +310,49 @@ service cloud.firestore {
           && request.resource.data.updatedAt == request.time;
 
 
+        /*
+         * Investors cannot delete decisions.
+         */
+
         allow delete:
           if isAdmin();
       }
 
 
+      /* =======================================================
+         ENGAGEMENT UPDATES
+         ======================================================= */
+
       match /updates/{updateId} {
 
         allow read:
           if isAdmin()
-          || hasActiveMembership(engagementId);
+          || hasActiveAssignment(engagementId);
 
         allow create, update, delete:
           if isAdmin();
       }
 
 
+      /* =======================================================
+         DOCUMENT METADATA
+         ======================================================= */
+
       match /documents/{documentId} {
 
         allow read:
           if isAdmin()
-          || hasActiveMembership(engagementId);
+          || hasActiveAssignment(engagementId);
 
         allow create, update, delete:
           if isAdmin();
       }
     }
 
+
+    /* =========================================================
+       DEFAULT DENY
+       ========================================================= */
 
     match /{document=**} {
       allow read, write: if false;
