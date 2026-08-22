@@ -1,4 +1,11 @@
-import { describe, test, before, beforeEach, after } from "node:test";
+import {
+  describe,
+  test,
+  before,
+  beforeEach,
+  after
+} from "node:test";
+
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
@@ -13,8 +20,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  query,
-  where,
   setDoc,
   updateDoc,
   serverTimestamp
@@ -26,7 +31,9 @@ const PROJECT_ID = "demo-quintrin";
 const ADMIN_UID = "admin-test";
 const INVESTOR_UID = "investor-test";
 const OUTSIDER_UID = "outsider-test";
-const INACTIVE_UID = "inactive-investor-test";
+const INACTIVE_USER_UID = "inactive-user-test";
+const REVOKED_UID = "revoked-investor-test";
+const CLIENT_UID = "client-test";
 
 const ENGAGEMENT_ID = "QFSL-TEST-001";
 const OTHER_ENGAGEMENT_ID = "QFSL-TEST-002";
@@ -35,12 +42,17 @@ let testEnv;
 
 
 /* =========================================================
-   TEST DATA SETUP
+   DATABASE SEED
    ========================================================= */
 
 async function seedDatabase() {
   await testEnv.withSecurityRulesDisabled(async (context) => {
     const db = context.firestore();
+
+
+    /* -----------------------------------------------------
+       PORTAL USERS
+       ----------------------------------------------------- */
 
     await setDoc(
       doc(db, "portalUsers", ADMIN_UID),
@@ -73,15 +85,39 @@ async function seedDatabase() {
     );
 
     await setDoc(
-      doc(db, "portalUsers", INACTIVE_UID),
+      doc(db, "portalUsers", INACTIVE_USER_UID),
       {
         role: "investor",
         active: false,
         email: "inactive@example.test",
-        displayName: "Inactive Investor"
+        displayName: "Inactive Portal Investor"
       }
     );
 
+    await setDoc(
+      doc(db, "portalUsers", REVOKED_UID),
+      {
+        role: "investor",
+        active: true,
+        email: "revoked@example.test",
+        displayName: "Revoked Investor"
+      }
+    );
+
+    await setDoc(
+      doc(db, "portalUsers", CLIENT_UID),
+      {
+        role: "client",
+        active: true,
+        email: "client@example.test",
+        displayName: "Test Private Client"
+      }
+    );
+
+
+    /* -----------------------------------------------------
+       PRIVATE ENGAGEMENTS
+       ----------------------------------------------------- */
 
     await setDoc(
       doc(db, "engagements", ENGAGEMENT_ID),
@@ -90,19 +126,149 @@ async function seedDatabase() {
         title: "Test Private Engagement",
         clientName: "Test Client",
         summary:
-          "Test client engagement for secure investor review and decision workflow.",
+          "Test engagement for secure private portal review.",
         status: "Under Review",
         transactionAmount: 100000,
         currency: "USD",
-        memberUids: [
-          INVESTOR_UID,
-          INACTIVE_UID
-        ],
         createdAt: new Date(),
         updatedAt: new Date()
       }
     );
 
+    await setDoc(
+      doc(db, "engagements", OTHER_ENGAGEMENT_ID),
+      {
+        reference: OTHER_ENGAGEMENT_ID,
+        title: "Other Private Engagement",
+        clientName: "Other Test Client",
+        summary:
+          "A separate engagement not assigned to the test investor.",
+        status: "Under Review",
+        transactionAmount: 50000,
+        currency: "USD",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    );
+
+
+    /* -----------------------------------------------------
+       USER-SPECIFIC ENGAGEMENT ASSIGNMENTS
+
+       Authoritative assignment path:
+
+       portalUsers/{uid}/engagements/{engagementId}
+       ----------------------------------------------------- */
+
+    await setDoc(
+      doc(
+        db,
+        "portalUsers",
+        INVESTOR_UID,
+        "engagements",
+        ENGAGEMENT_ID
+      ),
+      {
+        role: "investor",
+        access: "active",
+        reference: ENGAGEMENT_ID,
+        title: "Test Private Engagement",
+        clientName: "Test Client",
+        status: "Under Review",
+        transactionAmount: 100000,
+        currency: "USD",
+        updatedAt: new Date()
+      }
+    );
+
+    await setDoc(
+      doc(
+        db,
+        "portalUsers",
+        OUTSIDER_UID,
+        "engagements",
+        OTHER_ENGAGEMENT_ID
+      ),
+      {
+        role: "investor",
+        access: "active",
+        reference: OTHER_ENGAGEMENT_ID,
+        title: "Other Private Engagement",
+        clientName: "Other Test Client",
+        status: "Under Review",
+        transactionAmount: 50000,
+        currency: "USD",
+        updatedAt: new Date()
+      }
+    );
+
+    await setDoc(
+      doc(
+        db,
+        "portalUsers",
+        INACTIVE_USER_UID,
+        "engagements",
+        ENGAGEMENT_ID
+      ),
+      {
+        role: "investor",
+        access: "active",
+        reference: ENGAGEMENT_ID,
+        title: "Test Private Engagement",
+        clientName: "Test Client",
+        status: "Under Review",
+        transactionAmount: 100000,
+        currency: "USD",
+        updatedAt: new Date()
+      }
+    );
+
+    await setDoc(
+      doc(
+        db,
+        "portalUsers",
+        REVOKED_UID,
+        "engagements",
+        ENGAGEMENT_ID
+      ),
+      {
+        role: "investor",
+        access: "inactive",
+        reference: ENGAGEMENT_ID,
+        title: "Test Private Engagement",
+        clientName: "Test Client",
+        status: "Under Review",
+        transactionAmount: 100000,
+        currency: "USD",
+        updatedAt: new Date()
+      }
+    );
+
+    await setDoc(
+      doc(
+        db,
+        "portalUsers",
+        CLIENT_UID,
+        "engagements",
+        ENGAGEMENT_ID
+      ),
+      {
+        role: "client",
+        access: "active",
+        reference: ENGAGEMENT_ID,
+        title: "Test Private Engagement",
+        clientName: "Test Client",
+        status: "Under Review",
+        transactionAmount: 100000,
+        currency: "USD",
+        updatedAt: new Date()
+      }
+    );
+
+
+    /* -----------------------------------------------------
+       LEGACY MEMBERSHIP RECORD
+       ----------------------------------------------------- */
 
     await setDoc(
       doc(
@@ -119,54 +285,9 @@ async function seedDatabase() {
     );
 
 
-    await setDoc(
-      doc(
-        db,
-        "engagements",
-        ENGAGEMENT_ID,
-        "members",
-        INACTIVE_UID
-      ),
-      {
-        role: "investor",
-        access: "active"
-      }
-    );
-
-
-    await setDoc(
-      doc(db, "engagements", OTHER_ENGAGEMENT_ID),
-      {
-        reference: OTHER_ENGAGEMENT_ID,
-        title: "Other Private Engagement",
-        clientName: "Other Test Client",
-        summary: "Engagement not assigned to the test investor.",
-        status: "Under Review",
-        transactionAmount: 50000,
-        currency: "USD",
-        memberUids: [
-          OUTSIDER_UID
-        ],
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    );
-
-
-    await setDoc(
-      doc(
-        db,
-        "engagements",
-        OTHER_ENGAGEMENT_ID,
-        "members",
-        OUTSIDER_UID
-      ),
-      {
-        role: "investor",
-        access: "active"
-      }
-    );
-
+    /* -----------------------------------------------------
+       ENGAGEMENT UPDATE
+       ----------------------------------------------------- */
 
     await setDoc(
       doc(
@@ -185,6 +306,10 @@ async function seedDatabase() {
       }
     );
 
+
+    /* -----------------------------------------------------
+       PRIVATE DOCUMENT METADATA
+       ----------------------------------------------------- */
 
     await setDoc(
       doc(
@@ -223,7 +348,6 @@ describe(
 
       testEnv = await initializeTestEnvironment({
         projectId: PROJECT_ID,
-
         firestore: {
           rules
         }
@@ -243,7 +367,7 @@ describe(
 
 
     /* =====================================================
-       PORTAL USERS
+       PORTAL USER PROFILE SECURITY
        ===================================================== */
 
     test(
@@ -268,7 +392,7 @@ describe(
 
 
     test(
-      "investor cannot read another investor profile",
+      "investor cannot read another portal user's profile",
       async () => {
         const db =
           testEnv
@@ -289,7 +413,27 @@ describe(
 
 
     test(
-      "admin can read another portal user profile",
+      "investor cannot list all portal users",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(INVESTOR_UID)
+            .firestore();
+
+        await assertFails(
+          getDocs(
+            collection(
+              db,
+              "portalUsers"
+            )
+          )
+        );
+      }
+    );
+
+
+    test(
+      "admin can read another portal user's profile",
       async () => {
         const db =
           testEnv
@@ -310,11 +454,121 @@ describe(
 
 
     /* =====================================================
-       ENGAGEMENT ACCESS
+       USER-SPECIFIC DASHBOARD INDEX
        ===================================================== */
 
     test(
-      "admin can read any engagement",
+      "investor can list their own engagement assignments",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(INVESTOR_UID)
+            .firestore();
+
+        const snapshot =
+          await assertSucceeds(
+            getDocs(
+              collection(
+                db,
+                "portalUsers",
+                INVESTOR_UID,
+                "engagements"
+              )
+            )
+          );
+
+        assert.equal(
+          snapshot.size,
+          1
+        );
+
+        assert.equal(
+          snapshot.docs[0].id,
+          ENGAGEMENT_ID
+        );
+      }
+    );
+
+
+    test(
+      "investor can read their own engagement assignment",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(INVESTOR_UID)
+            .firestore();
+
+        const snapshot =
+          await assertSucceeds(
+            getDoc(
+              doc(
+                db,
+                "portalUsers",
+                INVESTOR_UID,
+                "engagements",
+                ENGAGEMENT_ID
+              )
+            )
+          );
+
+        assert.equal(
+          snapshot.data().access,
+          "active"
+        );
+      }
+    );
+
+
+    test(
+      "investor cannot read another user's engagement index",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(INVESTOR_UID)
+            .firestore();
+
+        await assertFails(
+          getDocs(
+            collection(
+              db,
+              "portalUsers",
+              OUTSIDER_UID,
+              "engagements"
+            )
+          )
+        );
+      }
+    );
+
+
+    test(
+      "investor cannot modify their assignment record",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(INVESTOR_UID)
+            .firestore();
+
+        await assertFails(
+          updateDoc(
+            doc(
+              db,
+              "portalUsers",
+              INVESTOR_UID,
+              "engagements",
+              ENGAGEMENT_ID
+            ),
+            {
+              role: "admin"
+            }
+          )
+        );
+      }
+    );
+
+
+    test(
+      "admin can read an investor engagement assignment",
       async () => {
         const db =
           testEnv
@@ -325,18 +579,10 @@ describe(
           getDoc(
             doc(
               db,
+              "portalUsers",
+              INVESTOR_UID,
               "engagements",
               ENGAGEMENT_ID
-            )
-          )
-        );
-
-        await assertSucceeds(
-          getDoc(
-            doc(
-              db,
-              "engagements",
-              OTHER_ENGAGEMENT_ID
             )
           )
         );
@@ -344,8 +590,12 @@ describe(
     );
 
 
+    /* =====================================================
+       GLOBAL ENGAGEMENT SECURITY
+       ===================================================== */
+
     test(
-      "assigned active investor can read their engagement",
+      "assigned active investor can open their engagement",
       async () => {
         const db =
           testEnv
@@ -372,7 +622,7 @@ describe(
 
 
     test(
-      "unassigned investor cannot read another engagement",
+      "unassigned investor cannot open another engagement",
       async () => {
         const db =
           testEnv
@@ -393,11 +643,11 @@ describe(
 
 
     test(
-      "inactive portal investor cannot read engagement",
+      "inactive portal user cannot open engagement even with assignment",
       async () => {
         const db =
           testEnv
-            .authenticatedContext(INACTIVE_UID)
+            .authenticatedContext(INACTIVE_USER_UID)
             .firestore();
 
         await assertFails(
@@ -408,6 +658,73 @@ describe(
               ENGAGEMENT_ID
             )
           )
+        );
+      }
+    );
+
+
+    test(
+      "revoked assignment cannot open engagement",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(REVOKED_UID)
+            .firestore();
+
+        await assertFails(
+          getDoc(
+            doc(
+              db,
+              "engagements",
+              ENGAGEMENT_ID
+            )
+          )
+        );
+      }
+    );
+
+
+    test(
+      "investor cannot enumerate global engagements",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(INVESTOR_UID)
+            .firestore();
+
+        await assertFails(
+          getDocs(
+            collection(
+              db,
+              "engagements"
+            )
+          )
+        );
+      }
+    );
+
+
+    test(
+      "admin can enumerate global engagements",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(ADMIN_UID)
+            .firestore();
+
+        const snapshot =
+          await assertSucceeds(
+            getDocs(
+              collection(
+                db,
+                "engagements"
+              )
+            )
+          );
+
+        assert.equal(
+          snapshot.size,
+          2
         );
       }
     );
@@ -438,49 +755,11 @@ describe(
 
 
     /* =====================================================
-       DASHBOARD QUERY
+       LEGACY MEMBERSHIP RECORDS
        ===================================================== */
 
     test(
-      "investor dashboard query returns assigned engagements",
-      async () => {
-        const db =
-          testEnv
-            .authenticatedContext(INVESTOR_UID)
-            .firestore();
-
-        const investorQuery = query(
-          collection(
-            db,
-            "engagements"
-          ),
-          where(
-            "memberUids",
-            "array-contains",
-            INVESTOR_UID
-          )
-        );
-
-        const snapshot =
-          await assertSucceeds(
-            getDocs(investorQuery)
-          );
-
-        assert.equal(
-          snapshot.size,
-          1
-        );
-
-        assert.equal(
-          snapshot.docs[0].id,
-          ENGAGEMENT_ID
-        );
-      }
-    );
-
-
-    test(
-      "investor cannot list every engagement without an assignment filter",
+      "investor cannot read legacy membership records",
       async () => {
         const db =
           testEnv
@@ -488,30 +767,6 @@ describe(
             .firestore();
 
         await assertFails(
-          getDocs(
-            collection(
-              db,
-              "engagements"
-            )
-          )
-        );
-      }
-    );
-
-
-    /* =====================================================
-       MEMBERSHIP RECORDS
-       ===================================================== */
-
-    test(
-      "investor can read their own membership record",
-      async () => {
-        const db =
-          testEnv
-            .authenticatedContext(INVESTOR_UID)
-            .firestore();
-
-        await assertSucceeds(
           getDoc(
             doc(
               db,
@@ -527,26 +782,22 @@ describe(
 
 
     test(
-      "investor cannot change their membership record",
+      "admin can read legacy membership records",
       async () => {
         const db =
           testEnv
-            .authenticatedContext(INVESTOR_UID)
+            .authenticatedContext(ADMIN_UID)
             .firestore();
 
-        await assertFails(
-          updateDoc(
+        await assertSucceeds(
+          getDoc(
             doc(
               db,
               "engagements",
               ENGAGEMENT_ID,
               "members",
               INVESTOR_UID
-            ),
-            {
-              access: "active",
-              role: "admin"
-            }
+            )
           )
         );
       }
@@ -565,17 +816,15 @@ describe(
             .authenticatedContext(INVESTOR_UID)
             .firestore();
 
-        const decisionRef = doc(
-          db,
-          "engagements",
-          ENGAGEMENT_ID,
-          "decisions",
-          INVESTOR_UID
-        );
-
         await assertSucceeds(
           setDoc(
-            decisionRef,
+            doc(
+              db,
+              "engagements",
+              ENGAGEMENT_ID,
+              "decisions",
+              INVESTOR_UID
+            ),
             {
               investorUid:
                 INVESTOR_UID,
@@ -599,7 +848,7 @@ describe(
 
 
     test(
-      "investor can update their decision while preserving submittedAt",
+      "investor can update decision while preserving submittedAt",
       async () => {
         const db =
           testEnv
@@ -635,7 +884,6 @@ describe(
             }
           )
         );
-
 
         await assertSucceeds(
           updateDoc(
@@ -657,7 +905,7 @@ describe(
 
 
     test(
-      "investor cannot reset original submittedAt timestamp",
+      "investor cannot reset original submittedAt",
       async () => {
         const db =
           testEnv
@@ -694,7 +942,6 @@ describe(
           )
         );
 
-
         await assertFails(
           updateDoc(
             decisionRef,
@@ -712,7 +959,7 @@ describe(
 
 
     test(
-      "unassigned investor cannot submit decision for engagement",
+      "unassigned investor cannot submit a decision",
       async () => {
         const db =
           testEnv
@@ -736,7 +983,7 @@ describe(
                 "Approved to Proceed",
 
               notes:
-                "This write must be rejected.",
+                "Unauthorized decision.",
 
               submittedAt:
                 serverTimestamp(),
@@ -751,11 +998,11 @@ describe(
 
 
     test(
-      "investor cannot submit a decision using another UID",
+      "revoked investor cannot submit a decision",
       async () => {
         const db =
           testEnv
-            .authenticatedContext(INVESTOR_UID)
+            .authenticatedContext(REVOKED_UID)
             .firestore();
 
         await assertFails(
@@ -765,17 +1012,56 @@ describe(
               "engagements",
               ENGAGEMENT_ID,
               "decisions",
-              OUTSIDER_UID
+              REVOKED_UID
             ),
             {
               investorUid:
-                OUTSIDER_UID,
+                REVOKED_UID,
 
               status:
                 "Approved to Proceed",
 
               notes:
-                "Invalid UID test.",
+                "Revoked assignment decision attempt.",
+
+              submittedAt:
+                serverTimestamp(),
+
+              updatedAt:
+                serverTimestamp()
+            }
+          )
+        );
+      }
+    );
+
+
+    test(
+      "client role cannot submit investor decision",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(CLIENT_UID)
+            .firestore();
+
+        await assertFails(
+          setDoc(
+            doc(
+              db,
+              "engagements",
+              ENGAGEMENT_ID,
+              "decisions",
+              CLIENT_UID
+            ),
+            {
+              investorUid:
+                CLIENT_UID,
+
+              status:
+                "Approved to Proceed",
+
+              notes:
+                "Client must not submit investor decision.",
 
               submittedAt:
                 serverTimestamp(),
@@ -794,7 +1080,7 @@ describe(
        ===================================================== */
 
     test(
-      "assigned investor can read engagement updates",
+      "assigned investor can read engagement update",
       async () => {
         const db =
           testEnv
@@ -817,7 +1103,53 @@ describe(
 
 
     test(
-      "investor cannot create official engagement updates",
+      "client with active assignment can read engagement update",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(CLIENT_UID)
+            .firestore();
+
+        await assertSucceeds(
+          getDoc(
+            doc(
+              db,
+              "engagements",
+              ENGAGEMENT_ID,
+              "updates",
+              "update-001"
+            )
+          )
+        );
+      }
+    );
+
+
+    test(
+      "revoked user cannot read engagement update",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(REVOKED_UID)
+            .firestore();
+
+        await assertFails(
+          getDoc(
+            doc(
+              db,
+              "engagements",
+              ENGAGEMENT_ID,
+              "updates",
+              "update-001"
+            )
+          )
+        );
+      }
+    );
+
+
+    test(
+      "investor cannot create official engagement update",
       async () => {
         const db =
           testEnv
@@ -838,7 +1170,7 @@ describe(
                 "Unauthorized update",
 
               message:
-                "Investor must not create official Quintrin updates.",
+                "Investor must not create official updates.",
 
               createdBy:
                 INVESTOR_UID,
@@ -853,7 +1185,7 @@ describe(
 
 
     /* =====================================================
-       DOCUMENT METADATA
+       PRIVATE DOCUMENT METADATA
        ===================================================== */
 
     test(
@@ -865,6 +1197,52 @@ describe(
             .firestore();
 
         await assertSucceeds(
+          getDoc(
+            doc(
+              db,
+              "engagements",
+              ENGAGEMENT_ID,
+              "documents",
+              "document-001"
+            )
+          )
+        );
+      }
+    );
+
+
+    test(
+      "client with active assignment can read document metadata",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(CLIENT_UID)
+            .firestore();
+
+        await assertSucceeds(
+          getDoc(
+            doc(
+              db,
+              "engagements",
+              ENGAGEMENT_ID,
+              "documents",
+              "document-001"
+            )
+          )
+        );
+      }
+    );
+
+
+    test(
+      "revoked user cannot read private document metadata",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(REVOKED_UID)
+            .firestore();
+
+        await assertFails(
           getDoc(
             doc(
               db,
@@ -909,6 +1287,27 @@ describe(
     /* =====================================================
        LOGGED-OUT ACCESS
        ===================================================== */
+
+    test(
+      "logged-out visitor cannot read portal user",
+      async () => {
+        const db =
+          testEnv
+            .unauthenticatedContext()
+            .firestore();
+
+        await assertFails(
+          getDoc(
+            doc(
+              db,
+              "portalUsers",
+              INVESTOR_UID
+            )
+          )
+        );
+      }
+    );
+
 
     test(
       "logged-out visitor cannot read private engagement",
