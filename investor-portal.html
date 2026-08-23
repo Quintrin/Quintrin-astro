@@ -3,119 +3,613 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Quintrin Secure Investor Portal</title>
-  <link rel="stylesheet" href="https://quintrin.github.io/Quintrin-astro/styles.css">
+
+  <link
+    rel="stylesheet"
+    href="https://quintrin.github.io/Quintrin-astro/styles.css"
+  >
 
   <style>
-    .portal-box{max-width:620px;margin:60px auto;padding:30px}
-    .portal-box input,.portal-box select,.portal-box textarea{width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box}
-    .portal-message{margin-top:15px;min-height:24px}
-    .secure-notice{margin:25px 0;padding:20px;border:1px solid #b99545}
-    .engagement-card{margin-top:30px;padding-top:10px}
-    .password-wrap{position:relative;width:100%}
-    .password-wrap input{padding-right:78px}
-    .password-toggle{position:absolute;right:8px;top:16px;width:auto;margin:0;padding:6px 8px;border:0;background:transparent;cursor:pointer;font:inherit;font-weight:600;z-index:10}
-    .decision-divider{margin:30px 0}
-    [hidden]{display:none!important}
+    :root {
+      --portal-border: #b99545;
+      --portal-muted: #66727c;
+      --portal-surface: #ffffff;
+      --portal-soft: #f7f8f9;
+    }
+
+    .portal-shell {
+      max-width: 920px;
+      margin: 48px auto;
+      padding: 28px;
+    }
+
+    .portal-box {
+      max-width: 620px;
+      margin: 60px auto;
+      padding: 30px;
+    }
+
+    .portal-heading-row,
+    .portal-action-row,
+    .dashboard-header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .portal-message {
+      margin-top: 15px;
+      min-height: 24px;
+    }
+
+    .muted {
+      color: var(--portal-muted);
+    }
+
+    .secure-notice {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid var(--portal-border);
+      border-radius: 6px;
+      background: var(--portal-surface);
+    }
+
+    .password-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .password-wrap input {
+      padding-right: 78px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 8px;
+      top: 16px;
+      width: auto;
+      margin: 0;
+      padding: 6px 8px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 600;
+      z-index: 10;
+    }
+
+    .portal-box input,
+    .portal-box select,
+    .portal-box textarea,
+    .portal-shell input,
+    .portal-shell select,
+    .portal-shell textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0 16px;
+      box-sizing: border-box;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin: 24px 0;
+    }
+
+    .engagement-card {
+      border: 1px solid #d7dde2;
+      border-radius: 8px;
+      padding: 18px;
+      background: var(--portal-surface);
+    }
+
+    .engagement-card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .engagement-card p {
+      margin: 6px 0;
+    }
+
+    .engagement-card .cta {
+      margin-top: 16px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .detail-item {
+      padding: 14px;
+      border: 1px solid #d7dde2;
+      border-radius: 6px;
+      background: var(--portal-soft);
+    }
+
+    .detail-item strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .portal-section {
+      margin-top: 30px;
+      padding-top: 24px;
+      border-top: 1px solid #d7dde2;
+    }
+
+    .portal-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .portal-list-item {
+      padding: 16px;
+      border: 1px solid #d7dde2;
+      border-radius: 6px;
+      background: var(--portal-surface);
+    }
+
+    .portal-list-item p {
+      margin: 6px 0;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 4px 9px;
+      border: 1px solid #c8d0d6;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      margin-top: 4px;
+    }
+
+    .button-link {
+      margin-top: 0;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 640px) {
+      .portal-shell,
+      .portal-box {
+        margin: 24px auto;
+        padding: 18px;
+      }
+
+      .portal-heading-row,
+      .portal-action-row,
+      .dashboard-header {
+        align-items: stretch;
+      }
+    }
   </style>
 </head>
 
 <body>
-<header><div class="logo">QUINTRIN</div></header>
+
+<!--
+  QUINTRIN SECURE INVESTOR PORTAL
+  Version: 2.0
+  Architecture:
+  Firebase Authentication + Firestore role-based access
+  User-specific engagement index:
+  portalUsers/{uid}/engagements/{engagementId}
+-->
+
+<header>
+  <div class="logo">QUINTRIN</div>
+</header>
 
 <main class="container">
 
+  <!-- =====================================================
+       LOGIN
+       ===================================================== -->
+
   <section id="loginPanel" class="portal-box">
+
     <h1>Investor Portal</h1>
-    <p>Private access for authorised Quintrin investors.</p>
+
+    <p>
+      Private access for authorised Quintrin investors.
+    </p>
 
     <form id="loginForm">
-      <label for="email">Email Address</label>
-      <input id="email" name="email" type="email" autocomplete="username" required>
 
-      <label for="password">Password</label>
+      <label for="email">
+        Email Address
+      </label>
+
+      <input
+        id="email"
+        name="email"
+        type="email"
+        autocomplete="username"
+        required
+      >
+
+      <label for="password">
+        Password
+      </label>
+
       <div class="password-wrap">
-        <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+        >
+
         <button
           id="togglePassword"
           class="password-toggle"
           type="button"
           aria-label="Show password"
           aria-pressed="false"
-          onclick="
-            const p=document.getElementById('password');
-            const hidden=p.type==='password';
-            p.type=hidden?'text':'password';
-            this.textContent=hidden?'Hide':'View';
-            this.setAttribute('aria-label',hidden?'Hide password':'Show password');
-            this.setAttribute('aria-pressed',hidden?'true':'false');
-          "
-        >View</button>
+        >
+          View
+        </button>
+
       </div>
 
-      <button id="loginButton" class="cta" type="submit">Secure Login</button>
+      <button
+        id="loginButton"
+        class="cta"
+        type="submit"
+      >
+        Secure Login
+      </button>
+
     </form>
 
-    <p id="loginMessage" class="portal-message" aria-live="polite"></p>
+    <p
+      id="loginMessage"
+      class="portal-message"
+      aria-live="polite"
+    ></p>
+
   </section>
 
-  <section id="portalPanel" class="portal-box" hidden>
-    <h1>Secure Investor Portal</h1>
-    <p id="welcomeUser"></p>
+
+  <!-- =====================================================
+       DASHBOARD
+       ===================================================== -->
+
+  <section
+    id="dashboardPanel"
+    class="portal-shell"
+    hidden
+  >
+
+    <div class="dashboard-header">
+
+      <div>
+        <h1>Secure Investor Portal</h1>
+
+        <p id="welcomeUser"></p>
+
+        <p
+          id="roleLabel"
+          class="muted"
+        ></p>
+      </div>
+
+      <button
+        id="dashboardLogoutButton"
+        class="cta button-link"
+        type="button"
+      >
+        Secure Logout
+      </button>
+
+    </div>
 
     <div class="secure-notice">
       <strong>Authentication Successful</strong>
-      <p>Your identity has been authenticated and authorised through the Quintrin secure access system.</p>
+
+      <p>
+        Your identity has been authenticated and authorised through
+        the Quintrin secure access system.
+      </p>
     </div>
 
-    <section id="engagementPanel" class="engagement-card" hidden>
-      <hr class="decision-divider">
-      <h2>Private Engagement Review</h2>
+    <div class="portal-heading-row">
 
-      <p><strong>Reference:</strong> <span id="engagementRef"></span></p>
-      <p><strong>Client:</strong> <span id="clientName"></span></p>
-      <p><strong>Engagement:</strong> <span id="engagementTitle"></span></p>
-      <p><strong>Current Status:</strong> <span id="engagementStatus"></span></p>
+      <h2 id="dashboardTitle">
+        Private Engagements
+      </h2>
 
-      <div class="secure-notice">
-        <strong>Client / Engagement Summary</strong>
-        <p id="engagementSummary"></p>
+      <button
+        id="refreshDashboardButton"
+        class="cta button-link"
+        type="button"
+      >
+        Refresh
+      </button>
+
+    </div>
+
+    <p
+      id="dashboardMessage"
+      class="portal-message"
+      aria-live="polite"
+    ></p>
+
+    <div
+      id="engagementList"
+      class="dashboard-grid"
+    ></div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ENGAGEMENT DETAIL
+       ===================================================== -->
+
+  <section
+    id="engagementPanel"
+    class="portal-shell"
+    hidden
+  >
+
+    <div class="portal-heading-row">
+
+      <button
+        id="backToDashboardButton"
+        class="cta button-link"
+        type="button"
+      >
+        Back to Dashboard
+      </button>
+
+      <button
+        id="engagementLogoutButton"
+        class="cta button-link"
+        type="button"
+      >
+        Secure Logout
+      </button>
+
+    </div>
+
+    <h1>
+      Private Engagement Review
+    </h1>
+
+    <p
+      id="engagementLoadMessage"
+      class="portal-message"
+      aria-live="polite"
+    ></p>
+
+    <div id="engagementContent" hidden>
+
+      <div class="detail-grid">
+
+        <div class="detail-item">
+          <strong>Reference</strong>
+          <span id="engagementRef"></span>
+        </div>
+
+        <div class="detail-item">
+          <strong>Client</strong>
+          <span id="clientName"></span>
+        </div>
+
+        <div class="detail-item">
+          <strong>Engagement</strong>
+          <span id="engagementTitle"></span>
+        </div>
+
+        <div class="detail-item">
+          <strong>Current Status</strong>
+          <span id="engagementStatus"></span>
+        </div>
+
+        <div class="detail-item">
+          <strong>Transaction Amount</strong>
+          <span id="engagementAmount"></span>
+        </div>
+
+        <div class="detail-item">
+          <strong>Currency</strong>
+          <span id="engagementCurrency"></span>
+        </div>
+
       </div>
 
-      <section id="decisionSection">
-        <h2>Investor Decision</h2>
+      <div class="secure-notice">
 
-        <form id="decisionForm">
-          <label for="decisionStatus">Decision Status</label>
-          <select id="decisionStatus" required>
-            <option value="Under Review">Under Review</option>
-            <option value="Request Additional Information">Request Additional Information</option>
-            <option value="Waiting Professional/Legal Review">Waiting Professional/Legal Review</option>
-            <option value="Approved to Proceed">Approved to Proceed</option>
-            <option value="Declined">Declined</option>
-          </select>
+        <strong>
+          Client / Engagement Summary
+        </strong>
 
-          <label for="decisionNotes">Notes / Conditions</label>
-          <textarea id="decisionNotes" rows="5" maxlength="5000" placeholder="Enter your review comments, conditions, or information requests."></textarea>
+        <p id="engagementSummary"></p>
 
-          <button id="decisionButton" class="cta" type="submit">Submit Decision</button>
-        </form>
+      </div>
 
-        <p id="decisionMessage" class="portal-message" aria-live="polite"></p>
+
+      <!-- ===============================================
+           ENGAGEMENT UPDATES
+           =============================================== -->
+
+      <section class="portal-section">
+
+        <h2>
+          Quintrin Updates
+        </h2>
+
+        <p
+          id="updatesMessage"
+          class="portal-message"
+        ></p>
+
+        <div
+          id="updatesList"
+          class="portal-list"
+        ></div>
+
       </section>
 
-      <p id="adminViewMessage" class="portal-message" hidden>
-        Administrator view. Investor decision controls are hidden.
-      </p>
-    </section>
 
-    <button id="logoutButton" class="cta" type="button">Secure Logout</button>
+      <!-- ===============================================
+           DOCUMENT METADATA
+           =============================================== -->
+
+      <section class="portal-section">
+
+        <h2>
+          Private Documents
+        </h2>
+
+        <p class="muted">
+          Secure document downloads will be enabled after Firebase
+          Storage access rules are completed.
+        </p>
+
+        <p
+          id="documentsMessage"
+          class="portal-message"
+        ></p>
+
+        <div
+          id="documentsList"
+          class="portal-list"
+        ></div>
+
+      </section>
+
+
+      <!-- ===============================================
+           INVESTOR DECISION
+           =============================================== -->
+
+      <section
+        id="decisionSection"
+        class="portal-section"
+        hidden
+      >
+
+        <h2>
+          Investor Decision
+        </h2>
+
+        <form id="decisionForm">
+
+          <label for="decisionStatus">
+            Decision Status
+          </label>
+
+          <select
+            id="decisionStatus"
+            required
+          >
+
+            <option value="Under Review">
+              Under Review
+            </option>
+
+            <option value="Request Additional Information">
+              Request Additional Information
+            </option>
+
+            <option value="Waiting Professional/Legal Review">
+              Waiting Professional/Legal Review
+            </option>
+
+            <option value="Approved to Proceed">
+              Approved to Proceed
+            </option>
+
+            <option value="Declined">
+              Declined
+            </option>
+
+          </select>
+
+          <label for="decisionNotes">
+            Notes / Conditions
+          </label>
+
+          <textarea
+            id="decisionNotes"
+            rows="6"
+            maxlength="5000"
+            placeholder="Enter your review comments, conditions, or information requests."
+          ></textarea>
+
+          <button
+            id="decisionButton"
+            class="cta"
+            type="submit"
+          >
+            Submit Decision
+          </button>
+
+        </form>
+
+        <p
+          id="decisionMessage"
+          class="portal-message"
+          aria-live="polite"
+        ></p>
+
+      </section>
+
+
+      <!-- ===============================================
+           ADMIN DECISION VIEW
+           =============================================== -->
+
+      <section
+        id="adminDecisionSection"
+        class="portal-section"
+        hidden
+      >
+
+        <h2>
+          Investor Decisions Received
+        </h2>
+
+        <p
+          id="adminDecisionMessage"
+          class="portal-message"
+        ></p>
+
+        <div
+          id="adminDecisionList"
+          class="portal-list"
+        ></div>
+
+      </section>
+
+    </div>
+
   </section>
 
 </main>
 
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
   import {
     getAuth,
     signInWithEmailAndPassword,
@@ -124,13 +618,22 @@
     setPersistence,
     browserSessionPersistence
   } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
   import {
     getFirestore,
+    collection,
     doc,
     getDoc,
+    getDocs,
     setDoc,
+    updateDoc,
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+
+  /* =========================================================
+     FIREBASE CONFIG
+     ========================================================= */
 
   const firebaseConfig = {
     apiKey: "AIzaSyCEsncA0dxiRu6d-ZOV87OgmJzArk0rrL0",
@@ -141,242 +644,1413 @@
     appId: "1:384297431496:web:ffe7f5771ebd6319dbd0fd"
   };
 
+
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  const loginPanel = document.getElementById("loginPanel");
-  const portalPanel = document.getElementById("portalPanel");
-  const loginForm = document.getElementById("loginForm");
-  const loginButton = document.getElementById("loginButton");
-  const loginMessage = document.getElementById("loginMessage");
-  const welcomeUser = document.getElementById("welcomeUser");
-  const logoutButton = document.getElementById("logoutButton");
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
-  const togglePassword = document.getElementById("togglePassword");
 
-  const engagementPanel = document.getElementById("engagementPanel");
-  const engagementRef = document.getElementById("engagementRef");
-  const clientName = document.getElementById("clientName");
-  const engagementTitle = document.getElementById("engagementTitle");
-  const engagementStatus = document.getElementById("engagementStatus");
-  const engagementSummary = document.getElementById("engagementSummary");
+  /* =========================================================
+     DOM REFERENCES
+     ========================================================= */
 
-  const decisionSection = document.getElementById("decisionSection");
-  const decisionForm = document.getElementById("decisionForm");
-  const decisionStatus = document.getElementById("decisionStatus");
-  const decisionNotes = document.getElementById("decisionNotes");
-  const decisionButton = document.getElementById("decisionButton");
-  const decisionMessage = document.getElementById("decisionMessage");
-  const adminViewMessage = document.getElementById("adminViewMessage");
+  const loginPanel =
+    document.getElementById("loginPanel");
 
-  const ACTIVE_ENGAGEMENT_ID = "QFSL-TEST-001";
+  const dashboardPanel =
+    document.getElementById("dashboardPanel");
+
+  const engagementPanel =
+    document.getElementById("engagementPanel");
+
+  const loginForm =
+    document.getElementById("loginForm");
+
+  const loginButton =
+    document.getElementById("loginButton");
+
+  const loginMessage =
+    document.getElementById("loginMessage");
+
+  const emailInput =
+    document.getElementById("email");
+
+  const passwordInput =
+    document.getElementById("password");
+
+  const togglePassword =
+    document.getElementById("togglePassword");
+
+  const welcomeUser =
+    document.getElementById("welcomeUser");
+
+  const roleLabel =
+    document.getElementById("roleLabel");
+
+  const dashboardTitle =
+    document.getElementById("dashboardTitle");
+
+  const dashboardMessage =
+    document.getElementById("dashboardMessage");
+
+  const engagementList =
+    document.getElementById("engagementList");
+
+  const refreshDashboardButton =
+    document.getElementById("refreshDashboardButton");
+
+  const dashboardLogoutButton =
+    document.getElementById("dashboardLogoutButton");
+
+  const engagementLogoutButton =
+    document.getElementById("engagementLogoutButton");
+
+  const backToDashboardButton =
+    document.getElementById("backToDashboardButton");
+
+  const engagementLoadMessage =
+    document.getElementById("engagementLoadMessage");
+
+  const engagementContent =
+    document.getElementById("engagementContent");
+
+  const engagementRef =
+    document.getElementById("engagementRef");
+
+  const clientName =
+    document.getElementById("clientName");
+
+  const engagementTitle =
+    document.getElementById("engagementTitle");
+
+  const engagementStatus =
+    document.getElementById("engagementStatus");
+
+  const engagementAmount =
+    document.getElementById("engagementAmount");
+
+  const engagementCurrency =
+    document.getElementById("engagementCurrency");
+
+  const engagementSummary =
+    document.getElementById("engagementSummary");
+
+  const updatesMessage =
+    document.getElementById("updatesMessage");
+
+  const updatesList =
+    document.getElementById("updatesList");
+
+  const documentsMessage =
+    document.getElementById("documentsMessage");
+
+  const documentsList =
+    document.getElementById("documentsList");
+
+  const decisionSection =
+    document.getElementById("decisionSection");
+
+  const decisionForm =
+    document.getElementById("decisionForm");
+
+  const decisionStatus =
+    document.getElementById("decisionStatus");
+
+  const decisionNotes =
+    document.getElementById("decisionNotes");
+
+  const decisionButton =
+    document.getElementById("decisionButton");
+
+  const decisionMessage =
+    document.getElementById("decisionMessage");
+
+  const adminDecisionSection =
+    document.getElementById("adminDecisionSection");
+
+  const adminDecisionMessage =
+    document.getElementById("adminDecisionMessage");
+
+  const adminDecisionList =
+    document.getElementById("adminDecisionList");
+
+
+  /* =========================================================
+     PORTAL STATE
+     ========================================================= */
+
   let currentPortalRole = "";
+  let currentProfile = null;
+  let selectedEngagementId = null;
 
-  async function loadExistingDecision() {
-    const user = auth.currentUser;
-    if (!user) return;
 
-    const decisionRef = doc(
+  /* =========================================================
+     HELPERS
+     ========================================================= */
+
+  function showOnly(panel) {
+    loginPanel.hidden = panel !== loginPanel;
+    dashboardPanel.hidden = panel !== dashboardPanel;
+    engagementPanel.hidden = panel !== engagementPanel;
+  }
+
+
+  function formatCurrency(amount, currency) {
+    if (
+      typeof amount !== "number" ||
+      !Number.isFinite(amount)
+    ) {
+      return "Not provided";
+    }
+
+    try {
+      return new Intl.NumberFormat(
+        "en-US",
+        {
+          style: "currency",
+          currency: currency || "USD",
+          maximumFractionDigits: 2
+        }
+      ).format(amount);
+    } catch {
+      return `${currency || "USD"} ${amount.toLocaleString()}`;
+    }
+  }
+
+
+  function formatTimestamp(value) {
+    if (!value) {
+      return "Not provided";
+    }
+
+    try {
+      const date =
+        typeof value.toDate === "function"
+          ? value.toDate()
+          : new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "Not provided";
+      }
+
+      return new Intl.DateTimeFormat(
+        "en-US",
+        {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }
+      ).format(date);
+    } catch {
+      return "Not provided";
+    }
+  }
+
+
+  function clearElement(element) {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+  }
+
+
+  function createTextElement(tag, text, className = "") {
+    const element = document.createElement(tag);
+
+    if (className) {
+      element.className = className;
+    }
+
+    element.textContent = text;
+
+    return element;
+  }
+
+
+  function resetEngagementView() {
+    selectedEngagementId = null;
+
+    engagementContent.hidden = true;
+    engagementLoadMessage.textContent = "";
+
+    engagementRef.textContent = "";
+    clientName.textContent = "";
+    engagementTitle.textContent = "";
+    engagementStatus.textContent = "";
+    engagementAmount.textContent = "";
+    engagementCurrency.textContent = "";
+    engagementSummary.textContent = "";
+
+    updatesMessage.textContent = "";
+    documentsMessage.textContent = "";
+    decisionMessage.textContent = "";
+    adminDecisionMessage.textContent = "";
+
+    decisionStatus.value = "Under Review";
+    decisionNotes.value = "";
+
+    clearElement(updatesList);
+    clearElement(documentsList);
+    clearElement(adminDecisionList);
+
+    decisionSection.hidden = true;
+    adminDecisionSection.hidden = true;
+  }
+
+
+  function resetPasswordControl() {
+    passwordInput.value = "";
+    passwordInput.type = "password";
+
+    togglePassword.textContent = "View";
+    togglePassword.setAttribute(
+      "aria-label",
+      "Show password"
+    );
+    togglePassword.setAttribute(
+      "aria-pressed",
+      "false"
+    );
+  }
+
+
+  /* =========================================================
+     PASSWORD VIEW / HIDE
+     ========================================================= */
+
+  togglePassword.addEventListener(
+    "click",
+    () => {
+      const hidden =
+        passwordInput.type === "password";
+
+      passwordInput.type =
+        hidden
+          ? "text"
+          : "password";
+
+      togglePassword.textContent =
+        hidden
+          ? "Hide"
+          : "View";
+
+      togglePassword.setAttribute(
+        "aria-label",
+        hidden
+          ? "Hide password"
+          : "Show password"
+      );
+
+      togglePassword.setAttribute(
+        "aria-pressed",
+        hidden
+          ? "true"
+          : "false"
+      );
+    }
+  );
+
+
+  /* =========================================================
+     LOGIN
+     ========================================================= */
+
+  loginForm.addEventListener(
+    "submit",
+    async (event) => {
+      event.preventDefault();
+
+      loginButton.disabled = true;
+      loginMessage.textContent =
+        "Authenticating...";
+
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
+      try {
+        await setPersistence(
+          auth,
+          browserSessionPersistence
+        );
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        resetPasswordControl();
+
+      } catch (error) {
+        console.error(
+          "Firebase login error:",
+          error
+        );
+
+        loginMessage.textContent =
+          "Unable to sign in. Please check your credentials.";
+
+        loginButton.disabled = false;
+      }
+    }
+  );
+
+
+  /* =========================================================
+     PROFILE / AUTHORIZATION
+     ========================================================= */
+
+  async function loadPortalProfile(user) {
+    const userRef = doc(
       db,
-      "engagements",
-      ACTIVE_ENGAGEMENT_ID,
-      "decisions",
+      "portalUsers",
       user.uid
     );
 
-    const decisionSnap = await getDoc(decisionRef);
+    const userSnap =
+      await getDoc(userRef);
 
-    if (!decisionSnap.exists()) {
-      decisionStatus.value = "Under Review";
-      decisionNotes.value = "";
-      decisionMessage.textContent = "";
-      return;
+    if (!userSnap.exists()) {
+      throw new Error(
+        "Portal user record not found."
+      );
     }
 
-    const data = decisionSnap.data();
-    if (data.status) decisionStatus.value = data.status;
-    decisionNotes.value = data.notes || "";
-    decisionMessage.textContent = "Your previously submitted decision is loaded.";
+    const data =
+      userSnap.data();
+
+    const role =
+      String(
+        data.role || ""
+      )
+        .trim()
+        .toLowerCase();
+
+    if (data.active !== true) {
+      throw new Error(
+        "Portal account is not active."
+      );
+    }
+
+    if (
+      role !== "admin" &&
+      role !== "investor"
+    ) {
+      throw new Error(
+        "Account role is not authorised for the Investor Portal."
+      );
+    }
+
+    currentPortalRole = role;
+    currentProfile = data;
+
+    return data;
   }
 
-  async function loadEngagement() {
-    engagementPanel.hidden = true;
 
-    const engagementDoc = doc(db, "engagements", ACTIVE_ENGAGEMENT_ID);
-    const engagementSnap = await getDoc(engagementDoc);
+  /* =========================================================
+     DASHBOARD
+     ========================================================= */
 
-    if (!engagementSnap.exists()) {
-      throw new Error("Engagement record not found.");
-    }
-
-    const data = engagementSnap.data();
-
-    engagementRef.textContent = engagementSnap.id;
-    clientName.textContent = data.clientName || "Not provided";
-    engagementTitle.textContent = data.title || "Private Engagement";
-    engagementStatus.textContent = data.status || "Under Review";
-    engagementSummary.textContent = data.summary || "No summary available.";
-
-    if (currentPortalRole === "investor") {
-      decisionSection.hidden = false;
-      adminViewMessage.hidden = true;
-      await loadExistingDecision();
-    } else {
-      decisionSection.hidden = true;
-      adminViewMessage.hidden = false;
-    }
-
-    engagementPanel.hidden = false;
-  }
-
-  loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    loginButton.disabled = true;
-    loginMessage.textContent = "Authenticating...";
-
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-
-    try {
-      await setPersistence(auth, browserSessionPersistence);
-      await signInWithEmailAndPassword(auth, email, password);
-
-      passwordInput.value = "";
-      passwordInput.type = "password";
-      togglePassword.textContent = "View";
-      togglePassword.setAttribute("aria-label", "Show password");
-      togglePassword.setAttribute("aria-pressed", "false");
-    } catch (error) {
-      console.error("Firebase login error:", error);
-      loginMessage.textContent = "Unable to sign in. Please check your credentials.";
-      loginButton.disabled = false;
-    }
-  });
-
-  decisionForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const user = auth.currentUser;
+  async function loadDashboard() {
+    const user =
+      auth.currentUser;
 
     if (!user) {
-      decisionMessage.textContent = "Your secure session has ended. Please sign in again.";
       return;
     }
 
-    if (currentPortalRole !== "investor") {
-      decisionMessage.textContent = "This account cannot submit an investor decision.";
+    dashboardMessage.textContent =
+      "Loading private engagements...";
+
+    clearElement(engagementList);
+
+    let snapshots = [];
+
+    if (currentPortalRole === "admin") {
+      dashboardTitle.textContent =
+        "All Private Engagements";
+
+      const engagementSnapshot =
+        await getDocs(
+          collection(
+            db,
+            "engagements"
+          )
+        );
+
+      snapshots =
+        engagementSnapshot.docs.map(
+          (item) => ({
+            id: item.id,
+            data: item.data()
+          })
+        );
+
+    } else {
+      dashboardTitle.textContent =
+        "My Private Engagements";
+
+      const assignmentSnapshot =
+        await getDocs(
+          collection(
+            db,
+            "portalUsers",
+            user.uid,
+            "engagements"
+          )
+        );
+
+      snapshots =
+        assignmentSnapshot.docs
+          .map(
+            (item) => ({
+              id: item.id,
+              data: item.data()
+            })
+          )
+          .filter(
+            (item) =>
+              item.data.access === "active"
+          );
+    }
+
+
+    if (snapshots.length === 0) {
+      dashboardMessage.textContent =
+        "No active private engagements are currently assigned to this account.";
+
       return;
     }
 
-    decisionButton.disabled = true;
-    decisionMessage.textContent = "Submitting decision...";
+
+    snapshots.sort(
+      (a, b) => {
+        const aReference =
+          String(
+            a.data.reference || a.id
+          );
+
+        const bReference =
+          String(
+            b.data.reference || b.id
+          );
+
+        return aReference.localeCompare(
+          bReference
+        );
+      }
+    );
+
+
+    for (const item of snapshots) {
+      const card =
+        document.createElement("article");
+
+      card.className =
+        "engagement-card";
+
+      const title =
+        item.data.title ||
+        "Private Engagement";
+
+      const reference =
+        item.data.reference ||
+        item.id;
+
+      const status =
+        item.data.status ||
+        "Under Review";
+
+      const amount =
+        formatCurrency(
+          item.data.transactionAmount,
+          item.data.currency
+        );
+
+      card.appendChild(
+        createTextElement(
+          "h3",
+          title
+        )
+      );
+
+      card.appendChild(
+        createTextElement(
+          "p",
+          `Reference: ${reference}`
+        )
+      );
+
+      if (item.data.clientName) {
+        card.appendChild(
+          createTextElement(
+            "p",
+            `Client: ${item.data.clientName}`
+          )
+        );
+      }
+
+      card.appendChild(
+        createTextElement(
+          "p",
+          `Amount: ${amount}`
+        )
+      );
+
+      const statusElement =
+        createTextElement(
+          "span",
+          status,
+          "status-pill"
+        );
+
+      card.appendChild(
+        statusElement
+      );
+
+      const openButton =
+        document.createElement("button");
+
+      openButton.type =
+        "button";
+
+      openButton.className =
+        "cta";
+
+      openButton.textContent =
+        "Open Engagement";
+
+      openButton.addEventListener(
+        "click",
+        () => {
+          openEngagement(
+            item.id
+          );
+        }
+      );
+
+      card.appendChild(
+        openButton
+      );
+
+      engagementList.appendChild(
+        card
+      );
+    }
+
+
+    dashboardMessage.textContent =
+      "";
+  }
+
+
+  /* =========================================================
+     ENGAGEMENT DETAIL
+     ========================================================= */
+
+  async function openEngagement(engagementId) {
+    resetEngagementView();
+
+    selectedEngagementId =
+      engagementId;
+
+    showOnly(
+      engagementPanel
+    );
+
+    engagementLoadMessage.textContent =
+      "Loading secure engagement...";
 
     try {
-      const decisionRef = doc(
+      const engagementDoc =
+        doc(
+          db,
+          "engagements",
+          engagementId
+        );
+
+      const engagementSnap =
+        await getDoc(
+          engagementDoc
+        );
+
+      if (!engagementSnap.exists()) {
+        throw new Error(
+          "Engagement record not found."
+        );
+      }
+
+      const data =
+        engagementSnap.data();
+
+      engagementRef.textContent =
+        data.reference ||
+        engagementSnap.id;
+
+      clientName.textContent =
+        data.clientName ||
+        "Not provided";
+
+      engagementTitle.textContent =
+        data.title ||
+        "Private Engagement";
+
+      engagementStatus.textContent =
+        data.status ||
+        "Under Review";
+
+      engagementAmount.textContent =
+        formatCurrency(
+          data.transactionAmount,
+          data.currency
+        );
+
+      engagementCurrency.textContent =
+        data.currency ||
+        "Not provided";
+
+      engagementSummary.textContent =
+        data.summary ||
+        "No summary available.";
+
+      await Promise.all([
+        loadEngagementUpdates(
+          engagementId
+        ),
+        loadDocumentMetadata(
+          engagementId
+        )
+      ]);
+
+      if (
+        currentPortalRole === "investor"
+      ) {
+        decisionSection.hidden =
+          false;
+
+        adminDecisionSection.hidden =
+          true;
+
+        await loadExistingDecision(
+          engagementId
+        );
+
+      } else {
+        decisionSection.hidden =
+          true;
+
+        adminDecisionSection.hidden =
+          false;
+
+        await loadAdminDecisions(
+          engagementId
+        );
+      }
+
+      engagementContent.hidden =
+        false;
+
+      engagementLoadMessage.textContent =
+        "";
+
+    } catch (error) {
+      console.error(
+        "Engagement load error:",
+        error
+      );
+
+      engagementLoadMessage.textContent =
+        "Unable to load this private engagement. Please return to the dashboard and try again.";
+    }
+  }
+
+
+  /* =========================================================
+     ENGAGEMENT UPDATES
+     ========================================================= */
+
+  async function loadEngagementUpdates(engagementId) {
+    clearElement(
+      updatesList
+    );
+
+    updatesMessage.textContent =
+      "Loading updates...";
+
+    try {
+      const snapshot =
+        await getDocs(
+          collection(
+            db,
+            "engagements",
+            engagementId,
+            "updates"
+          )
+        );
+
+      if (snapshot.empty) {
+        updatesMessage.textContent =
+          "No updates have been published for this engagement.";
+
+        return;
+      }
+
+      const items =
+        snapshot.docs
+          .map(
+            (item) => ({
+              id: item.id,
+              ...item.data()
+            })
+          )
+          .sort(
+            (a, b) => {
+              const aTime =
+                a.createdAt?.toMillis?.() || 0;
+
+              const bTime =
+                b.createdAt?.toMillis?.() || 0;
+
+              return bTime - aTime;
+            }
+          );
+
+      for (const item of items) {
+        const block =
+          document.createElement("article");
+
+        block.className =
+          "portal-list-item";
+
+        block.appendChild(
+          createTextElement(
+            "strong",
+            item.title ||
+            "Quintrin Update"
+          )
+        );
+
+        block.appendChild(
+          createTextElement(
+            "p",
+            item.message ||
+            ""
+          )
+        );
+
+        block.appendChild(
+          createTextElement(
+            "p",
+            formatTimestamp(
+              item.createdAt
+            ),
+            "muted"
+          )
+        );
+
+        updatesList.appendChild(
+          block
+        );
+      }
+
+      updatesMessage.textContent =
+        "";
+
+    } catch (error) {
+      console.error(
+        "Updates load error:",
+        error
+      );
+
+      updatesMessage.textContent =
+        "Unable to load engagement updates.";
+    }
+  }
+
+
+  /* =========================================================
+     DOCUMENT METADATA
+     ========================================================= */
+
+  async function loadDocumentMetadata(engagementId) {
+    clearElement(
+      documentsList
+    );
+
+    documentsMessage.textContent =
+      "Loading document information...";
+
+    try {
+      const snapshot =
+        await getDocs(
+          collection(
+            db,
+            "engagements",
+            engagementId,
+            "documents"
+          )
+        );
+
+      if (snapshot.empty) {
+        documentsMessage.textContent =
+          "No private documents have been published for this engagement.";
+
+        return;
+      }
+
+      for (const documentSnap of snapshot.docs) {
+        const item =
+          documentSnap.data();
+
+        const block =
+          document.createElement("article");
+
+        block.className =
+          "portal-list-item";
+
+        block.appendChild(
+          createTextElement(
+            "strong",
+            item.title ||
+            "Private Document"
+          )
+        );
+
+        if (item.category) {
+          block.appendChild(
+            createTextElement(
+              "p",
+              `Category: ${item.category}`
+            )
+          );
+        }
+
+        if (item.uploadedAt) {
+          block.appendChild(
+            createTextElement(
+              "p",
+              `Published: ${formatTimestamp(item.uploadedAt)}`,
+              "muted"
+            )
+          );
+        }
+
+        documentsList.appendChild(
+          block
+        );
+      }
+
+      documentsMessage.textContent =
+        "";
+
+    } catch (error) {
+      console.error(
+        "Document metadata load error:",
+        error
+      );
+
+      documentsMessage.textContent =
+        "Unable to load private document information.";
+    }
+  }
+
+
+  /* =========================================================
+     INVESTOR DECISION
+     ========================================================= */
+
+  async function loadExistingDecision(engagementId) {
+    const user =
+      auth.currentUser;
+
+    if (!user) {
+      return;
+    }
+
+    decisionStatus.value =
+      "Under Review";
+
+    decisionNotes.value =
+      "";
+
+    decisionMessage.textContent =
+      "";
+
+    const decisionRef =
+      doc(
         db,
         "engagements",
-        ACTIVE_ENGAGEMENT_ID,
+        engagementId,
         "decisions",
         user.uid
       );
 
-      await setDoc(decisionRef, {
-        investorUid: user.uid,
-        status: decisionStatus.value,
-        notes: decisionNotes.value.trim(),
-        submittedAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      });
+    const decisionSnap =
+      await getDoc(
+        decisionRef
+      );
 
-      decisionMessage.textContent = "Decision submitted securely to Quintrin.";
-    } catch (error) {
-      console.error("Decision submission error:", error);
-      decisionMessage.textContent = "Unable to submit your decision. Please try again.";
-    } finally {
-      decisionButton.disabled = false;
-    }
-  });
-
-  onAuthStateChanged(auth, async (user) => {
-    portalPanel.hidden = true;
-    engagementPanel.hidden = true;
-
-    if (!user) {
-      currentPortalRole = "";
-      loginPanel.hidden = false;
-      welcomeUser.textContent = "";
-      loginButton.disabled = false;
+    if (!decisionSnap.exists()) {
       return;
     }
 
-    loginPanel.hidden = false;
-    loginMessage.textContent = "Verifying portal authorisation...";
+    const data =
+      decisionSnap.data();
 
-    try {
-      const userRef = doc(db, "portalUsers", user.uid);
-      const userSnap = await getDoc(userRef);
+    if (data.status) {
+      decisionStatus.value =
+        data.status;
+    }
 
-      const role = userSnap.exists()
-        ? String(userSnap.data().role || "").trim().toLowerCase()
-        : "";
+    decisionNotes.value =
+      data.notes || "";
 
-      const authorised = role === "admin" || role === "investor";
+    decisionMessage.textContent =
+      `Previous decision loaded. Originally submitted: ${formatTimestamp(data.submittedAt)}. Last updated: ${formatTimestamp(data.updatedAt)}.`;
+  }
 
-      if (!authorised) {
-        await signOut(auth);
-        loginMessage.textContent = "This account is not authorised for Investor Portal access.";
-        loginButton.disabled = false;
+
+  decisionForm.addEventListener(
+    "submit",
+    async (event) => {
+      event.preventDefault();
+
+      const user =
+        auth.currentUser;
+
+      if (
+        !user ||
+        !selectedEngagementId
+      ) {
+        decisionMessage.textContent =
+          "Your secure session has ended. Please sign in again.";
+
         return;
       }
 
-      currentPortalRole = role;
-      await loadEngagement();
+      if (
+        currentPortalRole !== "investor"
+      ) {
+        decisionMessage.textContent =
+          "This account cannot submit an investor decision.";
 
-      loginPanel.hidden = true;
-      portalPanel.hidden = false;
-      loginMessage.textContent = "";
-      welcomeUser.textContent = "Authenticated account: " + user.email;
-      loginButton.disabled = false;
-    } catch (error) {
-      console.error("Portal authorisation error:", error);
-      currentPortalRole = "";
-
-      try {
-        await signOut(auth);
-      } catch (signOutError) {
-        console.error("Sign-out error:", signOutError);
+        return;
       }
 
-      loginMessage.textContent = "Unable to verify portal authorisation. Please try again.";
-      loginButton.disabled = false;
-    }
-  });
+      decisionButton.disabled =
+        true;
 
-  logoutButton.addEventListener("click", async () => {
-    logoutButton.disabled = true;
+      decisionMessage.textContent =
+        "Submitting decision...";
+
+      try {
+        const decisionRef =
+          doc(
+            db,
+            "engagements",
+            selectedEngagementId,
+            "decisions",
+            user.uid
+          );
+
+        const existingDecision =
+          await getDoc(
+            decisionRef
+          );
+
+        if (existingDecision.exists()) {
+          await updateDoc(
+            decisionRef,
+            {
+              status:
+                decisionStatus.value,
+
+              notes:
+                decisionNotes.value.trim(),
+
+              updatedAt:
+                serverTimestamp()
+            }
+          );
+
+          decisionMessage.textContent =
+            "Decision updated securely.";
+
+        } else {
+          await setDoc(
+            decisionRef,
+            {
+              investorUid:
+                user.uid,
+
+              status:
+                decisionStatus.value,
+
+              notes:
+                decisionNotes.value.trim(),
+
+              submittedAt:
+                serverTimestamp(),
+
+              updatedAt:
+                serverTimestamp()
+            }
+          );
+
+          decisionMessage.textContent =
+            "Decision submitted securely to Quintrin.";
+        }
+
+      } catch (error) {
+        console.error(
+          "Decision submission error:",
+          error
+        );
+
+        decisionMessage.textContent =
+          "Unable to submit your decision. Please try again.";
+
+      } finally {
+        decisionButton.disabled =
+          false;
+      }
+    }
+  );
+
+
+  /* =========================================================
+     ADMIN DECISION VIEW
+     ========================================================= */
+
+  async function loadAdminDecisions(engagementId) {
+    clearElement(
+      adminDecisionList
+    );
+
+    adminDecisionMessage.textContent =
+      "Loading investor decisions...";
 
     try {
-      await signOut(auth);
+      const snapshot =
+        await getDocs(
+          collection(
+            db,
+            "engagements",
+            engagementId,
+            "decisions"
+          )
+        );
 
-      currentPortalRole = "";
-      portalPanel.hidden = true;
-      engagementPanel.hidden = true;
-      loginPanel.hidden = false;
-      welcomeUser.textContent = "";
-      decisionMessage.textContent = "";
-      loginMessage.textContent = "Securely logged out.";
+      if (snapshot.empty) {
+        adminDecisionMessage.textContent =
+          "No investor decision has been submitted for this engagement.";
+
+        return;
+      }
+
+      for (const decisionSnap of snapshot.docs) {
+        const data =
+          decisionSnap.data();
+
+        let investorLabel =
+          data.investorUid ||
+          decisionSnap.id;
+
+        try {
+          const profileSnap =
+            await getDoc(
+              doc(
+                db,
+                "portalUsers",
+                data.investorUid ||
+                decisionSnap.id
+              )
+            );
+
+          if (profileSnap.exists()) {
+            const profile =
+              profileSnap.data();
+
+            investorLabel =
+              profile.displayName ||
+              profile.email ||
+              investorLabel;
+          }
+
+        } catch (profileError) {
+          console.warn(
+            "Investor profile lookup skipped:",
+            profileError
+          );
+        }
+
+        const block =
+          document.createElement("article");
+
+        block.className =
+          "portal-list-item";
+
+        block.appendChild(
+          createTextElement(
+            "strong",
+            investorLabel
+          )
+        );
+
+        block.appendChild(
+          createTextElement(
+            "p",
+            `Status: ${data.status || "Not provided"}`
+          )
+        );
+
+        block.appendChild(
+          createTextElement(
+            "p",
+            data.notes ||
+            "No notes supplied."
+          )
+        );
+
+        block.appendChild(
+          createTextElement(
+            "p",
+            `Submitted: ${formatTimestamp(data.submittedAt)}`,
+            "muted"
+          )
+        );
+
+        block.appendChild(
+          createTextElement(
+            "p",
+            `Updated: ${formatTimestamp(data.updatedAt)}`,
+            "muted"
+          )
+        );
+
+        adminDecisionList.appendChild(
+          block
+        );
+      }
+
+      adminDecisionMessage.textContent =
+        "";
+
     } catch (error) {
-      console.error("Logout error:", error);
-      loginMessage.textContent = "Unable to complete secure logout. Please try again.";
-    } finally {
-      logoutButton.disabled = false;
+      console.error(
+        "Admin decisions load error:",
+        error
+      );
+
+      adminDecisionMessage.textContent =
+        "Unable to load investor decisions.";
     }
-  });
+  }
+
+
+  /* =========================================================
+     NAVIGATION
+     ========================================================= */
+
+  backToDashboardButton.addEventListener(
+    "click",
+    async () => {
+      resetEngagementView();
+
+      showOnly(
+        dashboardPanel
+      );
+
+      await loadDashboard();
+    }
+  );
+
+
+  refreshDashboardButton.addEventListener(
+    "click",
+    async () => {
+      try {
+        await loadDashboard();
+      } catch (error) {
+        console.error(
+          "Dashboard refresh error:",
+          error
+        );
+
+        dashboardMessage.textContent =
+          "Unable to refresh private engagements.";
+      }
+    }
+  );
+
+
+  /* =========================================================
+     LOGOUT
+     ========================================================= */
+
+  async function completeLogout() {
+    dashboardLogoutButton.disabled =
+      true;
+
+    engagementLogoutButton.disabled =
+      true;
+
+    try {
+      await signOut(
+        auth
+      );
+
+      currentPortalRole =
+        "";
+
+      currentProfile =
+        null;
+
+      resetEngagementView();
+
+      clearElement(
+        engagementList
+      );
+
+      welcomeUser.textContent =
+        "";
+
+      roleLabel.textContent =
+        "";
+
+      dashboardMessage.textContent =
+        "";
+
+      loginMessage.textContent =
+        "Securely logged out.";
+
+      showOnly(
+        loginPanel
+      );
+
+    } catch (error) {
+      console.error(
+        "Logout error:",
+        error
+      );
+
+      loginMessage.textContent =
+        "Unable to complete secure logout. Please try again.";
+
+    } finally {
+      dashboardLogoutButton.disabled =
+        false;
+
+      engagementLogoutButton.disabled =
+        false;
+    }
+  }
+
+
+  dashboardLogoutButton.addEventListener(
+    "click",
+    completeLogout
+  );
+
+  engagementLogoutButton.addEventListener(
+    "click",
+    completeLogout
+  );
+
+
+  /* =========================================================
+     AUTH STATE
+     ========================================================= */
+
+  onAuthStateChanged(
+    auth,
+    async (user) => {
+
+      if (!user) {
+        currentPortalRole =
+          "";
+
+        currentProfile =
+          null;
+
+        resetEngagementView();
+
+        loginButton.disabled =
+          false;
+
+        showOnly(
+          loginPanel
+        );
+
+        return;
+      }
+
+      loginMessage.textContent =
+        "Verifying portal authorisation...";
+
+      try {
+        const profile =
+          await loadPortalProfile(
+            user
+          );
+
+        const displayName =
+          profile.displayName ||
+          user.email ||
+          "Authorised User";
+
+        welcomeUser.textContent =
+          `Authenticated account: ${displayName}`;
+
+        roleLabel.textContent =
+          `Portal role: ${currentPortalRole}`;
+
+        loginMessage.textContent =
+          "";
+
+        loginButton.disabled =
+          false;
+
+        showOnly(
+          dashboardPanel
+        );
+
+        await loadDashboard();
+
+      } catch (error) {
+        console.error(
+          "Portal authorisation error:",
+          error
+        );
+
+        try {
+          await signOut(
+            auth
+          );
+        } catch (signOutError) {
+          console.error(
+            "Sign-out error:",
+            signOutError
+          );
+        }
+
+        loginMessage.textContent =
+          "Unable to verify portal authorisation. Please try again.";
+
+        loginButton.disabled =
+          false;
+
+        showOnly(
+          loginPanel
+        );
+      }
+    }
+  );
+
 </script>
 
 </body>
 </html>
-        
