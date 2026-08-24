@@ -755,6 +755,116 @@ describe(
 
 
     /* =====================================================
+       EXACT INVESTOR PORTAL OPEN-SEQUENCE TESTS
+       ===================================================== */
+
+    test(
+      "portal sequence step 1 - investor can get assigned global engagement",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(INVESTOR_UID)
+            .firestore();
+
+        await assertSucceeds(
+          getDoc(
+            doc(
+              db,
+              "engagements",
+              ENGAGEMENT_ID
+            )
+          )
+        );
+      }
+    );
+
+
+    test(
+      "portal sequence step 2 - investor can list engagement updates",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(INVESTOR_UID)
+            .firestore();
+
+        const snapshot =
+          await assertSucceeds(
+            getDocs(
+              collection(
+                db,
+                "engagements",
+                ENGAGEMENT_ID,
+                "updates"
+              )
+            )
+          );
+
+        assert.equal(
+          snapshot.size,
+          1
+        );
+      }
+    );
+
+
+    test(
+      "portal sequence step 3 - investor can list document metadata",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(INVESTOR_UID)
+            .firestore();
+
+        const snapshot =
+          await assertSucceeds(
+            getDocs(
+              collection(
+                db,
+                "engagements",
+                ENGAGEMENT_ID,
+                "documents"
+              )
+            )
+          );
+
+        assert.equal(
+          snapshot.size,
+          1
+        );
+      }
+    );
+
+
+    test(
+      "portal sequence step 4 - investor can read missing own decision as not-found",
+      async () => {
+        const db =
+          testEnv
+            .authenticatedContext(INVESTOR_UID)
+            .firestore();
+
+        const snapshot =
+          await assertSucceeds(
+            getDoc(
+              doc(
+                db,
+                "engagements",
+                ENGAGEMENT_ID,
+                "decisions",
+                INVESTOR_UID
+              )
+            )
+          );
+
+        assert.equal(
+          snapshot.exists(),
+          false
+        );
+      }
+    );
+
+
+    /* =====================================================
        LEGACY MEMBERSHIP RECORDS
        ===================================================== */
 
