@@ -200,7 +200,7 @@
 
 <!--
   QUINTRIN SECURE INVESTOR PORTAL
-  Version: 2.0
+  Version: 2.1 Diagnostic-safe
   Architecture:
   Firebase Authentication + Firestore role-based access
   User-specific engagement index:
@@ -782,6 +782,7 @@
   let currentPortalRole = "";
   let currentProfile = null;
   let selectedEngagementId = null;
+  let investorDecisionAccessReady = false;
 
 
   /* =========================================================
@@ -888,6 +889,9 @@
     decisionStatus.value = "Under Review";
     decisionNotes.value = "";
 
+    investorDecisionAccessReady = false;
+    decisionButton.disabled = true;
+
     clearElement(updatesList);
     clearElement(documentsList);
     clearElement(adminDecisionList);
@@ -902,10 +906,12 @@
     passwordInput.type = "password";
 
     togglePassword.textContent = "View";
+
     togglePassword.setAttribute(
       "aria-label",
       "Show password"
     );
+
     togglePassword.setAttribute(
       "aria-pressed",
       "false"
@@ -960,6 +966,7 @@
       event.preventDefault();
 
       loginButton.disabled = true;
+
       loginMessage.textContent =
         "Authenticating...";
 
@@ -1003,14 +1010,17 @@
      ========================================================= */
 
   async function loadPortalProfile(user) {
-    const userRef = doc(
-      db,
-      "portalUsers",
-      user.uid
-    );
+    const userRef =
+      doc(
+        db,
+        "portalUsers",
+        user.uid
+      );
 
     const userSnap =
-      await getDoc(userRef);
+      await getDoc(
+        userRef
+      );
 
     if (!userSnap.exists()) {
       throw new Error(
@@ -1043,8 +1053,11 @@
       );
     }
 
-    currentPortalRole = role;
-    currentProfile = data;
+    currentPortalRole =
+      role;
+
+    currentProfile =
+      data;
 
     return data;
   }
@@ -1065,11 +1078,15 @@
     dashboardMessage.textContent =
       "Loading private engagements...";
 
-    clearElement(engagementList);
+    clearElement(
+      engagementList
+    );
 
     let snapshots = [];
 
-    if (currentPortalRole === "admin") {
+    if (
+      currentPortalRole === "admin"
+    ) {
       dashboardTitle.textContent =
         "All Private Engagements";
 
@@ -1130,12 +1147,14 @@
       (a, b) => {
         const aReference =
           String(
-            a.data.reference || a.id
+            a.data.reference ||
+            a.id
           );
 
         const bReference =
           String(
-            b.data.reference || b.id
+            b.data.reference ||
+            b.id
           );
 
         return aReference.localeCompare(
@@ -1147,7 +1166,9 @@
 
     for (const item of snapshots) {
       const card =
-        document.createElement("article");
+        document.createElement(
+          "article"
+        );
 
       card.className =
         "engagement-card";
@@ -1212,7 +1233,9 @@
       );
 
       const openButton =
-        document.createElement("button");
+        document.createElement(
+          "button"
+        );
 
       openButton.type =
         "button";
@@ -1264,7 +1287,17 @@
     engagementLoadMessage.textContent =
       "Loading secure engagement...";
 
+    /*
+     * Core engagement access is deliberately isolated from
+     * optional sections. A failure in updates, documents, or
+     * investor decision history must never hide an otherwise
+     * authorised engagement.
+     */
     try {
+      console.info(
+        "[QFSL Portal][ENGAGEMENT_GET] Starting core engagement read."
+      );
+
       const engagementDoc =
         doc(
           db,
@@ -1316,54 +1349,74 @@
         data.summary ||
         "No summary available.";
 
-      await Promise.all([
-        loadEngagementUpdates(
-          engagementId
-        ),
-        loadDocumentMetadata(
-          engagementId
-        )
-      ]);
-
-      if (
-        currentPortalRole === "investor"
-      ) {
-        decisionSection.hidden =
-          false;
-
-        adminDecisionSection.hidden =
-          true;
-
-        await loadExistingDecision(
-          engagementId
-        );
-
-      } else {
-        decisionSection.hidden =
-          true;
-
-        adminDecisionSection.hidden =
-          false;
-
-        await loadAdminDecisions(
-          engagementId
-        );
-      }
-
       engagementContent.hidden =
         false;
 
       engagementLoadMessage.textContent =
         "";
 
+      console.info(
+        "[QFSL Portal][ENGAGEMENT_GET] Core engagement read succeeded."
+      );
+
     } catch (error) {
       console.error(
-        "Engagement load error:",
+        "[QFSL Portal][ENGAGEMENT_GET] Core engagement read failed:",
         error
       );
 
+      engagementContent.hidden =
+        true;
+
       engagementLoadMessage.textContent =
-        "Unable to load this private engagement. Please return to the dashboard and try again.";
+        "Unable to open the core private engagement. Diagnostic: ENGAGEMENT_GET.";
+
+      return;
+    }
+
+
+    /*
+     * Updates and document metadata are independent supporting
+     * sections. Each loader owns its own error handling.
+     */
+    await Promise.all([
+      loadEngagementUpdates(
+        engagementId
+      ),
+
+      loadDocumentMetadata(
+        engagementId
+      )
+    ]);
+
+
+    /*
+     * Role-specific sections are also isolated from the core
+     * engagement display.
+     */
+    if (
+      currentPortalRole === "investor"
+    ) {
+      decisionSection.hidden =
+        false;
+
+      adminDecisionSection.hidden =
+        true;
+
+      await loadExistingDecision(
+        engagementId
+      );
+
+    } else {
+      decisionSection.hidden =
+        true;
+
+      adminDecisionSection.hidden =
+        false;
+
+      await loadAdminDecisions(
+        engagementId
+      );
     }
   }
 
@@ -1372,7 +1425,9 @@
      ENGAGEMENT UPDATES
      ========================================================= */
 
-  async function loadEngagementUpdates(engagementId) {
+  async function loadEngagementUpdates(
+    engagementId
+  ) {
     clearElement(
       updatesList
     );
@@ -1409,10 +1464,12 @@
           .sort(
             (a, b) => {
               const aTime =
-                a.createdAt?.toMillis?.() || 0;
+                a.createdAt?.toMillis?.() ||
+                0;
 
               const bTime =
-                b.createdAt?.toMillis?.() || 0;
+                b.createdAt?.toMillis?.() ||
+                0;
 
               return bTime - aTime;
             }
@@ -1420,7 +1477,9 @@
 
       for (const item of items) {
         const block =
-          document.createElement("article");
+          document.createElement(
+            "article"
+          );
 
         block.className =
           "portal-list-item";
@@ -1461,12 +1520,12 @@
 
     } catch (error) {
       console.error(
-        "Updates load error:",
+        "[QFSL Portal][UPDATES_LIST] Engagement updates read failed:",
         error
       );
 
       updatesMessage.textContent =
-        "Unable to load engagement updates.";
+        "Unable to load engagement updates. Diagnostic: UPDATES_LIST.";
     }
   }
 
@@ -1475,7 +1534,9 @@
      DOCUMENT METADATA
      ========================================================= */
 
-  async function loadDocumentMetadata(engagementId) {
+  async function loadDocumentMetadata(
+    engagementId
+  ) {
     clearElement(
       documentsList
     );
@@ -1501,12 +1562,17 @@
         return;
       }
 
-      for (const documentSnap of snapshot.docs) {
+      for (
+        const documentSnap
+        of snapshot.docs
+      ) {
         const item =
           documentSnap.data();
 
         const block =
-          document.createElement("article");
+          document.createElement(
+            "article"
+          );
 
         block.className =
           "portal-list-item";
@@ -1548,12 +1614,12 @@
 
     } catch (error) {
       console.error(
-        "Document metadata load error:",
+        "[QFSL Portal][DOCUMENTS_LIST] Document metadata read failed:",
         error
       );
 
       documentsMessage.textContent =
-        "Unable to load private document information.";
+        "Unable to load private document information. Diagnostic: DOCUMENTS_LIST.";
     }
   }
 
@@ -1562,12 +1628,23 @@
      INVESTOR DECISION
      ========================================================= */
 
-  async function loadExistingDecision(engagementId) {
+  async function loadExistingDecision(
+    engagementId
+  ) {
     const user =
       auth.currentUser;
 
+    investorDecisionAccessReady =
+      false;
+
+    decisionButton.disabled =
+      true;
+
     if (!user) {
-      return;
+      decisionMessage.textContent =
+        "Your secure session has ended. Please sign in again.";
+
+      return false;
     }
 
     decisionStatus.value =
@@ -1577,39 +1654,82 @@
       "";
 
     decisionMessage.textContent =
-      "";
+      "Checking existing decision status...";
 
-    const decisionRef =
-      doc(
-        db,
-        "engagements",
-        engagementId,
-        "decisions",
-        user.uid
+    try {
+      console.info(
+        "[QFSL Portal][DECISION_GET] Starting investor decision read."
       );
 
-    const decisionSnap =
-      await getDoc(
-        decisionRef
+      const decisionRef =
+        doc(
+          db,
+          "engagements",
+          engagementId,
+          "decisions",
+          user.uid
+        );
+
+      const decisionSnap =
+        await getDoc(
+          decisionRef
+        );
+
+      investorDecisionAccessReady =
+        true;
+
+      decisionButton.disabled =
+        false;
+
+      if (!decisionSnap.exists()) {
+        decisionMessage.textContent =
+          "No previous decision has been submitted.";
+
+        console.info(
+          "[QFSL Portal][DECISION_GET] Decision read succeeded; no existing decision."
+        );
+
+        return true;
+      }
+
+      const data =
+        decisionSnap.data();
+
+      if (data.status) {
+        decisionStatus.value =
+          data.status;
+      }
+
+      decisionNotes.value =
+        data.notes ||
+        "";
+
+      decisionMessage.textContent =
+        `Previous decision loaded. Originally submitted: ${formatTimestamp(data.submittedAt)}. Last updated: ${formatTimestamp(data.updatedAt)}.`;
+
+      console.info(
+        "[QFSL Portal][DECISION_GET] Existing decision read succeeded."
       );
 
-    if (!decisionSnap.exists()) {
-      return;
+      return true;
+
+    } catch (error) {
+      console.error(
+        "[QFSL Portal][DECISION_GET] Investor decision read failed:",
+        error
+      );
+
+      investorDecisionAccessReady =
+        false;
+
+      decisionButton.disabled =
+        true;
+
+      decisionMessage.textContent =
+        "The engagement is available, but the investor decision record could not be checked. Decision submission is temporarily disabled. Diagnostic: DECISION_GET.";
+
+      return false;
     }
-
-    const data =
-      decisionSnap.data();
-
-    if (data.status) {
-      decisionStatus.value =
-        data.status;
-    }
-
-    decisionNotes.value =
-      data.notes || "";
-
-    decisionMessage.textContent =
-      `Previous decision loaded. Originally submitted: ${formatTimestamp(data.submittedAt)}. Last updated: ${formatTimestamp(data.updatedAt)}.`;
   }
 
 
@@ -1632,10 +1752,23 @@
       }
 
       if (
-        currentPortalRole !== "investor"
+        currentPortalRole !==
+        "investor"
       ) {
         decisionMessage.textContent =
           "This account cannot submit an investor decision.";
+
+        return;
+      }
+
+      if (
+        !investorDecisionAccessReady
+      ) {
+        decisionMessage.textContent =
+          "Decision submission is unavailable until the existing decision status can be verified.";
+
+        decisionButton.disabled =
+          true;
 
         return;
       }
@@ -1661,7 +1794,9 @@
             decisionRef
           );
 
-        if (existingDecision.exists()) {
+        if (
+          existingDecision.exists()
+        ) {
           await updateDoc(
             decisionRef,
             {
@@ -1669,7 +1804,9 @@
                 decisionStatus.value,
 
               notes:
-                decisionNotes.value.trim(),
+                decisionNotes
+                  .value
+                  .trim(),
 
               updatedAt:
                 serverTimestamp()
@@ -1690,7 +1827,9 @@
                 decisionStatus.value,
 
               notes:
-                decisionNotes.value.trim(),
+                decisionNotes
+                  .value
+                  .trim(),
 
               submittedAt:
                 serverTimestamp(),
@@ -1715,7 +1854,7 @@
 
       } finally {
         decisionButton.disabled =
-          false;
+          !investorDecisionAccessReady;
       }
     }
   );
@@ -1725,7 +1864,9 @@
      ADMIN DECISION VIEW
      ========================================================= */
 
-  async function loadAdminDecisions(engagementId) {
+  async function loadAdminDecisions(
+    engagementId
+  ) {
     clearElement(
       adminDecisionList
     );
@@ -1751,7 +1892,10 @@
         return;
       }
 
-      for (const decisionSnap of snapshot.docs) {
+      for (
+        const decisionSnap
+        of snapshot.docs
+      ) {
         const data =
           decisionSnap.data();
 
@@ -1788,7 +1932,9 @@
         }
 
         const block =
-          document.createElement("article");
+          document.createElement(
+            "article"
+          );
 
         block.className =
           "portal-list-item";
@@ -1874,6 +2020,7 @@
     async () => {
       try {
         await loadDashboard();
+
       } catch (error) {
         console.error(
           "Dashboard refresh error:",
@@ -2030,6 +2177,7 @@
           await signOut(
             auth
           );
+
         } catch (signOutError) {
           console.error(
             "Sign-out error:",
