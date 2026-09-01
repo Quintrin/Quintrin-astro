@@ -40,3 +40,172 @@ service cloud.firestore {
     function assignment(engagementId) {
       return get(
         /databases/$(database)/documents/portalUsers/$(request.auth.uid)/engagements/$(engagementId)
+      );
+    }
+
+    function hasActiveAssignment(engagementId) {
+      return isActivePortalUser()
+        && assignmentExists(engagementId)
+        && assignment(engagementId).data.access == "active";
+    }
+
+    match /portalUsers/{userId} {
+
+      allow get:
+        if signedIn()
+        && (
+          request.auth.uid == userId
+          || isAdmin()
+        );
+
+      allow list:
+        if isAdmin();
+
+      allow create, update, delete:
+        if isAdmin();
+
+      match /engagements/{engagementId} {
+
+        allow read:
+          if isAdmin()
+          || (
+            isActivePortalUser()
+            && request.auth.uid == userId
+          );
+
+        allow create, update, delete:
+          if isAdmin();
+      }
+    }
+
+    match /engagements/{engagementId} {
+
+      allow get:
+        if isAdmin()
+        || hasActiveAssignment(engagementId);
+
+      allow list:
+        if isAdmin();
+
+      allow create, update, delete:
+        if isAdmin();
+
+      match /members/{memberId} {
+
+        allow read:
+          if isAdmin();
+
+        allow create, update, delete:
+          if isAdmin();
+      }
+
+      match /decisions/{investorId} {
+
+        allow get:
+          if isAdmin()
+          || (
+            signedIn()
+            && request.auth.uid == investorId
+            && hasActiveAssignment(engagementId)
+          );
+
+        allow list:
+          if isAdmin();
+
+        /*
+         * CONTROLLED MVP DECISION ACCESS
+         * Exact user ownership + active engagement assignment remain mandatory.
+         * Role-string and exact request.time hardening are deferred.
+         */
+
+        allow create:
+          if signedIn()
+          && request.auth.uid == investorId
+          && hasActiveAssignment(engagementId)
+          && request.resource.data.keys().hasOnly([
+            "investorUid",
+            "status",
+            "notes",
+            "submittedAt",
+            "updatedAt"
+          ])
+          && request.resource.data.keys().hasAll([
+            "investorUid",
+            "status",
+            "notes",
+            "submittedAt",
+            "updatedAt"
+          ])
+          && request.resource.data.investorUid == request.auth.uid
+          && request.resource.data.status in [
+            "Under Review",
+            "Request Additional Information",
+            "Waiting Professional/Legal Review",
+            "Approved to Proceed",
+            "Declined"
+          ]
+          && request.resource.data.notes is string
+          && request.resource.data.notes.size() <= 5000;
+
+        allow update:
+          if signedIn()
+          && request.auth.uid == investorId
+          && hasActiveAssignment(engagementId)
+          && request.resource.data.keys().hasOnly([
+            "investorUid",
+            "status",
+            "notes",
+            "submittedAt",
+            "updatedAt"
+          ])
+          && request.resource.data.keys().hasAll([
+            "investorUid",
+            "status",
+            "notes",
+            "submittedAt",
+            "updatedAt"
+          ])
+          && request.resource.data.investorUid == request.auth.uid
+          && request.resource.data.investorUid == resource.data.investorUid
+          && request.resource.data.status in [
+            "Under Review",
+            "Request Additional Information",
+            "Waiting Professional/Legal Review",
+            "Approved to Proceed",
+            "Declined"
+          ]
+          && request.resource.data.notes is string
+          && request.resource.data.notes.size() <= 5000
+          && request.resource.data.submittedAt == resource.data.submittedAt;
+
+        allow delete:
+          if isAdmin();
+      }
+
+      match /updates/{updateId} {
+
+        allow read:
+          if isAdmin()
+          || hasActiveAssignment(engagementId);
+
+        allow create, update, delete:
+          if isAdmin();
+      }
+
+      match /documents/{documentId} {
+
+        allow read:
+          if isAdmin()
+          || hasActiveAssignment(engagementId);
+
+        allow create, update, delete:
+          if isAdmin();
+      }
+    }
+
+    match /{document=**} {
+      allow read, write:
+        if false;
+    }
+  }
+}
