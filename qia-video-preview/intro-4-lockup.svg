@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#07131f"/>
+    <stop offset="55%" stop-color="#0E1A24"/>
+    <stop offset="100%" stop-color="#142B40"/>
+  </linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#F2F4F6"/>
+    <stop offset="35%" stop-color="#E4C29F"/>
+    <stop offset="70%" stop-color="#CB8B71"/>
+    <stop offset="100%" stop-color="#B87554"/>
+  </linearGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="1920" height="1080" fill="url(#bg)"/>
+<rect x="95" y="80" width="1730" height="920" rx="40" fill="none" stroke="#FFFFFF" stroke-opacity=".08" stroke-width="2"/>
+<line x1="1320" y1="130" x2="1320" y2="940" stroke="#E4C29F" stroke-opacity=".55" stroke-width="5"/>
+<line x1="390" y1="210" x2="390" y2="850" stroke="#7BB1DD" stroke-opacity=".18" stroke-width="2"/>
+<circle cx="1640" cy="220" r="5" fill="#E4C29F"/>
+<circle cx="1670" cy="220" r="3" fill="#F2F4F6"/>
+<circle cx="1695" cy="220" r="3" fill="#7BB1DD"/>
+
+  <image href="https://raw.githubusercontent.com/Quintrin/Quintrin-astro/main/assets/logo.png" x="580" y="270" width="330" height="330" preserveAspectRatio="xMidYMid meet"/>
+  <text x="945" y="560" font-family="Georgia, serif" font-size="250" font-weight="700" fill="url(#gold)">I</text><text x="1110" y="560" font-family="Georgia, serif" font-size="250" font-weight="700" fill="url(#gold)">A</text>
+      <text x="960" y="700" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="62" fill="#F2F4F6">Quintrin Intelligence Assistant</text>
+      <text x="960" y="785" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#E4C29F">Community Hospital Restoration • Bridge Team Project Control</text>
+    </svg>
